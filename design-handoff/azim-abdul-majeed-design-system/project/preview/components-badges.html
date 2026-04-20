@@ -1,0 +1,42 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Amiri:ital,wght@0,400;0,700&display=swap');
+:root {
+  --purple-1:#2e1065;--purple-2:#4c1d95;--purple-3:#6d28d9;--purple-4:#7c3aed;--purple-5:#a78bfa;--purple-6:#ede9fe;
+  --zinc-50:#fafafa;--zinc-100:#f4f4f5;--zinc-200:#e4e4e7;--zinc-300:#d4d4d8;--zinc-400:#a1a1aa;--zinc-500:#71717a;--zinc-600:#52525b;--zinc-700:#3f3f46;--zinc-800:#27272a;--zinc-900:#18181b;--zinc-950:#09090b;
+  --bg:#fff;--bg-elev:#fff;--bg-sunken:var(--zinc-50);--bg-muted:var(--zinc-100);
+  --fg1:var(--zinc-900);--fg2:var(--zinc-700);--fg3:var(--zinc-500);--fg4:var(--zinc-400);
+  --brand:var(--purple-4);--brand-hover:var(--purple-3);--brand-soft:var(--purple-6);--brand-ink:var(--purple-1);
+  --border-subtle:var(--zinc-100);--border:var(--zinc-200);--border-strong:var(--zinc-300);
+  --focus-ring:color-mix(in oklab,var(--purple-4) 60%,transparent);
+  --shadow-sm:0 1px 2px 0 rgba(0,0,0,.05);
+  --shadow-md:0 1px 3px 0 rgba(0,0,0,.05),0 1px 2px -1px rgba(0,0,0,.05);
+  --font-display:'Fraunces',Georgia,serif;--font-body:'Ubuntu',system-ui,sans-serif;--font-mono:'JetBrains Mono',Menlo,monospace;--font-arabic:'Amiri',serif;
+  --radius-sm:4px;--radius-md:6px;--radius-lg:8px;--radius-xl:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--fg1);font-family:var(--font-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{padding:24px;width:700px}
+a{color:var(--brand);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.22em;text-decoration-color:color-mix(in oklab,currentColor 35%,transparent)}
+.row{display:flex}.col{display:flex;flex-direction:column}
+.gap-1{gap:4px}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}.gap-5{gap:24px}.gap-6{gap:32px}
+.swatch{display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px;min-height:80px;border-radius:var(--radius-md);font-family:var(--font-mono);font-size:11px;line-height:1.3;border:1px solid transparent}
+.swatch .name{font-weight:600}.swatch .hex{opacity:.85}
+.label{font-family:var(--font-body);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--fg3)}
+[lang="ar"],.arabic{font-family:var(--font-arabic);font-size:1.15em;line-height:1.85;direction:rtl;unicode-bidi:plaintext}
+</style></head><body>
+<div class="col gap-4">
+  <div class="label">Badges</div>
+  <div class="row gap-2" style="flex-wrap:wrap;align-items:center">
+    <span style="display:inline-flex;align-items:center;font-family:var(--font-body);font-size:12px;font-weight:500;padding:2px 10px;border-radius:999px;background:var(--brand);color:#fff">Default</span>
+    <span style="display:inline-flex;align-items:center;font-family:var(--font-body);font-size:12px;font-weight:500;padding:2px 10px;border-radius:999px;background:var(--bg-muted);color:var(--fg1)">Secondary</span>
+    <span style="display:inline-flex;align-items:center;font-family:var(--font-body);font-size:12px;font-weight:500;padding:2px 10px;border-radius:999px;background:transparent;color:var(--fg1);border:1px solid var(--border)">Outline</span>
+    <span style="display:inline-flex;align-items:center;font-family:var(--font-body);font-size:12px;font-weight:500;padding:2px 10px;border-radius:999px;background:#fef2f2;color:#991b1b;border:1px solid #fecaca">Destructive</span>
+    <span style="display:inline-flex;align-items:center;font-family:var(--font-body);font-size:12px;font-weight:500;padding:2px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand-ink)">Brand soft</span>
+  </div>
+  <div class="label">Category dots (kicker variant)</div>
+  <div class="col gap-2">
+    <div style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-body);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--brand)"><span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>Islamic Finance · 10 min read</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-body);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--fg3)"><span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>Economics · 8 min read</div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="MA monogram">
+  <rect width="120" height="120" rx="8" fill="#290540"></rect>
+  <text x="60" y="78" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="62" letter-spacing="-0.03em" fill="#fbf9f5">MA</text>
+  <circle cx="94" cy="70" r="4" fill="#17a210"></circle>
+</svg>
