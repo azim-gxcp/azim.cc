@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <pattern id="star8" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        
+        <path d="M60 10 L70 40 L100 30 L80 55 L110 60 L80 65 L100 90 L70 80 L60 110 L50 80 L20 90 L40 65 L10 60 L40 55 L20 30 L50 40 Z"></path>
+        <circle cx="60" cy="60" r="18"></circle>
+        <path d="M0 60 L20 60 M100 60 L120 60 M60 0 L60 20 M60 100 L60 120"></path>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="120" height="120" fill="url(#star8)"></rect>
+</svg>

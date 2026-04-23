@@ -9,7 +9,18 @@
       "Bash(mv:*)",
       "Bash(npx create-next-app@latest:*)",
       "Bash(npm install:*)",
-      "Bash(npx shadcn@latest:*)"
+      "Bash(npx shadcn@latest:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run:*)",
+      "Bash(npx tsx:*)",
+      "Bash(rm:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(npx next:*)",
+      "Bash(npx tsc:*)",
+      "Bash(pdftotext:*)",
+      "WebFetch(domain:gxcoin.money)"
     ]
   }
 }

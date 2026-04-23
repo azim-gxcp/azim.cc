@@ -1,9 +1,10 @@
 {
-  "name": "azim-temp",
+  "name": "azim.cc",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
+    "prebuild": "tsx scripts/process-drafts.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
