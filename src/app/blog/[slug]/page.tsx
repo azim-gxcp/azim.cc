@@ -99,23 +99,6 @@ export default async function BlogPostPage({ params }: Props) {
         <MDXRemote source={post.content} components={mdxComponents} />
       </div>
 
-      <div
-        className="mt-16 mb-10 pt-6"
-        style={{ borderTop: "1px solid var(--border-subtle)" }}
-      >
-        <div
-          style={{
-            fontFamily: "var(--font-body)",
-            fontSize: "12px",
-            textTransform: "uppercase",
-            letterSpacing: "0.12em",
-            color: "var(--fg3)",
-          }}
-        >
-          Written in Kuala Lumpur &middot; shared freely &middot; CC BY
-        </div>
-      </div>
-
       <CommentSection slug={slug} />
 
       <NewsletterForm variant="soft" />
