@@ -104,7 +104,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div
           style={{
             fontFamily: "var(--font-body)",
-            fontSize: "12px",
+            fontSize: "var(--article-kicker-size, 12px)",
             fontWeight: 600,
             textTransform: "uppercase",
             letterSpacing: "0.12em",
@@ -118,7 +118,7 @@ export default async function BlogPostPage({ params }: Props) {
           className="m-0 mb-6"
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(2.1rem, 4.8vw, 3.375rem)",
+            fontSize: "clamp(var(--article-h1-min, 34px), 4.8vw, var(--article-h1-max, 54px))",
             fontWeight: 600,
             lineHeight: 1.1,
             letterSpacing: "-0.02em",
@@ -132,7 +132,7 @@ export default async function BlogPostPage({ params }: Props) {
           className="m-0 mb-8"
           style={{
             fontFamily: "var(--font-body)",
-            fontSize: "19px",
+            fontSize: "var(--article-lede-size, 19px)",
             fontStyle: "italic",
             lineHeight: 1.6,
             color: "var(--fg2)",

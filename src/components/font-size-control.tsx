@@ -3,15 +3,31 @@
 import { useState, useEffect } from "react";
 import { Minus, Plus } from "lucide-react";
 
+// All sizes proportional to body. M (14px body) is default.
+// 2px body increments: XS=10, S=12, M=14, L=16, XL=18
+// Everything else scales proportionally from M ratios.
 const SIZES = [
-  { body: 12, heading: 20, h3: 17, label: "S" },
-  { body: 14, heading: 24, h3: 20, label: "M" },
-  { body: 16, heading: 26, h3: 22, label: "L" },
-  { body: 18, heading: 28, h3: 24, label: "XL" },
+  { body: 10, lede: 14, h1Min: 24, h1Max: 39, h2: 17, h3: 14, kicker: 9, label: "XS" },
+  { body: 12, lede: 16, h1Min: 29, h1Max: 46, h2: 21, h3: 17, kicker: 10, label: "S" },
+  { body: 14, lede: 19, h1Min: 34, h1Max: 54, h2: 24, h3: 20, kicker: 12, label: "M" },
+  { body: 16, lede: 22, h1Min: 38, h1Max: 62, h2: 27, h3: 23, kicker: 13, label: "L" },
+  { body: 18, lede: 24, h1Min: 43, h1Max: 69, h2: 31, h3: 26, kicker: 15, label: "XL" },
 ];
 
-const DEFAULT_INDEX = 1; // 14px
+const DEFAULT_INDEX = 2; // M
 const STORAGE_KEY = "azim_font_size";
+
+function applySize(idx: number) {
+  const s = SIZES[idx];
+  const root = document.documentElement;
+  root.style.setProperty("--article-body-size", `${s.body}px`);
+  root.style.setProperty("--article-lede-size", `${s.lede}px`);
+  root.style.setProperty("--article-h1-min", `${s.h1Min}px`);
+  root.style.setProperty("--article-h1-max", `${s.h1Max}px`);
+  root.style.setProperty("--article-heading-size", `${s.h2}px`);
+  root.style.setProperty("--article-h3-size", `${s.h3}px`);
+  root.style.setProperty("--article-kicker-size", `${s.kicker}px`);
+}
 
 export function FontSizeControl() {
   const [sizeIndex, setSizeIndex] = useState(DEFAULT_INDEX);
@@ -30,14 +46,6 @@ export function FontSizeControl() {
       // ignore
     }
   }, []);
-
-  function applySize(idx: number) {
-    const s = SIZES[idx];
-    const root = document.documentElement;
-    root.style.setProperty("--article-body-size", `${s.body}px`);
-    root.style.setProperty("--article-heading-size", `${s.heading}px`);
-    root.style.setProperty("--article-h3-size", `${s.h3}px`);
-  }
 
   function change(delta: number) {
     const next = Math.max(0, Math.min(SIZES.length - 1, sizeIndex + delta));
