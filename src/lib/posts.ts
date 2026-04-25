@@ -14,6 +14,7 @@ export interface PostMeta {
   date: string;
   readTime: number;
   published: boolean;
+  keywords: string[];
 }
 
 export interface Post extends PostMeta {
@@ -43,6 +44,7 @@ export function getAllPosts(): PostMeta[] {
         date: data.date || "",
         readTime: Math.ceil(stats.minutes),
         published: data.published !== false,
+        keywords: data.keywords || [],
       } satisfies PostMeta;
     })
     .filter((post) => post.published)
@@ -72,6 +74,7 @@ export function getPostBySlug(slug: string): Post | null {
     date: data.date || "",
     readTime: Math.ceil(stats.minutes),
     published: data.published !== false,
+    keywords: data.keywords || [],
     content,
   };
 }

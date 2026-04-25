@@ -99,7 +99,7 @@ export function Footer() {
             <div className="flex flex-col gap-2">
               {[
                 { label: "Email newsletter", href: "/newsletter" },
-                { label: "RSS", href: "#" },
+                { label: "RSS", href: "/feed.xml" },
                 { label: "Twitter / X", href: "https://x.com/EduTechOne" },
                 { label: "LinkedIn", href: "https://www.linkedin.com/in/azim-gx/" },
               ].map(({ label, href }) => (

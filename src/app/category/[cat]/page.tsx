@@ -4,22 +4,53 @@ import { ArticleCard } from "@/components/article-card";
 import { ArticleGrid } from "@/components/article-grid";
 import type { Metadata } from "next";
 
-const CATEGORY_INFO: Record<string, { label: string; lede: string }> = {
+const CATEGORY_INFO: Record<
+  string,
+  { label: string; lede: string; keywords: string[] }
+> = {
   "islamic-finance": {
     label: "Islamic Finance",
-    lede: "Essays on ribā, sukūk, and the moral architecture of money in the Islamic tradition.",
+    lede: "Essays on riba, Shariah compliance, Islamic economics, halal finance, and the moral architecture of money in the Islamic tradition.",
+    keywords: [
+      "Islamic finance",
+      "riba",
+      "Shariah compliance",
+      "halal finance",
+      "Islamic economics",
+      "sukuk",
+      "Islamic banking",
+    ],
   },
   economics: {
     label: "Economics",
-    lede: "On markets, prices, and the political economy beneath them.",
+    lede: "Analysis of monetary systems, monetary policy, debt architecture, inflation, and the political economy beneath them.",
+    keywords: [
+      "economics",
+      "monetary systems",
+      "monetary policy",
+      "inflation",
+      "debt crisis",
+      "fiat currency",
+      "economic analysis",
+    ],
   },
   finance: {
     label: "Finance",
-    lede: "On banks, rates, and the instruments that move the modern world.",
+    lede: "On banks, interest rates, cryptocurrency, blockchain, Bitcoin, and the instruments that move the modern world.",
+    keywords: [
+      "finance",
+      "cryptocurrency",
+      "blockchain",
+      "Bitcoin",
+      "banking",
+      "financial systems",
+      "digital currency",
+    ],
   },
   unfiltered: {
     label: "Unfiltered",
     lede: "Things I cannot stop thinking about that do not quite fit the other categories.",
+    keywords: [],
   },
 };
 
@@ -36,9 +67,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { cat } = await params;
   const info = CATEGORY_INFO[cat];
   if (!info) return {};
+  const url = `https://azim.cc/category/${cat}`;
   return {
-    title: `${info.label} — M Azim Abdul Majeed`,
+    title: info.label,
     description: info.lede,
+    keywords: info.keywords,
+    openGraph: {
+      title: `${info.label} Articles`,
+      description: info.lede,
+      url,
+      siteName: "azim.cc",
+      type: "website",
+    },
+    alternates: {
+      canonical: url,
+    },
   };
 }
 

@@ -20,9 +20,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return {};
+  const url = `https://azim.cc/blog/${slug}`;
   return {
-    title: `${post.title} — M Azim Abdul Majeed`,
+    title: post.title,
     description: post.lede,
+    authors: [{ name: post.author }],
+    openGraph: {
+      title: post.title,
+      description: post.lede,
+      type: "article",
+      url,
+      siteName: "azim.cc",
+      locale: "en_GB",
+      publishedTime: new Date(post.date).toISOString(),
+      authors: [post.author],
+      section: post.kicker,
+    },
+    twitter: {
+      card: "summary",
+      title: post.title,
+      description: post.lede,
+      creator: "@EduTechOne",
+    },
+    alternates: {
+      canonical: url,
+    },
+    keywords: post.keywords,
   };
 }
 
@@ -36,8 +59,36 @@ export default async function BlogPostPage({ params }: Props) {
       ? "var(--green-5)"
       : "var(--brand)";
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.lede,
+    author: {
+      "@type": "Person",
+      name: post.author,
+      url: "https://azim.cc/about",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "M Azim Abdul Majeed",
+      url: "https://azim.cc",
+    },
+    datePublished: new Date(post.date).toISOString(),
+    url: `https://azim.cc/blog/${slug}`,
+    mainEntityOfPage: `https://azim.cc/blog/${slug}`,
+    articleSection: post.kicker,
+    wordCount: post.readTime * 250,
+    inLanguage: "en",
+    keywords: post.keywords.join(", "),
+  };
+
   return (
     <div className="max-w-[720px] mx-auto px-5 md:px-10 py-14 pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <BackLink />
 
       <header className="mb-12">
