@@ -21,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
       { href: "/category/economics", label: "Economics" },
       { href: "/category/finance", label: "Finance" },
       { href: "/category/crypto", label: "Crypto" },
+      { href: "/category/education", label: "Education" },
       { href: "/category/unfiltered", label: "Unfiltered" },
     ],
   },

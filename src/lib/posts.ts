@@ -85,6 +85,7 @@ export function getPostsByCategory(category: string): PostMeta[] {
     economics: "Economics",
     finance: "Finance",
     crypto: "Crypto",
+    education: "Education",
     unfiltered: "Unfiltered",
   };
 
@@ -106,6 +107,7 @@ export function getCategorySlug(kicker: string): string {
     Economics: "economics",
     Finance: "finance",
     Crypto: "crypto",
+    Education: "education",
     Unfiltered: "unfiltered",
     Articles: "articles",
   };

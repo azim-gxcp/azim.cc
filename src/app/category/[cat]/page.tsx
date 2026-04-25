@@ -59,6 +59,18 @@ const CATEGORY_INFO: Record<
       "Web3",
     ],
   },
+  education: {
+    label: "Education",
+    lede: "On Islamic theology, Arabic language, Tawhid, Quranic education, and reclaiming precision in how Muslims understand and articulate their faith.",
+    keywords: [
+      "Islamic education",
+      "Tawhid",
+      "Quranic Arabic",
+      "Islamic theology",
+      "Arabic language",
+      "Muslim education",
+    ],
+  },
   unfiltered: {
     label: "Unfiltered",
     lede: "Things I cannot stop thinking about that do not quite fit the other categories.",
