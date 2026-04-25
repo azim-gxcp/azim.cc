@@ -79,6 +79,49 @@ export function getPostBySlug(slug: string): Post | null {
   };
 }
 
+export function getAllPostsMeta(): { slug: string; title: string; lede: string; kicker: string; keywords: string[] }[] {
+  return getAllPosts().map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    lede: p.lede,
+    kicker: p.kicker,
+    keywords: p.keywords,
+  }));
+}
+
+export function getRelatedPosts(slug: string, limit = 3): PostMeta[] {
+  const current = getPostBySlug(slug);
+  if (!current) return [];
+
+  const allPosts = getAllPosts().filter((p) => p.slug !== slug);
+  const currentKeywords = new Set(current.keywords.map((k) => k.toLowerCase()));
+
+  const scored = allPosts.map((post) => {
+    let score = 0;
+    if (post.kicker === current.kicker) score += 10;
+    for (const kw of post.keywords) {
+      if (currentKeywords.has(kw.toLowerCase())) score += 1;
+    }
+    return { post, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+
+  const results = scored.slice(0, limit).map((s) => s.post);
+
+  // Fill with recent posts if we don't have enough
+  if (results.length < limit) {
+    for (const post of allPosts) {
+      if (results.length >= limit) break;
+      if (!results.find((r) => r.slug === post.slug)) {
+        results.push(post);
+      }
+    }
+  }
+
+  return results;
+}
+
 export function getPostsByCategory(category: string): PostMeta[] {
   const categoryMap: Record<string, string> = {
     "islamic-finance": "Islamic Finance",

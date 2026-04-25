@@ -5,6 +5,12 @@ import { BackLink } from "@/components/back-link";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { CommentSection } from "@/components/comment-section";
 import { mdxComponents } from "@/components/mdx-components";
+import { ReadingProgress } from "@/components/reading-progress";
+import { TableOfContents } from "@/components/table-of-contents";
+import { ShareButtons } from "@/components/share-buttons";
+import { RelatedArticles } from "@/components/related-articles";
+import { BookmarkButton } from "@/components/bookmark-button";
+import { FontSizeControl } from "@/components/font-size-control";
 import type { Metadata } from "next";
 
 interface Props {
@@ -37,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       section: post.kicker,
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: post.title,
       description: post.lede,
       creator: "@EduTechOne",
@@ -59,6 +65,8 @@ export default async function BlogPostPage({ params }: Props) {
       ? "var(--green-5)"
       : "var(--brand)";
 
+  const url = `https://azim.cc/blog/${slug}`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -75,8 +83,8 @@ export default async function BlogPostPage({ params }: Props) {
       url: "https://azim.cc",
     },
     datePublished: new Date(post.date).toISOString(),
-    url: `https://azim.cc/blog/${slug}`,
-    mainEntityOfPage: `https://azim.cc/blog/${slug}`,
+    url,
+    mainEntityOfPage: url,
     articleSection: post.kicker,
     wordCount: post.readTime * 250,
     inLanguage: "en",
@@ -85,6 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <div className="max-w-[720px] mx-auto px-5 md:px-10 py-14 pb-24">
+      <ReadingProgress />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -134,21 +143,54 @@ export default async function BlogPostPage({ params }: Props) {
         </p>
         <div
           style={{
-            fontFamily: "var(--font-body)",
-            fontSize: "14px",
-            color: "var(--fg3)",
-            fontStyle: "italic",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
             paddingBottom: "32px",
             borderBottom: "1px solid var(--border-subtle)",
           }}
         >
-          By <strong>{post.author}</strong> &middot; {post.date}
+          <div
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "14px",
+              color: "var(--fg3)",
+              fontStyle: "italic",
+            }}
+          >
+            By <strong>{post.author}</strong> &middot; {post.date}
+          </div>
+          <FontSizeControl />
         </div>
       </header>
+
+      <TableOfContents content={post.content} />
 
       <div className="article-body">
         <MDXRemote source={post.content} components={mdxComponents} />
       </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          marginTop: "3rem",
+          paddingTop: "1.5rem",
+          borderTop: "1px solid var(--border-subtle)",
+        }}
+      >
+        <ShareButtons title={post.title} url={url} />
+        <BookmarkButton
+          slug={slug}
+          title={post.title}
+          kicker={post.kicker}
+          lede={post.lede}
+          date={post.date}
+        />
+      </div>
+
+      <RelatedArticles currentSlug={slug} />
 
       <CommentSection slug={slug} />
 

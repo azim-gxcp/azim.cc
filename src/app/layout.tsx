@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
+import { SearchDialog } from "@/components/search-dialog";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -106,6 +107,7 @@ export default function RootLayout({
           <Nav />
           <main className="flex-1">{children}</main>
           <Footer />
+          <SearchDialog />
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

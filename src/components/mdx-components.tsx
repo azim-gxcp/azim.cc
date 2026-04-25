@@ -1,4 +1,24 @@
 import type { MDXComponents } from "mdx/types";
+import { Footnote } from "./footnote";
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .trim();
+}
+
+function getTextContent(children: React.ReactNode): string {
+  if (typeof children === "string") return children;
+  if (typeof children === "number") return String(children);
+  if (Array.isArray(children)) return children.map(getTextContent).join("");
+  if (children && typeof children === "object" && "props" in children) {
+    return getTextContent((children as React.ReactElement<{ children?: React.ReactNode }>).props.children);
+  }
+  return "";
+}
 
 export function PullQuote({ children }: { children: React.ReactNode }) {
   return <blockquote className="pull-quote">{children}</blockquote>;
@@ -13,32 +33,15 @@ export function Arabic({ children }: { children: React.ReactNode }) {
 }
 
 export const mdxComponents: MDXComponents = {
-  h2: (props) => (
-    <h2
-      style={{
-        fontFamily: "var(--font-display)",
-        fontSize: "28px",
-        fontWeight: 600,
-        lineHeight: 1.25,
-        letterSpacing: "-0.015em",
-        color: "var(--fg1)",
-        margin: "2.5em 0 0",
-        fontVariationSettings: "'opsz' 72",
-      }}
-      {...props}
-    />
-  ),
-  p: (props) => (
-    <p
-      style={{
-        fontFamily: "var(--font-body)",
-        fontSize: "18px",
-        lineHeight: 1.8,
-        color: "var(--fg1)",
-      }}
-      {...props}
-    />
-  ),
+  h2: (props) => {
+    const id = slugify(getTextContent(props.children));
+    return <h2 id={id} {...props} />;
+  },
+  h3: (props) => {
+    const id = slugify(getTextContent(props.children));
+    return <h3 id={id} {...props} />;
+  },
+  p: (props) => <p {...props} />,
   blockquote: (props) => <blockquote className="pull-quote" {...props} />,
   code: (props) => (
     <code
@@ -56,4 +59,5 @@ export const mdxComponents: MDXComponents = {
   PullQuote,
   DropCap,
   Arabic,
+  Footnote,
 };

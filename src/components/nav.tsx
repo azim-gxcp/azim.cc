@@ -123,6 +123,7 @@ export function Nav() {
               color: "var(--fg2)",
             }}
             aria-label="Search"
+            onClick={() => window.dispatchEvent(new Event("open-search"))}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "var(--bg-muted)";
               e.currentTarget.style.color = "var(--fg1)";
