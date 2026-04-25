@@ -12,7 +12,7 @@ export function Hero() {
           marginBottom: "20px",
         }}
       >
-        Thoughts and posts by Azim
+        Articles by Azim
       </div>
       <h1
         className="m-0 mb-5"
@@ -26,11 +26,14 @@ export function Hero() {
           fontVariationSettings: "'opsz' 144",
         }}
       >
-        On <em style={{ fontStyle: "italic", color: "var(--brand)" }}>money</em>
-        ,{" "}
-        <em style={{ fontStyle: "italic", color: "var(--brand)" }}>markets</em>,
+        On{" "}
+        <em style={{ fontStyle: "italic", color: "var(--brand)" }}>money</em>,{" "}
+        <em style={{ fontStyle: "italic", color: "var(--brand)" }}>
+          monetary systems
+        </em>
+        ,
         <br />
-        and what we owe each other.
+        and the architecture of justice.
       </h1>
       <p
         className="m-0"
@@ -43,8 +46,8 @@ export function Hero() {
           maxWidth: "60ch",
         }}
       >
-        Long-form essays on economics, finance, and Islamic finance, plus the
-        occasional thought that will not leave me alone.
+        Economics, Islamic finance, monetary architecture, and first-principles
+        thinking about how money should work.
       </p>
     </section>
   );
