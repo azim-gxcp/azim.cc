@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy:api": "npm --prefix server run deploy"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
