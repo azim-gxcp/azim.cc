@@ -96,6 +96,22 @@ function NewsletterContent() {
     }
   }
 
+  async function handleActivate(id: string) {
+    setActionLoading(id);
+    try {
+      await activateSubscriber(id);
+      showFeedback("Subscriber activated", "success");
+      loadSubscribers();
+    } catch (err) {
+      showFeedback(
+        err instanceof ApiError ? err.message : "Failed to activate subscriber",
+        "error"
+      );
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
   async function handleUnsuspend(id: string) {
     setActionLoading(id);
     try {
@@ -451,6 +467,16 @@ function NewsletterContent() {
                     </td>
                     <td style={{ padding: "10px 16px" }}>
                       <div style={{ display: "flex", gap: "6px" }}>
+                        {/* Pending: show Activate */}
+                        {!s.confirmed && !s.unsubscribedAt && (
+                          <button
+                            onClick={() => handleActivate(s.id)}
+                            disabled={isLoading}
+                            style={{ ...actionBtnStyle, color: "#22c55e", borderColor: "#22c55e" }}
+                          >
+                            Activate
+                          </button>
+                        )}
                         {/* Active: show Suspend */}
                         {s.confirmed && !s.unsubscribedAt && (
                           <button
