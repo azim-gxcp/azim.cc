@@ -36,15 +36,27 @@ const CATEGORY_INFO: Record<
   },
   finance: {
     label: "Finance",
-    lede: "On banks, interest rates, cryptocurrency, blockchain, Bitcoin, and the instruments that move the modern world.",
+    lede: "On banks, interest rates, and the instruments that move the modern world.",
     keywords: [
       "finance",
+      "banking",
+      "financial systems",
+      "monetary policy",
+      "interest rates",
+    ],
+  },
+  crypto: {
+    label: "Crypto",
+    lede: "On Bitcoin, blockchain, cryptocurrency, tokenomics, digital currency design, and the future of decentralised money.",
+    keywords: [
       "cryptocurrency",
       "blockchain",
       "Bitcoin",
-      "banking",
-      "financial systems",
+      "tokenomics",
       "digital currency",
+      "decentralised finance",
+      "crypto",
+      "Web3",
     ],
   },
   unfiltered: {

@@ -62,6 +62,7 @@ export function Footer() {
                 { href: "/category/islamic-finance", label: "Islamic Finance" },
                 { href: "/category/economics", label: "Economics" },
                 { href: "/category/finance", label: "Finance" },
+                { href: "/category/crypto", label: "Crypto" },
                 { href: "/category/unfiltered", label: "Unfiltered" },
               ].map((link) => (
                 <Link

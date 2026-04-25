@@ -84,6 +84,7 @@ export function getPostsByCategory(category: string): PostMeta[] {
     "islamic-finance": "Islamic Finance",
     economics: "Economics",
     finance: "Finance",
+    crypto: "Crypto",
     unfiltered: "Unfiltered",
   };
 
@@ -104,6 +105,7 @@ export function getCategorySlug(kicker: string): string {
     "Islamic Finance": "islamic-finance",
     Economics: "economics",
     Finance: "finance",
+    Crypto: "crypto",
     Unfiltered: "unfiltered",
     Essays: "essays",
   };

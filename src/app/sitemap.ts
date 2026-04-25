@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const categories = ["islamic-finance", "economics", "finance", "unfiltered"];
+  const categories = ["islamic-finance", "economics", "finance", "crypto", "unfiltered"];
   const categoryEntries = categories.map((cat) => ({
     url: `${SITE_URL}/category/${cat}`,
     lastModified: new Date(),
