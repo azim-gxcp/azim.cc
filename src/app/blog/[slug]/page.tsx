@@ -92,7 +92,7 @@ export default async function BlogPostPage({ params }: Props) {
   };
 
   return (
-    <div className="max-w-[720px] mx-auto px-5 md:px-10 py-14 pb-24">
+    <div className="max-w-[800px] mx-auto px-5 md:px-10 py-14 pb-24">
       <ReadingProgress />
       <script
         type="application/ld+json"
@@ -118,7 +118,7 @@ export default async function BlogPostPage({ params }: Props) {
           className="m-0 mb-6"
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(2.25rem, 5vw, 3.5rem)",
+            fontSize: "clamp(2.1rem, 4.8vw, 3.375rem)",
             fontWeight: 600,
             lineHeight: 1.1,
             letterSpacing: "-0.02em",
@@ -132,7 +132,7 @@ export default async function BlogPostPage({ params }: Props) {
           className="m-0 mb-8"
           style={{
             fontFamily: "var(--font-body)",
-            fontSize: "21px",
+            fontSize: "19px",
             fontStyle: "italic",
             lineHeight: 1.6,
             color: "var(--fg2)",

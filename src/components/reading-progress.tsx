@@ -1,11 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export function ReadingProgress() {
   const [progress, setProgress] = useState(0);
+  const [navHeight, setNavHeight] = useState(53);
+  const measured = useRef(false);
 
   useEffect(() => {
+    if (!measured.current) {
+      const nav = document.querySelector("header");
+      if (nav) setNavHeight(nav.getBoundingClientRect().height);
+      measured.current = true;
+    }
+
     let ticking = false;
 
     function onScroll() {
@@ -37,12 +45,12 @@ export function ReadingProgress() {
       className="reading-progress"
       style={{
         position: "fixed",
-        top: 0,
+        top: navHeight,
         left: 0,
         width: `${progress}%`,
         height: "3px",
         background: "var(--brand)",
-        zIndex: 50,
+        zIndex: 11,
         transition: "width 100ms linear",
       }}
     />
