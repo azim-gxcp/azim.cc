@@ -10,7 +10,7 @@ const CATEGORY_INFO: Record<
 > = {
   "islamic-finance": {
     label: "Islamic Finance",
-    lede: "Essays on riba, Shariah compliance, Islamic economics, halal finance, and the moral architecture of money in the Islamic tradition.",
+    lede: "Articles on riba, Shariah compliance, Islamic economics, halal finance, and the moral architecture of money in the Islamic tradition.",
     keywords: [
       "Islamic finance",
       "riba",

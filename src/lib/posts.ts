@@ -39,7 +39,7 @@ export function getAllPosts(): PostMeta[] {
         slug,
         title: data.title || slug,
         lede: data.lede || "",
-        kicker: data.kicker || "Essays",
+        kicker: data.kicker || "Articles",
         author: data.author || "Azim",
         date: data.date || "",
         readTime: Math.ceil(stats.minutes),
@@ -69,7 +69,7 @@ export function getPostBySlug(slug: string): Post | null {
     slug,
     title: data.title || slug,
     lede: data.lede || "",
-    kicker: data.kicker || "Essays",
+    kicker: data.kicker || "Articles",
     author: data.author || "Azim",
     date: data.date || "",
     readTime: Math.ceil(stats.minutes),
@@ -107,7 +107,7 @@ export function getCategorySlug(kicker: string): string {
     Finance: "finance",
     Crypto: "crypto",
     Unfiltered: "unfiltered",
-    Essays: "essays",
+    Articles: "articles",
   };
   return map[kicker] || kicker.toLowerCase().replace(/\s+/g, "-");
 }

@@ -227,7 +227,7 @@ export default function AboutPage() {
           You can find me on{" "}
           <Link href="https://x.com/EduTechOne" target="_blank" rel="noopener noreferrer">Twitter / X</Link>, on{" "}
           <Link href="https://www.linkedin.com/in/azim-gx/" target="_blank" rel="noopener noreferrer">LinkedIn</Link>, and the full archive of
-          writing on the <Link href="/">Essays</Link> page.
+          writing on the <Link href="/">Articles</Link> page.
         </p>
       </div>
     </div>
