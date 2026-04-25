@@ -6,6 +6,9 @@ import { RequireAdmin } from "@/lib/admin-auth";
 import {
   getSubscribers,
   sendNewsletter,
+  activateSubscriber,
+  deactivateSubscriber,
+  deleteSubscriber,
   type Subscriber,
   ApiError,
 } from "@/lib/api";
@@ -29,18 +32,25 @@ function NewsletterContent() {
   const [sending, setSending] = useState(false);
   const [sendResult, setSendResult] = useState("");
 
-  useEffect(() => {
+  // Action loading states
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  function loadSubscribers() {
     getSubscribers()
       .then(setSubscribers)
       .catch(() => {})
       .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    loadSubscribers();
   }, []);
 
   const active = subscribers.filter(
     (s) => s.confirmed && !s.unsubscribedAt
   );
-  const pending = subscribers.filter((s) => !s.confirmed);
-  const unsubscribed = subscribers.filter((s) => s.unsubscribedAt);
+  const pending = subscribers.filter((s) => !s.confirmed && !s.unsubscribedAt);
+  const deactivated = subscribers.filter((s) => s.unsubscribedAt);
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
@@ -66,6 +76,43 @@ function NewsletterContent() {
     }
   }
 
+  async function handleActivate(id: string) {
+    setActionLoading(id);
+    try {
+      await activateSubscriber(id);
+      loadSubscribers();
+    } catch {
+      // silently fail
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  async function handleDeactivate(id: string) {
+    setActionLoading(id);
+    try {
+      await deactivateSubscriber(id);
+      loadSubscribers();
+    } catch {
+      // silently fail
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Permanently delete this subscriber?")) return;
+    setActionLoading(id);
+    try {
+      await deleteSubscriber(id);
+      loadSubscribers();
+    } catch {
+      // silently fail
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
   const inputStyle: React.CSSProperties = {
     fontFamily: "var(--font-body)",
     fontSize: "15px",
@@ -77,6 +124,18 @@ function NewsletterContent() {
     outline: "none",
     width: "100%",
     boxSizing: "border-box",
+  };
+
+  const actionBtnStyle: React.CSSProperties = {
+    fontSize: "12px",
+    fontWeight: 500,
+    padding: "4px 10px",
+    borderRadius: "4px",
+    border: "1px solid var(--border)",
+    background: "transparent",
+    cursor: "pointer",
+    fontFamily: "var(--font-body)",
+    transition: "opacity 150ms",
   };
 
   return (
@@ -124,8 +183,8 @@ function NewsletterContent() {
         <StatCard label="Active" value={active.length} color="#22c55e" />
         <StatCard label="Pending" value={pending.length} color="var(--brand)" />
         <StatCard
-          label="Unsubscribed"
-          value={unsubscribed.length}
+          label="Deactivated"
+          value={deactivated.length}
           color="var(--fg3)"
         />
       </div>
@@ -264,33 +323,82 @@ function NewsletterContent() {
                 <th style={{ padding: "10px 16px", fontWeight: 600, color: "var(--fg2)" }}>
                   Date
                 </th>
+                <th style={{ padding: "10px 16px", fontWeight: 600, color: "var(--fg2)" }}>
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
-              {subscribers.map((s) => (
-                <tr
-                  key={s.id}
-                  style={{
-                    borderTop: "1px solid var(--border-subtle)",
-                    background: "var(--bg-elev)",
-                  }}
-                >
-                  <td style={{ padding: "10px 16px", color: "var(--fg1)" }}>
-                    {s.email}
-                    {s.name && (
-                      <span style={{ color: "var(--fg3)", marginLeft: "6px" }}>
-                        ({s.name})
-                      </span>
-                    )}
-                  </td>
-                  <td style={{ padding: "10px 16px" }}>
-                    <SubscriberStatus subscriber={s} />
-                  </td>
-                  <td style={{ padding: "10px 16px", color: "var(--fg3)" }}>
-                    {new Date(s.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
+              {subscribers.map((s) => {
+                const isLoading = actionLoading === s.id;
+                return (
+                  <tr
+                    key={s.id}
+                    style={{
+                      borderTop: "1px solid var(--border-subtle)",
+                      background: "var(--bg-elev)",
+                      opacity: isLoading ? 0.5 : 1,
+                    }}
+                  >
+                    <td style={{ padding: "10px 16px", color: "var(--fg1)" }}>
+                      {s.email}
+                      {s.name && (
+                        <span style={{ color: "var(--fg3)", marginLeft: "6px" }}>
+                          ({s.name})
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ padding: "10px 16px" }}>
+                      <SubscriberStatus subscriber={s} />
+                    </td>
+                    <td style={{ padding: "10px 16px", color: "var(--fg3)" }}>
+                      {new Date(s.createdAt).toLocaleDateString()}
+                    </td>
+                    <td style={{ padding: "10px 16px" }}>
+                      <div style={{ display: "flex", gap: "6px" }}>
+                        {/* Pending: show Activate */}
+                        {!s.confirmed && !s.unsubscribedAt && (
+                          <button
+                            onClick={() => handleActivate(s.id)}
+                            disabled={isLoading}
+                            style={{ ...actionBtnStyle, color: "#22c55e", borderColor: "#22c55e" }}
+                          >
+                            Activate
+                          </button>
+                        )}
+                        {/* Active: show Deactivate */}
+                        {s.confirmed && !s.unsubscribedAt && (
+                          <button
+                            onClick={() => handleDeactivate(s.id)}
+                            disabled={isLoading}
+                            style={{ ...actionBtnStyle, color: "var(--fg3)" }}
+                          >
+                            Deactivate
+                          </button>
+                        )}
+                        {/* Deactivated/Unsubscribed: show Reactivate */}
+                        {s.unsubscribedAt && (
+                          <button
+                            onClick={() => handleActivate(s.id)}
+                            disabled={isLoading}
+                            style={{ ...actionBtnStyle, color: "var(--brand)", borderColor: "var(--brand)" }}
+                          >
+                            Reactivate
+                          </button>
+                        )}
+                        {/* Always show Delete */}
+                        <button
+                          onClick={() => handleDelete(s.id)}
+                          disabled={isLoading}
+                          style={{ ...actionBtnStyle, color: "#dc2626", borderColor: "#dc2626" }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -356,7 +464,7 @@ function SubscriberStatus({ subscriber }: { subscriber: Subscriber }) {
           color: "var(--fg3)",
         }}
       >
-        Unsubscribed
+        Deactivated
       </span>
     );
   }

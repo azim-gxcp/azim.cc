@@ -202,6 +202,24 @@ export function getSubscribers() {
   return apiFetch<Subscriber[]>("/api/admin/subscribers");
 }
 
+export function activateSubscriber(id: string) {
+  return apiFetch<{ message: string }>(`/api/admin/subscribers/${id}/activate`, {
+    method: "POST",
+  });
+}
+
+export function deactivateSubscriber(id: string) {
+  return apiFetch<{ message: string }>(`/api/admin/subscribers/${id}/deactivate`, {
+    method: "POST",
+  });
+}
+
+export function deleteSubscriber(id: string) {
+  return apiFetch<{ message: string }>(`/api/admin/subscribers/${id}`, {
+    method: "DELETE",
+  });
+}
+
 export function sendNewsletter(
   slug: string,
   title: string,
@@ -224,4 +242,72 @@ export interface AdminStats {
 
 export function getAdminStats() {
   return apiFetch<AdminStats>("/api/admin/stats");
+}
+
+// --- Upload wrapper (multipart) ---
+
+async function apiUpload<T>(path: string, formData: FormData): Promise<T> {
+  const headers: Record<string, string> = {};
+
+  const token = getAccessToken();
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  // Do NOT set Content-Type - browser auto-sets multipart boundary
+
+  const res = await fetch(`${API_URL}${path}`, {
+    method: "POST",
+    headers,
+    body: formData,
+  });
+
+  if (res.status === 401 && getRefreshToken()) {
+    const refreshed = await tryRefresh();
+    if (refreshed) {
+      headers["Authorization"] = `Bearer ${getAccessToken()}`;
+      const retry = await fetch(`${API_URL}${path}`, {
+        method: "POST",
+        headers,
+        body: formData,
+      });
+      if (retry.ok) return retry.json() as Promise<T>;
+    }
+    clearTokens();
+    throw new ApiError(401, "Session expired");
+  }
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new ApiError(
+      res.status,
+      (body as { error?: string }).error || res.statusText
+    );
+  }
+
+  return res.json() as Promise<T>;
+}
+
+// --- Publish API ---
+
+export function publishArticle(data: {
+  file: File;
+  title: string;
+  lede: string;
+  kicker: string;
+  date: string;
+  keywords?: string;
+}) {
+  const fd = new FormData();
+  fd.append("file", data.file);
+  fd.append("title", data.title);
+  fd.append("lede", data.lede);
+  fd.append("kicker", data.kicker);
+  fd.append("date", data.date);
+  if (data.keywords) fd.append("keywords", data.keywords);
+
+  return apiUpload<{ message: string; slug: string; url: string }>(
+    "/api/admin/publish",
+    fd
+  );
 }

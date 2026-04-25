@@ -123,6 +123,7 @@ function DashboardContent() {
 
       {/* Quick links */}
       <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+        <AdminLink href="/admin/publish">Publish article</AdminLink>
         <AdminLink href="/admin/comments">
           Moderate comments
           {stats?.comments.pending
