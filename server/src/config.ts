@@ -34,4 +34,11 @@ export const config = {
 
   frontendUrl: optional("FRONTEND_URL", "https://azim.cc"),
   apiUrl: optional("API_URL", "https://api.azim.cc"),
+
+  github: {
+    token: required("GITHUB_TOKEN"),
+    owner: optional("GITHUB_OWNER", "azim-gxcp"),
+    repo: optional("GITHUB_REPO", "azim.cc"),
+    branch: optional("GITHUB_BRANCH", "main"),
+  },
 };

@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import multipart from "@fastify/multipart";
 import { config } from "./config.js";
 import { authRoutes } from "./routes/auth.js";
 import { newsletterRoutes } from "./routes/newsletter.js";
@@ -14,6 +15,9 @@ await app.register(cors, {
   methods: ["GET", "POST", "DELETE"],
   credentials: true,
 });
+
+// Multipart file uploads (10 MB limit)
+await app.register(multipart, { limits: { fileSize: 10_485_760 } });
 
 // Health check
 app.get("/api/health", async () => ({
