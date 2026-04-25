@@ -14,7 +14,7 @@ export function BackLink() {
       }}
     >
       <ArrowLeft size={14} />
-      All essays
+      All articles
     </Link>
   );
 }
