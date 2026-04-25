@@ -43,6 +43,7 @@ He is the designer of GX Coin Protocol, a protocol-level monetary architecture, 
 - [Islamic Finance: Have We Avoided a Sin Only to Commit a Greater One?](https://azim.cc/blog/islamic-finance-have-we-avoided-a-sin): A critique of the Islamic finance industry's departure from the maqasid al-shariah. Argues that technical Shariah compliance without social justice outcomes betrays the spirit of Islamic law.
 - [From Tally Sticks to Tokenized Ledgers](https://azim.cc/blog/from-tally-sticks-to-tokenized-ledgers): Why the dollar still dominates global finance and where the cracks are forming. Examines monetary history, dollar infrastructure, Bitcoin limitations, stablecoins, CBDCs, and a third path through productivity-anchored monetary architecture.
 - [Inflation, Debt, and the Dollar's Risk Premium](https://azim.cc/blog/inflation-debt-and-the-dollars-risk-premium): Analysis of how inflation and US debt interact with dollar reserve status. Explores tokenization of money and collateral, and emerging proposals for productivity-anchored, interest-free monetary protocols.
+- [Rethinking Riba in the Age of Fiat](https://azim.cc/blog/rethinking-riba-in-the-age-of-fiat): Challenges prevailing assumptions about applying classical riba rulings to modern fiat currencies. Asks whether fiat currency, born from interest-bearing debt, can logically be treated as a ribawi item under prophetic hadith definitions.
 
 ## Tools
 
