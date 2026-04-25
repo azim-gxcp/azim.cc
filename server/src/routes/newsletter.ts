@@ -51,16 +51,24 @@ export async function newsletterRoutes(app: FastifyInstance) {
             })
             .where(eq(subscribers.id, existing.id));
 
-          const emailContent = confirmationEmail(newToken);
-          await sendEmail({ to: email, ...emailContent });
+          try {
+            const emailContent = confirmationEmail(newToken);
+            await sendEmail({ to: email, ...emailContent });
+          } catch (err) {
+            app.log.error(err, "Failed to send confirmation email");
+          }
 
           return { message: "Check your email to confirm your subscription" };
         }
 
         // Already pending confirmation, resend
         if (existing.confirmToken) {
-          const emailContent = confirmationEmail(existing.confirmToken);
-          await sendEmail({ to: email, ...emailContent });
+          try {
+            const emailContent = confirmationEmail(existing.confirmToken);
+            await sendEmail({ to: email, ...emailContent });
+          } catch (err) {
+            app.log.error(err, "Failed to resend confirmation email");
+          }
         }
 
         return { message: "Check your email to confirm your subscription" };
@@ -73,8 +81,12 @@ export async function newsletterRoutes(app: FastifyInstance) {
         .returning({ confirmToken: subscribers.confirmToken });
 
       if (sub?.confirmToken) {
-        const emailContent = confirmationEmail(sub.confirmToken);
-        await sendEmail({ to: email, ...emailContent });
+        try {
+          const emailContent = confirmationEmail(sub.confirmToken);
+          await sendEmail({ to: email, ...emailContent });
+        } catch (err) {
+          app.log.error(err, "Failed to send confirmation email");
+        }
       }
 
       return { message: "Check your email to confirm your subscription" };
@@ -103,9 +115,13 @@ export async function newsletterRoutes(app: FastifyInstance) {
       .set({ confirmed: true })
       .where(eq(subscribers.id, sub.id));
 
-    // Send welcome email
-    const welcome = welcomeEmail();
-    await sendEmail({ to: sub.email, ...welcome });
+    // Send welcome email (non-blocking)
+    try {
+      const welcome = welcomeEmail();
+      await sendEmail({ to: sub.email, ...welcome });
+    } catch (err) {
+      app.log.error(err, "Failed to send welcome email");
+    }
 
     return reply.redirect(`${config.frontendUrl}/newsletter?status=confirmed`);
   });
