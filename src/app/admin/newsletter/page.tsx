@@ -13,6 +13,8 @@ import {
   ApiError,
 } from "@/lib/api";
 
+type LoadError = string | null;
+
 export default function AdminNewsletterPage() {
   return (
     <RequireAdmin>
@@ -24,6 +26,7 @@ export default function AdminNewsletterPage() {
 function NewsletterContent() {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<LoadError>(null);
 
   // Newsletter send form
   const [slug, setSlug] = useState("");
@@ -35,10 +38,27 @@ function NewsletterContent() {
   // Action loading states
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
+  // Action feedback
+  const [actionFeedback, setActionFeedback] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+
+  function showFeedback(message: string, type: "success" | "error") {
+    setActionFeedback({ message, type });
+    if (type === "success") {
+      setTimeout(() => setActionFeedback(null), 3000);
+    }
+  }
+
   function loadSubscribers() {
+    setLoadError(null);
     getSubscribers()
       .then(setSubscribers)
-      .catch(() => {})
+      .catch((err) => {
+        const msg = err instanceof ApiError ? err.message : "Failed to load subscribers";
+        setLoadError(msg);
+      })
       .finally(() => setLoading(false));
   }
 
@@ -76,25 +96,33 @@ function NewsletterContent() {
     }
   }
 
-  async function handleActivate(id: string) {
+  async function handleUnsuspend(id: string) {
     setActionLoading(id);
     try {
       await activateSubscriber(id);
+      showFeedback("Subscriber unsuspended", "success");
       loadSubscribers();
-    } catch {
-      // silently fail
+    } catch (err) {
+      showFeedback(
+        err instanceof ApiError ? err.message : "Failed to unsuspend subscriber",
+        "error"
+      );
     } finally {
       setActionLoading(null);
     }
   }
 
-  async function handleDeactivate(id: string) {
+  async function handleSuspend(id: string) {
     setActionLoading(id);
     try {
       await deactivateSubscriber(id);
+      showFeedback("Subscriber suspended", "success");
       loadSubscribers();
-    } catch {
-      // silently fail
+    } catch (err) {
+      showFeedback(
+        err instanceof ApiError ? err.message : "Failed to suspend subscriber",
+        "error"
+      );
     } finally {
       setActionLoading(null);
     }
@@ -105,9 +133,13 @@ function NewsletterContent() {
     setActionLoading(id);
     try {
       await deleteSubscriber(id);
+      showFeedback("Subscriber deleted", "success");
       loadSubscribers();
-    } catch {
-      // silently fail
+    } catch (err) {
+      showFeedback(
+        err instanceof ApiError ? err.message : "Failed to delete subscriber",
+        "error"
+      );
     } finally {
       setActionLoading(null);
     }
@@ -183,11 +215,45 @@ function NewsletterContent() {
         <StatCard label="Active" value={active.length} color="#22c55e" />
         <StatCard label="Pending" value={pending.length} color="var(--brand)" />
         <StatCard
-          label="Deactivated"
+          label="Suspended"
           value={deactivated.length}
           color="var(--fg3)"
         />
       </div>
+
+      {/* Action feedback */}
+      {actionFeedback && (
+        <div
+          style={{
+            padding: "12px 16px",
+            borderRadius: "6px",
+            marginBottom: "16px",
+            fontSize: "14px",
+            fontWeight: 500,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: actionFeedback.type === "success" ? "#dcfce7" : "#fee2e2",
+            color: actionFeedback.type === "success" ? "#166534" : "#991b1b",
+          }}
+        >
+          <span>{actionFeedback.message}</span>
+          <button
+            onClick={() => setActionFeedback(null)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "16px",
+              color: "inherit",
+              opacity: 0.6,
+              padding: "0 4px",
+            }}
+          >
+            &times;
+          </button>
+        </div>
+      )}
 
       {/* Send newsletter */}
       <div
@@ -288,6 +354,35 @@ function NewsletterContent() {
 
       {loading ? (
         <p style={{ fontSize: "14px", color: "var(--fg3)" }}>Loading...</p>
+      ) : loadError ? (
+        <div
+          style={{
+            padding: "16px 20px",
+            borderRadius: "8px",
+            border: "1px solid #fecaca",
+            background: "#fee2e2",
+            color: "#991b1b",
+            fontSize: "14px",
+          }}
+        >
+          <p style={{ margin: "0 0 8px", fontWeight: 500 }}>{loadError}</p>
+          <button
+            onClick={() => { setLoading(true); loadSubscribers(); }}
+            style={{
+              fontSize: "13px",
+              fontWeight: 500,
+              padding: "6px 12px",
+              borderRadius: "4px",
+              border: "1px solid #991b1b",
+              background: "transparent",
+              color: "#991b1b",
+              cursor: "pointer",
+              fontFamily: "var(--font-body)",
+            }}
+          >
+            Retry
+          </button>
+        </div>
       ) : subscribers.length === 0 ? (
         <p style={{ fontSize: "15px", color: "var(--fg3)" }}>
           No subscribers yet.
@@ -356,34 +451,24 @@ function NewsletterContent() {
                     </td>
                     <td style={{ padding: "10px 16px" }}>
                       <div style={{ display: "flex", gap: "6px" }}>
-                        {/* Pending: show Activate */}
-                        {!s.confirmed && !s.unsubscribedAt && (
-                          <button
-                            onClick={() => handleActivate(s.id)}
-                            disabled={isLoading}
-                            style={{ ...actionBtnStyle, color: "#22c55e", borderColor: "#22c55e" }}
-                          >
-                            Activate
-                          </button>
-                        )}
-                        {/* Active: show Deactivate */}
+                        {/* Active: show Suspend */}
                         {s.confirmed && !s.unsubscribedAt && (
                           <button
-                            onClick={() => handleDeactivate(s.id)}
+                            onClick={() => handleSuspend(s.id)}
                             disabled={isLoading}
                             style={{ ...actionBtnStyle, color: "var(--fg3)" }}
                           >
-                            Deactivate
+                            Suspend
                           </button>
                         )}
-                        {/* Deactivated/Unsubscribed: show Reactivate */}
+                        {/* Suspended: show Unsuspend */}
                         {s.unsubscribedAt && (
                           <button
-                            onClick={() => handleActivate(s.id)}
+                            onClick={() => handleUnsuspend(s.id)}
                             disabled={isLoading}
                             style={{ ...actionBtnStyle, color: "var(--brand)", borderColor: "var(--brand)" }}
                           >
-                            Reactivate
+                            Unsuspend
                           </button>
                         )}
                         {/* Always show Delete */}
@@ -464,7 +549,7 @@ function SubscriberStatus({ subscriber }: { subscriber: Subscriber }) {
           color: "var(--fg3)",
         }}
       >
-        Deactivated
+        Suspended
       </span>
     );
   }

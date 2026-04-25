@@ -40,6 +40,7 @@ const btnStyle: React.CSSProperties = {
 
 export function ShareButtons({ title, url }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
+  const [printing, setPrinting] = useState(false);
 
   const encodedTitle = encodeURIComponent(title);
   const encodedUrl = encodeURIComponent(url);
@@ -57,6 +58,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
         target="_blank"
         rel="noopener noreferrer"
         style={{ ...btnStyle, textDecoration: "none" }}
+        title="Share on X"
         aria-label="Share on X"
         onMouseEnter={(e) => {
           e.currentTarget.style.color = "var(--fg1)";
@@ -74,6 +76,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
         target="_blank"
         rel="noopener noreferrer"
         style={{ ...btnStyle, textDecoration: "none" }}
+        title="Share on LinkedIn"
         aria-label="Share on LinkedIn"
         onMouseEnter={(e) => {
           e.currentTarget.style.color = "var(--fg1)";
@@ -91,6 +94,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
         target="_blank"
         rel="noopener noreferrer"
         style={{ ...btnStyle, textDecoration: "none" }}
+        title="Share on WhatsApp"
         aria-label="Share on WhatsApp"
         onMouseEnter={(e) => {
           e.currentTarget.style.color = "var(--fg1)";
@@ -106,6 +110,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
       <button
         onClick={copyLink}
         style={btnStyle}
+        title="Copy article link"
         aria-label="Copy link"
         onMouseEnter={(e) => {
           e.currentTarget.style.color = "var(--fg1)";
@@ -117,15 +122,20 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
         }}
       >
         {copied ? (
-          <span style={{ fontSize: "11px", fontFamily: "var(--font-body)" }}>Done</span>
+          <span style={{ fontSize: "11px", fontFamily: "var(--font-body)" }}>Copied!</span>
         ) : (
           <Link2 size={15} />
         )}
       </button>
       <button
         className="pdf-export-btn"
-        onClick={() => window.print()}
+        onClick={() => {
+          setPrinting(true);
+          window.print();
+          setTimeout(() => setPrinting(false), 2000);
+        }}
         style={btnStyle}
+        title="Save as PDF"
         aria-label="Download PDF"
         onMouseEnter={(e) => {
           e.currentTarget.style.color = "var(--fg1)";
@@ -136,7 +146,11 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
           e.currentTarget.style.borderColor = "var(--border)";
         }}
       >
-        <FileDown size={15} />
+        {printing ? (
+          <span style={{ fontSize: "11px", fontFamily: "var(--font-body)" }}>Printing...</span>
+        ) : (
+          <FileDown size={15} />
+        )}
       </button>
     </div>
   );
