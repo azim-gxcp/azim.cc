@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About — M Azim Abdul Majeed",
   description:
-    "I write about economics, finance, and Islamic finance — and I reserve a small corner of the site for thoughts that refuse to fit anywhere else.",
+    "Writer, researcher, and monetary architect. I work at the intersection of economics, Islamic finance, and first-principles monetary design.",
 };
 
 export default function AboutPage() {
@@ -52,9 +52,8 @@ export default function AboutPage() {
             maxWidth: "56ch",
           }}
         >
-          I write about economics, finance, and Islamic finance, and I reserve
-          a small corner of the site for thoughts that refuse to fit anywhere
-          else.
+          Writer, researcher, and monetary architect working at the intersection
+          of economics, Islamic finance, and first-principles system design.
         </p>
 
         <div
@@ -89,7 +88,7 @@ export default function AboutPage() {
           >
             &ldquo;If you do good, you do good for yourselves.&rdquo;{" "}
             <span style={{ opacity: 0.7 }}>
-              &mdash; Al-Isra (17:7)
+              Al-Isra (17:7)
             </span>
           </p>
         </div>
@@ -104,10 +103,11 @@ export default function AboutPage() {
             color: "var(--fg1)",
           }}
         >
-          I have spent most of my working life at the edge of two traditions —
-          the quantitative vocabulary of modern finance, and the scholarly
-          tradition of Islamic jurisprudence on exchange. Much of what I write
-          here is an attempt to hold them in the same sentence.
+          I study money. Not as a portfolio exercise, but as an architectural
+          question: why modern monetary systems produce the outcomes they do, and
+          whether better designs are possible. My work sits between the
+          quantitative vocabulary of modern economics and the scholarly tradition
+          of Islamic jurisprudence on exchange.
         </p>
         <p
           className="mt-5"
@@ -118,9 +118,43 @@ export default function AboutPage() {
             color: "var(--fg1)",
           }}
         >
-          The site is a personal project. There is no sponsor, no paywall, no
-          tracking. If you want to get in touch, the email is in the footer; if
-          you want to subscribe, the button is everywhere.
+          I am the designer of{" "}
+          <Link href="https://gxcoin.money" target="_blank" rel="noopener noreferrer">
+            GX Coin Protocol
+          </Link>
+          , a productivity-anchored, interest-free monetary architecture built on
+          first principles. I also created{" "}
+          <Link href="/tools/mizan">Mizan</Link>, a diagnostic framework for
+          evaluating financial instruments against the classical{" "}
+          <em>ribawi</em> characteristics derived from primary Islamic sources.
+        </p>
+        <p
+          className="mt-5"
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "18px",
+            lineHeight: 1.8,
+            color: "var(--fg1)",
+          }}
+        >
+          A recurring thread in my research is what I call the convergence
+          thesis: that rigorous first-principles analysis of what sound money
+          should look like independently arrives at conclusions identical to
+          those Islamic economics has advocated for centuries. The overlap is not
+          cosmetic. It is structural.
+        </p>
+        <p
+          className="mt-5"
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "18px",
+            lineHeight: 1.8,
+            color: "var(--fg1)",
+          }}
+        >
+          This site is a personal project. No sponsor, no paywall, no tracking.
+          If you want to get in touch, the email is in the footer; if you want
+          to subscribe, the button is everywhere.
         </p>
 
         <h2
@@ -133,17 +167,18 @@ export default function AboutPage() {
             fontVariationSettings: "'opsz' 72",
           }}
         >
-          Frequently written about
+          What I write about
         </h2>
         <ul
           className="p-0 flex flex-col gap-3.5"
           style={{ listStyle: "none" }}
         >
           {[
-            <><strong>Ribā, gharar, and the moral geometry of exchange.</strong></>,
-            <><strong>Sukūk as an institutional form</strong> — what works, what does not, and why.</>,
-            <><strong>Central banks, trust, and the politics of monetary credibility.</strong></>,
-            <><strong>Development economics</strong> and the quiet violence of poor policy.</>,
+            <><strong>Riba, monetary architecture, and the structural mechanics of interest-based money creation.</strong></>,
+            <><strong>Islamic finance</strong> beyond compliance: maqasid al-shari&apos;ah, first-principles critique, and systemic reform.</>,
+            <><strong>Monetary systems</strong>, fiat currency, inflation, central banking, and the politics of monetary credibility.</>,
+            <><strong>Bitcoin, cryptocurrency, and blockchain</strong> as alternative monetary rails, their strengths and structural failures.</>,
+            <><strong>First-principles economic design</strong> and the convergence between secular analysis and Islamic economic principles.</>,
           ].map((item, i) => (
             <li
               key={i}
@@ -152,10 +187,17 @@ export default function AboutPage() {
                 fontSize: "18px",
                 lineHeight: 1.8,
                 color: "var(--fg1)",
+                paddingLeft: "20px",
+                position: "relative",
               }}
             >
-              <span style={{ color: "var(--brand)", fontFamily: "var(--font-display)" }}>
-                &sect;{" "}
+              <span style={{
+                color: "var(--brand)",
+                position: "absolute",
+                left: 0,
+                fontWeight: 700,
+              }}>
+                /{" "}
               </span>
               {item}
             </li>
@@ -182,9 +224,9 @@ export default function AboutPage() {
             color: "var(--fg1)",
           }}
         >
-          You can find occasional posts on{" "}
-          <Link href="https://x.com/EduTechOne" target="_blank" rel="noopener noreferrer">Twitter / X</Link>, longer threads on{" "}
-          <Link href="https://www.linkedin.com/in/azim-gx/" target="_blank" rel="noopener noreferrer">LinkedIn</Link>, and a complete archive of older
+          You can find me on{" "}
+          <Link href="https://x.com/EduTechOne" target="_blank" rel="noopener noreferrer">Twitter / X</Link>, on{" "}
+          <Link href="https://www.linkedin.com/in/azim-gx/" target="_blank" rel="noopener noreferrer">LinkedIn</Link>, and the full archive of
           writing on the <Link href="/">Essays</Link> page.
         </p>
       </div>
