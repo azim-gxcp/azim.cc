@@ -46,6 +46,7 @@ He is the designer of GX Coin Protocol, a protocol-level monetary architecture, 
 - [Rethinking Riba in the Age of Fiat](https://azim.cc/blog/rethinking-riba-in-the-age-of-fiat): Challenges prevailing assumptions about applying classical riba rulings to modern fiat currencies. Asks whether fiat currency, born from interest-bearing debt, can logically be treated as a ribawi item under prophetic hadith definitions.
 - [The Authenticity Crisis in Islamic Finance](https://azim.cc/blog/the-authenticity-crisis-in-islamic-finance): A Socratic inquiry into the gap between Shariah theory and banking practice. Examines risk-sharing, the Murabaha escape route, the "debt merchant" paradox, Tawakkul, and a practical proposal for deploying zero-cost current account capital into genuine venture finance.
 - ["Allah" Is Not God](https://azim.cc/blog/allah-is-not-god): Why Muslims should stop translating "Allah" into "God." A linguistic and theological argument for preserving the proper noun that the Creator chose for Himself, grounded in Tawhid and Quranic precision.
+- [Rethinking Assessment: From Student Measurement to Systemic Reflection](https://azim.cc/blog/rethinking-student-assessment): Assessment as a four-dimensional diagnostic lens across learner, educator, curriculum, and institutional delivery framework, not just a grade on a student's report card.
 
 ## Tools
 
