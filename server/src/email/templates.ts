@@ -1,5 +1,13 @@
 import { config } from "../config.js";
 
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 const baseStyle = `
   font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   max-width: 580px;
@@ -83,14 +91,14 @@ export function newsletterEmail(
   const postUrl = `${config.frontendUrl}/blog/${postSlug}`;
 
   return {
-    subject: postTitle,
+    subject: postTitle.replace(/[\r\n]/g, " "),
     html: `
       <div style="${baseStyle}">
         <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: #7c3aed; font-weight: 600; margin: 0 0 12px;">
           New article
         </p>
-        <h2 style="font-size: 28px; margin: 0 0 12px; line-height: 1.2;">${postTitle}</h2>
-        <p style="font-size: 18px; font-style: italic; color: #3f3f46; margin: 0 0 28px;">${postLede}</p>
+        <h2 style="font-size: 28px; margin: 0 0 12px; line-height: 1.2;">${escapeHtml(postTitle)}</h2>
+        <p style="font-size: 18px; font-style: italic; color: #3f3f46; margin: 0 0 28px;">${escapeHtml(postLede)}</p>
         <p style="margin: 28px 0;">
           <a href="${postUrl}" style="${buttonStyle}">Read the full article</a>
         </p>

@@ -4,8 +4,8 @@ import { config } from "../config.js";
 const transporter = nodemailer.createTransport({
   host: config.smtp.host,
   port: config.smtp.port,
-  secure: false,
-  tls: { rejectUnauthorized: false },
+  secure: config.smtp.port === 465,
+  tls: { rejectUnauthorized: process.env.NODE_ENV === "production" },
 });
 
 interface SendOptions {

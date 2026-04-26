@@ -1,6 +1,7 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import multipart from "@fastify/multipart";
+import rateLimit from "@fastify/rate-limit";
 import { config } from "./config.js";
 import { authRoutes } from "./routes/auth.js";
 import { newsletterRoutes } from "./routes/newsletter.js";
@@ -10,11 +11,18 @@ import { adminRoutes } from "./routes/admin.js";
 const app = Fastify({ logger: true });
 
 // CORS for frontend
+const origins = [config.frontendUrl];
+if (process.env.NODE_ENV !== "production") {
+  origins.push("http://localhost:3000");
+}
 await app.register(cors, {
-  origin: [config.frontendUrl, "http://localhost:3000"],
+  origin: origins,
   methods: ["GET", "POST", "DELETE"],
   credentials: true,
 });
+
+// Global rate limit (100 req/min per IP), auth routes override below
+await app.register(rateLimit, { max: 100, timeWindow: "1 minute" });
 
 // Multipart file uploads (10 MB limit)
 await app.register(multipart, { limits: { fileSize: 10_485_760 } });

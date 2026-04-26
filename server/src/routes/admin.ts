@@ -1,7 +1,16 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyReply } from "fastify";
 import { eq, and, isNull, desc, count, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "../db/index.js";
+
+function parseUuid(raw: string, reply: FastifyReply) {
+  const result = z.string().uuid().safeParse(raw);
+  if (!result.success) {
+    reply.status(400).send({ error: "Invalid ID format" });
+    return null;
+  }
+  return result.data;
+}
 import { comments, subscribers, sentNewsletters } from "../db/schema.js";
 import { requireAdmin } from "../middleware/auth.js";
 import { sendBatch } from "../email/send.js";
@@ -32,7 +41,8 @@ export async function adminRoutes(app: FastifyInstance) {
 
   // Approve a comment
   app.post("/api/admin/comments/:id/approve", async (request, reply) => {
-    const { id } = request.params as { id: string };
+    const id = parseUuid((request.params as { id: string }).id, reply);
+    if (!id) return;
 
     const [updated] = await db
       .update(comments)
@@ -49,7 +59,8 @@ export async function adminRoutes(app: FastifyInstance) {
 
   // Delete a comment
   app.delete("/api/admin/comments/:id", async (request, reply) => {
-    const { id } = request.params as { id: string };
+    const id = parseUuid((request.params as { id: string }).id, reply);
+    if (!id) return;
 
     const [deleted] = await db
       .delete(comments)
@@ -164,7 +175,8 @@ export async function adminRoutes(app: FastifyInstance) {
 
   // Activate a subscriber (confirm + clear unsubscribed)
   app.post("/api/admin/subscribers/:id/activate", async (request, reply) => {
-    const { id } = request.params as { id: string };
+    const id = parseUuid((request.params as { id: string }).id, reply);
+    if (!id) return;
 
     const [updated] = await db
       .update(subscribers)
@@ -181,7 +193,8 @@ export async function adminRoutes(app: FastifyInstance) {
 
   // Deactivate a subscriber (set unsubscribedAt)
   app.post("/api/admin/subscribers/:id/deactivate", async (request, reply) => {
-    const { id } = request.params as { id: string };
+    const id = parseUuid((request.params as { id: string }).id, reply);
+    if (!id) return;
 
     const [updated] = await db
       .update(subscribers)
@@ -198,7 +211,8 @@ export async function adminRoutes(app: FastifyInstance) {
 
   // Delete a subscriber permanently
   app.delete("/api/admin/subscribers/:id", async (request, reply) => {
-    const { id } = request.params as { id: string };
+    const id = parseUuid((request.params as { id: string }).id, reply);
+    if (!id) return;
 
     const [deleted] = await db
       .delete(subscribers)

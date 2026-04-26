@@ -5,6 +5,14 @@ import { db } from "../db/index.js";
 import { comments } from "../db/schema.js";
 import { verifyTurnstile } from "../middleware/turnstile.js";
 
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 const submitSchema = z.object({
   postSlug: z.string().min(1).max(200),
   authorName: z.string().min(1).max(100),
@@ -15,8 +23,10 @@ const submitSchema = z.object({
 
 export async function commentRoutes(app: FastifyInstance) {
   // Fetch approved comments for a post
-  app.get("/api/comments/:slug", async (request) => {
-    const { slug } = request.params as { slug: string };
+  app.get("/api/comments/:slug", async (request, reply) => {
+    const slug = z.string().min(1).max(200).safeParse((request.params as { slug: string }).slug);
+    if (!slug.success) return reply.status(400).send({ error: "Invalid slug" });
+    const { data: slugVal } = slug;
 
     const results = await db
       .select({
@@ -26,7 +36,7 @@ export async function commentRoutes(app: FastifyInstance) {
         createdAt: comments.createdAt,
       })
       .from(comments)
-      .where(and(eq(comments.postSlug, slug), eq(comments.approved, true)))
+      .where(and(eq(comments.postSlug, slugVal), eq(comments.approved, true)))
       .orderBy(desc(comments.createdAt));
 
     return results;
@@ -39,19 +49,16 @@ export async function commentRoutes(app: FastifyInstance) {
     async (request, reply) => {
       const parsed = submitSchema.safeParse(request.body);
       if (!parsed.success) {
-        return reply.status(400).send({
-          error: "Invalid comment data",
-          details: parsed.error.flatten().fieldErrors,
-        });
+        return reply.status(400).send({ error: "Invalid comment data" });
       }
 
       const { postSlug, authorName, authorEmail, body } = parsed.data;
 
       await db.insert(comments).values({
         postSlug,
-        authorName,
+        authorName: escapeHtml(authorName),
         authorEmail,
-        body,
+        body: escapeHtml(body),
       });
 
       return { message: "Your comment has been submitted for moderation" };

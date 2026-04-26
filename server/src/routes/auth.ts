@@ -38,7 +38,9 @@ async function createTokens(userId: string, email: string, role: string) {
 }
 
 export async function authRoutes(app: FastifyInstance) {
-  app.post("/api/auth/login", async (request, reply) => {
+  app.post("/api/auth/login", {
+    config: { rateLimit: { max: 5, timeWindow: "1 minute" } },
+  }, async (request, reply) => {
     const parsed = loginSchema.safeParse(request.body);
     if (!parsed.success) {
       return reply.status(400).send({ error: "Invalid email or password format" });
@@ -69,7 +71,9 @@ export async function authRoutes(app: FastifyInstance) {
     };
   });
 
-  app.post("/api/auth/refresh", async (request, reply) => {
+  app.post("/api/auth/refresh", {
+    config: { rateLimit: { max: 30, timeWindow: "1 hour" } },
+  }, async (request, reply) => {
     const parsed = refreshSchema.safeParse(request.body);
     if (!parsed.success) {
       return reply.status(400).send({ error: "Missing refresh token" });

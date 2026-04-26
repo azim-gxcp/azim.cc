@@ -1,8 +1,10 @@
 import "dotenv/config";
 
-function required(key: string): string {
+function required(key: string, minLength = 0): string {
   const val = process.env[key];
   if (!val) throw new Error(`Missing required env var: ${key}`);
+  if (minLength && val.length < minLength)
+    throw new Error(`${key} must be at least ${minLength} characters`);
   return val;
 }
 
@@ -17,7 +19,7 @@ export const config = {
   databaseUrl: required("DATABASE_URL"),
 
   jwt: {
-    secret: required("JWT_SECRET"),
+    secret: required("JWT_SECRET", 32),
     issuer: optional("JWT_ISSUER", "api.azim.cc"),
     accessTtl: "15m",
     refreshTtl: "7d",
