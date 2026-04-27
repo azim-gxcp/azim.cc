@@ -16,8 +16,22 @@ export function SecondaryFeatureCard({ post }: { post: PostMeta }) {
           borderRadius: "10px",
           padding: "clamp(24px, 3vw, 32px)",
           border: "1px solid var(--border-subtle)",
+          position: "relative",
         }}
       >
+        <span
+          style={{
+            position: "absolute",
+            top: "12px",
+            right: "14px",
+            fontSize: "16px",
+            color: "var(--brand)",
+            opacity: 0.7,
+          }}
+          title="Featured"
+        >
+          &#9733;
+        </span>
         <div
           style={{
             fontFamily: "var(--font-body)",

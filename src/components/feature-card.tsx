@@ -17,6 +17,21 @@ export function FeatureCard({ post }: { post: PostMeta }) {
           border: "1px solid var(--border)",
         }}
       >
+
+        <span
+          style={{
+            position: "absolute",
+            top: "16px",
+            right: "18px",
+            fontSize: "20px",
+            color: kickerColor,
+            opacity: 0.6,
+            zIndex: 2,
+          }}
+          title="Featured"
+        >
+          &#9733;
+        </span>
         <div className="relative z-[1]">
           <div
             style={{
@@ -35,7 +50,7 @@ export function FeatureCard({ post }: { post: PostMeta }) {
             className="m-0 mb-4"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(2rem, 4vw, 3rem)",
+              fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)",
               fontWeight: 600,
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
@@ -48,7 +63,7 @@ export function FeatureCard({ post }: { post: PostMeta }) {
             className="m-0 mb-5"
             style={{
               fontFamily: "var(--font-body)",
-              fontSize: "18px",
+              fontSize: "16px",
               lineHeight: 1.65,
               fontStyle: "italic",
               maxWidth: "56ch",
