@@ -43,7 +43,7 @@ export async function GET() {
   <channel>
     <title>M Azim Abdul Majeed</title>
     <link>${SITE_URL}</link>
-    <description>Long-form essays on economics, finance, and Islamic finance.</description>
+    <description>Economics, Islamic finance, monetary architecture, and first-principles thinking about how money should work.</description>
     <language>en</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>
