@@ -100,7 +100,7 @@ export default function TermsPage() {
 
       <h2 style={sectionTitle}>8. Intellectual Property</h2>
       <p style={bodyText}>
-        All original content on this Site, including text, graphics, and design, is the intellectual property of M Azim Abdul Majeed unless otherwise stated. You may share links to articles freely. Reproducing full articles without written permission is prohibited.
+        All original content on this Site, including text, graphics, and design, is the intellectual property of M Azim Abdul Majeed unless otherwise stated. You may share links to articles freely. Reproducing full articles without written permission is prohibited. If any part of this work is quoted, referenced, or used elsewhere, due credit must be given to the author by name (M Azim Abdul Majeed) and by linking to https://azim.cc.
       </p>
 
       <h2 style={sectionTitle}>9. Third-Party Links</h2>
