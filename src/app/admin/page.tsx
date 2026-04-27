@@ -3,7 +3,15 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { RequireAdmin, useAuth } from "@/lib/admin-auth";
-import { getAdminStats, type AdminStats } from "@/lib/api";
+import {
+  getAdminStats,
+  type AdminStats,
+  getFeaturedSlugs,
+  setFeaturedSlugs,
+  getAdminPosts,
+  type AdminPost,
+  ApiError,
+} from "@/lib/api";
 
 export default function AdminDashboard() {
   return (
@@ -16,10 +24,50 @@ export default function AdminDashboard() {
 function DashboardContent() {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState<AdminStats | null>(null);
+  const [posts, setPosts] = useState<AdminPost[]>([]);
+  const [slots, setSlots] = useState<[string, string, string]>(["", "", ""]);
+  const [featuredSaving, setFeaturedSaving] = useState(false);
+  const [featuredFeedback, setFeaturedFeedback] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
 
   useEffect(() => {
     getAdminStats().then(setStats).catch(() => {});
+    getAdminPosts().then(setPosts).catch(() => {});
+    getFeaturedSlugs()
+      .then((data) => {
+        const s = data.slugs || [];
+        setSlots([s[0] || "", s[1] || "", s[2] || ""]);
+      })
+      .catch(() => {});
   }, []);
+
+  async function handleSaveFeatured() {
+    setFeaturedSaving(true);
+    setFeaturedFeedback(null);
+    try {
+      const slugs = slots.filter((s) => s !== "");
+      await setFeaturedSlugs(slugs);
+      setFeaturedFeedback({ message: "Featured articles updated", type: "success" });
+      setTimeout(() => setFeaturedFeedback(null), 3000);
+    } catch (err) {
+      setFeaturedFeedback({
+        message: err instanceof ApiError ? err.message : "Failed to save",
+        type: "error",
+      });
+    } finally {
+      setFeaturedSaving(false);
+    }
+  }
+
+  function updateSlot(index: number, value: string) {
+    setSlots((prev) => {
+      const next = [...prev] as [string, string, string];
+      next[index] = value;
+      return next;
+    });
+  }
 
   const cardStyle: React.CSSProperties = {
     padding: "24px",
@@ -118,6 +166,102 @@ function DashboardContent() {
         <div style={cardStyle}>
           <div style={labelStyle}>Newsletters sent</div>
           <div style={valueStyle}>{stats?.newslettersSent ?? "-"}</div>
+        </div>
+      </div>
+
+      {/* Featured articles */}
+      <div style={{ ...cardStyle, marginBottom: "32px" }}>
+        <h2
+          style={{
+            fontSize: "16px",
+            fontWeight: 600,
+            color: "var(--fg1)",
+            margin: "0 0 16px",
+          }}
+        >
+          Featured Articles
+        </h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          {(["Primary", "Secondary 1", "Secondary 2"] as const).map(
+            (label, i) => {
+              const selectedElsewhere = slots.filter(
+                (s, j) => j !== i && s !== ""
+              );
+              return (
+                <div key={label}>
+                  <label
+                    style={{
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      color: "var(--fg3)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      display: "block",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    {label}
+                  </label>
+                  <select
+                    value={slots[i]}
+                    onChange={(e) => updateSlot(i, e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "10px 14px",
+                      fontSize: "14px",
+                      fontFamily: "var(--font-body)",
+                      background: "var(--bg-elev)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "4px",
+                      color: "var(--fg1)",
+                    }}
+                  >
+                    <option value="">Auto (latest)</option>
+                    {posts.map((p) => (
+                      <option
+                        key={p.slug}
+                        value={p.slug}
+                        disabled={selectedElsewhere.includes(p.slug)}
+                      >
+                        {p.title} ({p.date})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              );
+            }
+          )}
+          {featuredFeedback && (
+            <p
+              style={{
+                fontSize: "13px",
+                margin: 0,
+                color:
+                  featuredFeedback.type === "success" ? "#22c55e" : "#dc2626",
+              }}
+            >
+              {featuredFeedback.message}
+            </p>
+          )}
+          <button
+            onClick={handleSaveFeatured}
+            disabled={featuredSaving}
+            style={{
+              fontSize: "14px",
+              fontWeight: 600,
+              padding: "10px 20px",
+              border: "none",
+              borderRadius: "4px",
+              background: "var(--brand)",
+              color: "var(--fg-inverse)",
+              cursor: featuredSaving ? "not-allowed" : "pointer",
+              opacity: featuredSaving ? 0.7 : 1,
+              fontFamily: "var(--font-body)",
+              alignSelf: "flex-start",
+            }}
+          >
+            {featuredSaving ? "Saving..." : "Save featured"}
+          </button>
         </div>
       </div>
 
