@@ -311,3 +311,26 @@ export function publishArticle(data: {
     fd
   );
 }
+
+// --- Featured articles ---
+
+export function getFeaturedSlugs() {
+  return apiFetch<{ slugs: string[] }>("/api/settings/featured");
+}
+
+export function setFeaturedSlugs(slugs: string[]) {
+  return apiFetch<{ message: string }>("/api/admin/settings/featured", {
+    method: "POST",
+    body: JSON.stringify({ slugs }),
+  });
+}
+
+export interface AdminPost {
+  slug: string;
+  title: string;
+  date: string;
+}
+
+export function getAdminPosts() {
+  return apiFetch<AdminPost[]>("/api/admin/posts");
+}
