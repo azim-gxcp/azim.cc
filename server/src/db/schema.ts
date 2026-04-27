@@ -54,3 +54,9 @@ export const sentNewsletters = pgTable("sent_newsletters", {
   sentAt: timestamp("sent_at", { withTimezone: true }).defaultNow(),
   recipientCount: integer("recipient_count"),
 });
+
+export const siteSettings = pgTable("site_settings", {
+  key: varchar("key", { length: 100 }).primaryKey(),
+  value: text("value"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
