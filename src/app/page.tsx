@@ -6,12 +6,14 @@ import { ArticleCard } from "@/components/article-card";
 import { ArticleGrid } from "@/components/article-grid";
 import { NewsletterForm } from "@/components/newsletter-form";
 
+export const dynamic = "force-dynamic";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.azim.cc";
 
 async function getFeaturedSlugs(): Promise<string[]> {
   try {
     const res = await fetch(`${API_URL}/api/settings/featured`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
     if (!res.ok) return [];
     const data = await res.json();
