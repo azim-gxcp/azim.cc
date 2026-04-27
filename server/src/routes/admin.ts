@@ -1,4 +1,5 @@
 import type { FastifyInstance, FastifyReply } from "fastify";
+import path from "path";
 import { eq, and, isNull, desc, count, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "../db/index.js";
@@ -11,7 +12,7 @@ function parseUuid(raw: string, reply: FastifyReply) {
   }
   return result.data;
 }
-import { comments, subscribers, sentNewsletters } from "../db/schema.js";
+import { comments, subscribers, sentNewsletters, siteSettings } from "../db/schema.js";
 import { requireAdmin } from "../middleware/auth.js";
 import { sendBatch } from "../email/send.js";
 import { newsletterEmail } from "../email/templates.js";
@@ -261,6 +262,60 @@ export async function adminRoutes(app: FastifyInstance) {
       },
       newslettersSent: newsletterStats?.total || 0,
     };
+  });
+
+  // Update featured articles
+  const featuredSchema = z.object({
+    slugs: z
+      .array(z.string().min(1).max(200))
+      .max(3)
+      .refine((arr) => new Set(arr).size === arr.length, {
+        message: "Duplicate slugs are not allowed",
+      }),
+  });
+
+  app.post("/api/admin/settings/featured", async (request, reply) => {
+    const parsed = featuredSchema.safeParse(request.body);
+    if (!parsed.success) {
+      return reply.status(400).send({ error: parsed.error.issues[0]?.message || "Invalid request" });
+    }
+
+    const { slugs } = parsed.data;
+    const value = slugs.length > 0 ? JSON.stringify(slugs) : null;
+
+    await db
+      .insert(siteSettings)
+      .values({ key: "featured_slugs", value, updatedAt: new Date() })
+      .onConflictDoUpdate({
+        target: siteSettings.key,
+        set: { value, updatedAt: new Date() },
+      });
+
+    return { message: "Featured articles updated" };
+  });
+
+  // List published posts
+  app.get("/api/admin/posts", async () => {
+    const postsDir = path.join(process.cwd(), "..", "content", "posts");
+    const fs = await import("fs");
+    const matter = (await import("gray-matter")).default;
+
+    if (!fs.existsSync(postsDir)) return [];
+
+    const files = fs.readdirSync(postsDir).filter((f: string) => f.endsWith(".mdx"));
+
+    return files
+      .map((filename: string) => {
+        const slug = filename.replace(/\.mdx$/, "");
+        const raw = fs.readFileSync(path.join(postsDir, filename), "utf8");
+        const { data } = matter(raw);
+        if (data.published === false) return null;
+        return { slug, title: data.title || slug, date: data.date || "" };
+      })
+      .filter((x): x is { slug: string; title: string; date: string } => x !== null)
+      .sort((a, b) =>
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
   });
 
   // Publish article
