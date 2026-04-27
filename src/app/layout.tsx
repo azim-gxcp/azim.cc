@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | azim.cc",
   },
   description:
-    "Economics, Islamic finance, monetary architecture, and first-principles thinking about how money should work.",
+    "Economics, monetary architecture, Islamic Finance and first-principles thinking about how money should work.",
   authors: [{ name: "M Azim Abdul Majeed" }],
   creator: "M Azim Abdul Majeed",
   publisher: "M Azim Abdul Majeed",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "M Azim Abdul Majeed | Blog",
     description:
-      "Economics, Islamic finance, monetary architecture, and first-principles thinking about how money should work.",
+      "Economics, monetary architecture, Islamic Finance and first-principles thinking about how money should work.",
     type: "website",
     url: "https://azim.cc",
     siteName: "azim.cc",
@@ -90,7 +90,7 @@ export default function RootLayout({
               name: "azim.cc",
               url: "https://azim.cc",
               description:
-                "Economics, Islamic finance, monetary architecture, and first-principles thinking about how money should work.",
+                "Economics, monetary architecture, Islamic Finance and first-principles thinking about how money should work.",
               author: {
                 "@type": "Person",
                 name: "M Azim Abdul Majeed",
