@@ -7,6 +7,7 @@ import { authRoutes } from "./routes/auth.js";
 import { newsletterRoutes } from "./routes/newsletter.js";
 import { commentRoutes } from "./routes/comments.js";
 import { adminRoutes } from "./routes/admin.js";
+import { settingsRoutes } from "./routes/settings.js";
 
 const app = Fastify({ logger: true });
 
@@ -38,6 +39,7 @@ await app.register(authRoutes);
 await app.register(newsletterRoutes);
 await app.register(commentRoutes);
 await app.register(adminRoutes);
+await app.register(settingsRoutes);
 
 // Start
 try {
