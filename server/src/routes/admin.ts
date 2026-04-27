@@ -40,6 +40,17 @@ export async function adminRoutes(app: FastifyInstance) {
     return results;
   });
 
+  // Approved comments
+  app.get("/api/admin/comments/approved", async () => {
+    const results = await db
+      .select()
+      .from(comments)
+      .where(eq(comments.approved, true))
+      .orderBy(desc(comments.createdAt));
+
+    return results;
+  });
+
   // Approve a comment
   app.post("/api/admin/comments/:id/approve", async (request, reply) => {
     const id = parseUuid((request.params as { id: string }).id, reply);

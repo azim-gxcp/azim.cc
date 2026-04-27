@@ -177,6 +177,10 @@ export function getPendingComments() {
   return apiFetch<PendingComment[]>("/api/admin/comments/pending");
 }
 
+export function getApprovedComments() {
+  return apiFetch<PendingComment[]>("/api/admin/comments/approved");
+}
+
 export function approveComment(id: string) {
   return apiFetch<{ message: string }>(`/api/admin/comments/${id}/approve`, {
     method: "POST",
