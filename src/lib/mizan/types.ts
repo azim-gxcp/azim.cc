@@ -173,5 +173,7 @@ export const PHASE_NAMES: string[] = [
   "The outstanding obligation (Dayn)",
   "Ribawi characteristics test",
   "The Hila / subterfuge test",
+  "Gharar (uncertainty) assessment",
+  "Maysir (gambling) assessment",
   "The Maqasid check",
 ];

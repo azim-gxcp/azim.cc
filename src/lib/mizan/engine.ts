@@ -240,6 +240,102 @@ export function computeVerdict(
     });
   }
 
+  // ── GHARAR DIAGNOSTIC (from root Gh-R-R) ──
+
+  if ((W.gharar_subject || 0) >= 3) {
+    findings.push({
+      t: "f",
+      label: "Gharar Fahish in the subject matter - you do not know what you are acquiring",
+      text: "The root Gh-R-R means to deceive, to expose to danger through ignorance. Gharar Fahish (excessive Gharar) in the subject matter means the buyer or investor does not know the essential nature of what they are paying for. The Prophet (peace be upon him) prohibited Mulamasah and Munabadha (Sahih al-Bukhari 2146). He prohibited bay' al-gharar as a great principle (asl kabir) of commercial law (Imam al-Nawawi). Al-Azhari: 'Gharar is that whose outward appearance pleases the observer, but whose inner reality is unknown or detested.' This arrangement fails the Jahalah (ignorance) test.",
+      src: "Sahih Muslim 1513; Sahih al-Bukhari 2146; Al-Nawawi, Sharh Sahih Muslim; Al-Azhari, Tahdhib al-Lughah",
+    });
+  } else if ((W.gharar_subject || 0) >= 1) {
+    findings.push({
+      t: "w",
+      label: "Partial uncertainty in the subject matter - Gharar caution",
+      text: "Some uncertainty exists about what you are acquiring or investing in. Minor Gharar (Gharar Yasir) is tolerated because complete elimination of uncertainty would make commerce impossible. However, if the uncertainty relates to a material element, it may cross into prohibited Gharar. Ensure you understand the essential elements before committing.",
+      src: "Classical distinction: Gharar Fahish vs Gharar Yasir; Al-Kasani, Bada'i al-Sana'i",
+    });
+  }
+
+  if ((W.gharar_price || 0) >= 2) {
+    findings.push({
+      t: "f",
+      label: "Gharar in the price - the total cost is unknown or unpredictable",
+      text: "Gharar in the price (al-Thaman) occurs when the total cost cannot be determined at the time of contract. Ibn Rushd al-Jadd identified uncertainty in the price as one of the three domains where Gharar invalidates a sale. Al-Sarakhsi: 'Gharar is that whose outcome is concealed.' Hidden fees or mechanisms that change the total cost without the buyer's awareness constitute Gharar in the price. The Quran: 'Give full measure and weight with justice' (6:152).",
+      src: "Ibn Rushd al-Jadd, Al-Muqaddimat; Al-Sarakhsi, Al-Mabsut; Surah Al-An'am 6:152",
+    });
+  }
+
+  if ((W.gharar_delivery || 0) >= 2) {
+    findings.push({
+      t: "f",
+      label: "Gharar in delivery - the seller may not be able to deliver",
+      text: "The Prophet (peace be upon him) said: 'Do not sell what is not with you' (Sunan al-Tirmidhi 1232). When the seller's ability to deliver is genuinely doubtful, the transaction contains Gharar Fahish in delivery. The buyer is paying for something that may never arrive.",
+      src: "Sunan al-Tirmidhi 1232; Al-Kasani, Bada'i al-Sana'i; Sahih al-Bukhari 2143",
+    });
+  }
+
+  if ((W.gharar_existence || 0) >= 2) {
+    findings.push({
+      t: "f",
+      label: "Gharar in existence - the subject matter may not exist",
+      text: "The Prophet (peace be upon him) prohibited the sale of habal al-habalah, the offspring of an unborn animal (Sahih al-Bukhari 2143). Selling what does not exist is Gharar Fahish. A transaction whose subject matter has not yet come into existence commits real wealth today for something that may never materialise.",
+      src: "Sahih al-Bukhari 2143; Sahih Muslim 1514; All four madhabs on the sale of ma'dum",
+    });
+  }
+
+  // ── MAYSIR DIAGNOSTIC (from root Y-S-R) ──
+
+  if ((W.maysir_zerosum || 0) >= 2) {
+    findings.push({
+      t: "f",
+      label: "Maysir structure - zero-sum: one party's gain is another's loss",
+      text: "The root Y-S-R means ease. Maysir is the acquisition of wealth without productive effort. The first element: zero-sum outcome. One party gains exactly what another loses. No new wealth is created. The Quran declares Maysir to be rijs (abomination) from the work of Shaytan (5:90): 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91).",
+      src: "Surah Al-Ma'idah 5:90-91; Al-Tabari; Al-Qurtubi; Ibn Taymiyyah, Majmu' al-Fatawa",
+    });
+  }
+
+  if ((W.maysir_chance || 0) >= 2) {
+    findings.push({
+      t: "f",
+      label: "Maysir - outcome determined by chance, not productive effort",
+      text: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited bay' al-hasah where the outcome depended on a random event (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.' When a financial outcome depends entirely on uncontrollable fluctuations or random events, it approaches Maysir.",
+      src: "Sahih Muslim 1513; Surah Al-Ma'idah 5:90-91; Al-Qurtubi; Surah Al-Baqarah 2:219",
+    });
+  }
+
+  if ((W.maysir_no_value || 0) >= 2) {
+    findings.push({
+      t: "f",
+      label: "Maysir - no productive contribution, wealth consumed by falsehood",
+      text: "The third element: absence of productive contribution. Ibn Taymiyyah: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity.' The Quran: 'Do not consume each other's wealth unjustly, except through trade by mutual consent' (4:29). A transaction that creates no goods, provides no services, and merely redistributes wealth through chance is Maysir.",
+      src: "Surah Al-Nisa 4:29; Ibn Taymiyyah, Majmu' al-Fatawa; Surah Al-Ma'idah 5:90-91",
+    });
+  }
+
+  const ghararScore = (W.gharar_subject || 0) + (W.gharar_price || 0) + (W.gharar_delivery || 0) + (W.gharar_existence || 0) + (W.gharar || 0);
+  const maysirScore = (W.maysir_zerosum || 0) + (W.maysir_chance || 0) + (W.maysir_no_value || 0) + (W.speculative || 0);
+
+  if (ghararScore === 0 && summary.length > 3) {
+    findings.push({
+      t: "p",
+      label: "No excessive Gharar (uncertainty) detected",
+      text: "The subject matter, price, delivery, and existence of what is being transacted appear to be known and specified. The arrangement meets the standard of Ma'lum (known) required for valid Bay'.",
+      src: "Sahih Muslim 1513; Al-Nawawi on the Gharar principle; Classical Gharar Fahish vs Yasir distinction",
+    });
+  }
+
+  if (maysirScore === 0 && summary.length > 3) {
+    findings.push({
+      t: "p",
+      label: "No Maysir (gambling) structure detected",
+      text: "The transaction is not zero-sum, the outcome is not determined by pure chance, and productive contribution is present. Consistent with genuine Bay' or Musharakah rather than the chance-based wealth transfer the Quran prohibits (5:90-91).",
+      src: "Surah Al-Ma'idah 5:90-91; Classical definitions of Maysir; Distinction from genuine Bay'",
+    });
+  }
+
+
   if ((W.guaranteed_return || 0) >= 2) {
     findings.push({
       t: "f",

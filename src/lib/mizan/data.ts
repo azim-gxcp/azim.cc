@@ -126,6 +126,40 @@ export const QS: Record<string, Question[]> = {
         { label: "The structure could trap me in debt regardless of what I do", sub: "The risk is entirely mine; the return is entirely the bank's", val: "trap", w: { dayn_trap: 2 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you fully understand all the terms, costs, and obligations of this arrangement?",
+      plain: "Are there any fees, charges, conditions, or mechanisms in this contract that you do not fully understand or that were not clearly explained to you?",
+      principle: "The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar, the sale of Gharar (Sahih Muslim 1513). Gharar means excessive, avoidable uncertainty in a contract. Ibn Rushd al-Jadd defined it as uncertainty in the price (thaman), the object (muthman), or the term (ajal). A contract whose terms, costs, or obligations are unclear to one party contains Gharar that may render it defective.",
+      opts: [
+        { label: "Yes, every term, cost, and obligation is clear to me", sub: "I understand exactly what I am paying and receiving", val: "clear", w: {} },
+        { label: "Some terms are unclear but I signed anyway", sub: "There are clauses or mechanisms I do not fully understand", val: "unclear", w: { gharar_subject: 2 } },
+        { label: "Significant parts of this arrangement are opaque to me", sub: "I do not understand major elements of how this works", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Are there any hidden fees, variable charges, or conditions that could change the total cost?",
+      plain: "Could the total amount you pay end up being different from what you were initially told, due to hidden fees, variable rates, or conditional charges?",
+      principle: "Gharar in the price (al-Thaman) occurs when the total cost is not determinable at the time of contract. Al-Sarakhsi in Al-Mabsut: Gharar is that whose outcome is concealed. The Quran commands: 'Give full measure and weight with justice' (6:152).",
+      opts: [
+        { label: "No, the total cost is fixed and fully transparent", sub: "", val: "fixed", w: {} },
+        { label: "There are some variable elements but they are disclosed", sub: "I know they exist even if the exact amount may vary", val: "variable", w: { gharar_price: 1 } },
+        { label: "Yes, hidden or unpredictable charges could change the total significantly", sub: "", val: "hidden", w: { gharar_price: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -182,6 +216,40 @@ export const QS: Record<string, Question[]> = {
       opts: [
         { label: "Yes, strip everything and it is money in, more money out", sub: "", val: "yes", w: { hila: 3 } },
         { label: "No, the asset is genuinely necessary", sub: "", val: "no", w: {} },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you fully understand all the terms, costs, and obligations of this arrangement?",
+      plain: "Are there any fees, charges, conditions, or mechanisms in this contract that you do not fully understand or that were not clearly explained to you?",
+      principle: "The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar, the sale of Gharar (Sahih Muslim 1513). Gharar means excessive, avoidable uncertainty in a contract. Ibn Rushd al-Jadd defined it as uncertainty in the price (thaman), the object (muthman), or the term (ajal). A contract whose terms, costs, or obligations are unclear to one party contains Gharar that may render it defective.",
+      opts: [
+        { label: "Yes, every term, cost, and obligation is clear to me", sub: "I understand exactly what I am paying and receiving", val: "clear", w: {} },
+        { label: "Some terms are unclear but I signed anyway", sub: "There are clauses or mechanisms I do not fully understand", val: "unclear", w: { gharar_subject: 2 } },
+        { label: "Significant parts of this arrangement are opaque to me", sub: "I do not understand major elements of how this works", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Are there any hidden fees, variable charges, or conditions that could change the total cost?",
+      plain: "Could the total amount you pay end up being different from what you were initially told, due to hidden fees, variable rates, or conditional charges?",
+      principle: "Gharar in the price (al-Thaman) occurs when the total cost is not determinable at the time of contract. Al-Sarakhsi in Al-Mabsut: Gharar is that whose outcome is concealed. The Quran commands: 'Give full measure and weight with justice' (6:152).",
+      opts: [
+        { label: "No, the total cost is fixed and fully transparent", sub: "", val: "fixed", w: {} },
+        { label: "There are some variable elements but they are disclosed", sub: "I know they exist even if the exact amount may vary", val: "variable", w: { gharar_price: 1 } },
+        { label: "Yes, hidden or unpredictable charges could change the total significantly", sub: "", val: "hidden", w: { gharar_price: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -241,6 +309,40 @@ export const QS: Record<string, Question[]> = {
       opts: [
         { label: "Major repairs and ownership risk stay with the bank (lessor)", sub: "I only pay for normal use and maintenance", val: "bank", w: {} },
         { label: "All costs and risks are transferred to me from day one", sub: "", val: "me", w: { no_risk: 2 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you fully understand all the terms, costs, and obligations of this arrangement?",
+      plain: "Are there any fees, charges, conditions, or mechanisms in this contract that you do not fully understand or that were not clearly explained to you?",
+      principle: "The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar, the sale of Gharar (Sahih Muslim 1513). Gharar means excessive, avoidable uncertainty in a contract. Ibn Rushd al-Jadd defined it as uncertainty in the price (thaman), the object (muthman), or the term (ajal). A contract whose terms, costs, or obligations are unclear to one party contains Gharar that may render it defective.",
+      opts: [
+        { label: "Yes, every term, cost, and obligation is clear to me", sub: "I understand exactly what I am paying and receiving", val: "clear", w: {} },
+        { label: "Some terms are unclear but I signed anyway", sub: "There are clauses or mechanisms I do not fully understand", val: "unclear", w: { gharar_subject: 2 } },
+        { label: "Significant parts of this arrangement are opaque to me", sub: "I do not understand major elements of how this works", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Are there any hidden fees, variable charges, or conditions that could change the total cost?",
+      plain: "Could the total amount you pay end up being different from what you were initially told, due to hidden fees, variable rates, or conditional charges?",
+      principle: "Gharar in the price (al-Thaman) occurs when the total cost is not determinable at the time of contract. Al-Sarakhsi in Al-Mabsut: Gharar is that whose outcome is concealed. The Quran commands: 'Give full measure and weight with justice' (6:152).",
+      opts: [
+        { label: "No, the total cost is fixed and fully transparent", sub: "", val: "fixed", w: {} },
+        { label: "There are some variable elements but they are disclosed", sub: "I know they exist even if the exact amount may vary", val: "variable", w: { gharar_price: 1 } },
+        { label: "Yes, hidden or unpredictable charges could change the total significantly", sub: "", val: "hidden", w: { gharar_price: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -304,6 +406,51 @@ export const QS: Record<string, Question[]> = {
         { label: "Yes, I use margin or CFDs or other borrowed money", sub: "", val: "yes", w: { leverage: 3 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you understand what you are investing in, the underlying asset, business, or activity?",
+      plain: "Can you describe what your money is actually doing? Do you know where it goes, what it funds, and how returns are generated?",
+      principle: "Gharar in investment occurs when the investor does not know the nature of the underlying activity their wealth is supporting. The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar (Sahih Muslim 1513). An investor who cannot describe what their money funds is in a state of Jahalah (ignorance) about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the underlying business, asset, or activity clearly", sub: "I can describe what my money is doing", val: "clear", w: {} },
+        { label: "I understand the general category but not the specifics", sub: "I know it is in property/stocks/commodities but not the details", val: "general", w: { gharar_subject: 1 } },
+        { label: "I do not know what my money is actually doing", sub: "The fund, product, or structure is opaque to me", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the return on this investment linked to a real, identifiable economic activity?",
+      plain: "Does the profit come from an actual business, trade, rental income, or productive activity, or is it generated by financial engineering or mechanisms you cannot trace?",
+      principle: "Al-Nawawi stated that bay\\u2019 al-gharar is that whose nature or outcome or both is unknown. Returns that cannot be traced to genuine productive activity raise Gharar concerns. Genuine Bay\\u2019 and Musharakah generate returns from real economic activity.",
+      opts: [
+        { label: "Yes, the return comes from identifiable productive activity", sub: "Trade, rental, business profit, or services", val: "real", w: {} },
+        { label: "The return mechanism is complex but documented", sub: "Multiple layers or financial structures are involved", val: "complex", w: { gharar_subject: 1 } },
+        { label: "I cannot trace where the return actually comes from", sub: "The source of profit is opaque or relies on financial engineering", val: "opaque", w: { gharar_subject: 2, gharar_price: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -350,6 +497,40 @@ export const QS: Record<string, Question[]> = {
       opts: [
         { label: "No, the returns depend on and derive from the assets genuinely", sub: "", val: "no", w: {} },
         { label: "Yes, strip the assets and it is a plain bond", sub: "", val: "yes", w: { hila: 3 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you understand what you are investing in, the underlying asset, business, or activity?",
+      plain: "Can you describe what your money is actually doing? Do you know where it goes, what it funds, and how returns are generated?",
+      principle: "Gharar in investment occurs when the investor does not know the nature of the underlying activity their wealth is supporting. The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar (Sahih Muslim 1513). An investor who cannot describe what their money funds is in a state of Jahalah (ignorance) about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the underlying business, asset, or activity clearly", sub: "I can describe what my money is doing", val: "clear", w: {} },
+        { label: "I understand the general category but not the specifics", sub: "I know it is in property/stocks/commodities but not the details", val: "general", w: { gharar_subject: 1 } },
+        { label: "I do not know what my money is actually doing", sub: "The fund, product, or structure is opaque to me", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the return on this investment linked to a real, identifiable economic activity?",
+      plain: "Does the profit come from an actual business, trade, rental income, or productive activity, or is it generated by financial engineering or mechanisms you cannot trace?",
+      principle: "Al-Nawawi stated that bay\\u2019 al-gharar is that whose nature or outcome or both is unknown. Returns that cannot be traced to genuine productive activity raise Gharar concerns. Genuine Bay\\u2019 and Musharakah generate returns from real economic activity.",
+      opts: [
+        { label: "Yes, the return comes from identifiable productive activity", sub: "Trade, rental, business profit, or services", val: "real", w: {} },
+        { label: "The return mechanism is complex but documented", sub: "Multiple layers or financial structures are involved", val: "complex", w: { gharar_subject: 1 } },
+        { label: "I cannot trace where the return actually comes from", sub: "The source of profit is opaque or relies on financial engineering", val: "opaque", w: { gharar_subject: 2, gharar_price: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -404,6 +585,51 @@ export const QS: Record<string, Question[]> = {
         { label: "Performance fee on top of fixed fee", sub: "", val: "both", w: {} },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you understand what you are investing in, the underlying asset, business, or activity?",
+      plain: "Can you describe what your money is actually doing? Do you know where it goes, what it funds, and how returns are generated?",
+      principle: "Gharar in investment occurs when the investor does not know the nature of the underlying activity their wealth is supporting. The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar (Sahih Muslim 1513). An investor who cannot describe what their money funds is in a state of Jahalah (ignorance) about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the underlying business, asset, or activity clearly", sub: "I can describe what my money is doing", val: "clear", w: {} },
+        { label: "I understand the general category but not the specifics", sub: "I know it is in property/stocks/commodities but not the details", val: "general", w: { gharar_subject: 1 } },
+        { label: "I do not know what my money is actually doing", sub: "The fund, product, or structure is opaque to me", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the return on this investment linked to a real, identifiable economic activity?",
+      plain: "Does the profit come from an actual business, trade, rental income, or productive activity, or is it generated by financial engineering or mechanisms you cannot trace?",
+      principle: "Al-Nawawi stated that bay\\u2019 al-gharar is that whose nature or outcome or both is unknown. Returns that cannot be traced to genuine productive activity raise Gharar concerns. Genuine Bay\\u2019 and Musharakah generate returns from real economic activity.",
+      opts: [
+        { label: "Yes, the return comes from identifiable productive activity", sub: "Trade, rental, business profit, or services", val: "real", w: {} },
+        { label: "The return mechanism is complex but documented", sub: "Multiple layers or financial structures are involved", val: "complex", w: { gharar_subject: 1 } },
+        { label: "I cannot trace where the return actually comes from", sub: "The source of profit is opaque or relies on financial engineering", val: "opaque", w: { gharar_subject: 2, gharar_price: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -454,6 +680,40 @@ export const QS: Record<string, Question[]> = {
         { label: "Mixed - some activity is Halal, some questionable", sub: "", val: "mixed", w: { mixed: 1 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you understand what you are investing in, the underlying asset, business, or activity?",
+      plain: "Can you describe what your money is actually doing? Do you know where it goes, what it funds, and how returns are generated?",
+      principle: "Gharar in investment occurs when the investor does not know the nature of the underlying activity their wealth is supporting. The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar (Sahih Muslim 1513). An investor who cannot describe what their money funds is in a state of Jahalah (ignorance) about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the underlying business, asset, or activity clearly", sub: "I can describe what my money is doing", val: "clear", w: {} },
+        { label: "I understand the general category but not the specifics", sub: "I know it is in property/stocks/commodities but not the details", val: "general", w: { gharar_subject: 1 } },
+        { label: "I do not know what my money is actually doing", sub: "The fund, product, or structure is opaque to me", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the return on this investment linked to a real, identifiable economic activity?",
+      plain: "Does the profit come from an actual business, trade, rental income, or productive activity, or is it generated by financial engineering or mechanisms you cannot trace?",
+      principle: "Al-Nawawi stated that bay\\u2019 al-gharar is that whose nature or outcome or both is unknown. Returns that cannot be traced to genuine productive activity raise Gharar concerns. Genuine Bay\\u2019 and Musharakah generate returns from real economic activity.",
+      opts: [
+        { label: "Yes, the return comes from identifiable productive activity", sub: "Trade, rental, business profit, or services", val: "real", w: {} },
+        { label: "The return mechanism is complex but documented", sub: "Multiple layers or financial structures are involved", val: "complex", w: { gharar_subject: 1 } },
+        { label: "I cannot trace where the return actually comes from", sub: "The source of profit is opaque or relies on financial engineering", val: "opaque", w: { gharar_subject: 2, gharar_price: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -501,6 +761,40 @@ export const QS: Record<string, Question[]> = {
         { label: "Yes, the buyer genuinely wants and will use these goods", sub: "", val: "yes", w: {} },
         { label: "The buyer will immediately resell - this is not for their use", sub: "Possibly circular trade", val: "resell", w: { hila: 1 } },
         { label: "The goods are being used to generate cash - no one intends to keep them", sub: "", val: "cash_gen", w: { hila: 3 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you know exactly what you are buying, its identity, quantity, quality, and specifications?",
+      plain: "Can you fully describe what you will receive? Is the subject matter clearly identified and specified?",
+      principle: "Gharar in the subject matter (al-Ma\\u2019qud \\u2019Alayh): the Prophet (peace be upon him) prohibited selling what is not clearly known. He prohibited Mulamasah (buying by touch without examination) and Munabadha (buying by throwing without inspection), Sahih al-Bukhari 2146. The buyer must know what they are acquiring.",
+      opts: [
+        { label: "Yes, the subject matter is fully specified and I have examined it", sub: "Identity, quantity, quality, all known", val: "known", w: {} },
+        { label: "I know the general type but not the exact specifications", sub: "Some details about quality or exact quantity are uncertain", val: "partial", w: { gharar_subject: 1 } },
+        { label: "Significant aspects of what I am buying are unknown to me", sub: "I am committing wealth to something I cannot fully describe", val: "unknown", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Can the seller deliver what has been promised, and does the subject matter exist?",
+      plain: "Is the thing being sold in the seller's possession? Is the seller able to hand it over? Or does it depend on future events?",
+      principle: "The Prophet (peace be upon him) said: 'Do not sell what is not with you' (Sunan al-Tirmidhi 1232). He prohibited the sale of habal al-habalah, the offspring of an unborn animal (Sahih al-Bukhari 2143). Selling what may not exist or what the seller cannot deliver is Gharar Fahish.",
+      opts: [
+        { label: "Yes, the item exists and the seller possesses it now", sub: "Delivery is immediate or certain", val: "exists", w: {} },
+        { label: "The item will be produced or delivered in the future", sub: "It does not exist yet but delivery is reasonably certain", val: "future", w: { gharar_delivery: 1 } },
+        { label: "The item may or may not come into existence or be deliverable", sub: "Delivery depends on uncertain future events", val: "uncertain", w: { gharar_delivery: 3, gharar_existence: 2 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -553,6 +847,51 @@ export const QS: Record<string, Question[]> = {
         { label: "This is not a same-type exchange - different commodities", sub: "", val: "different_type", w: {} },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you know exactly what you are buying, its identity, quantity, quality, and specifications?",
+      plain: "Can you fully describe what you will receive? Is the subject matter clearly identified and specified?",
+      principle: "Gharar in the subject matter (al-Ma\\u2019qud \\u2019Alayh): the Prophet (peace be upon him) prohibited selling what is not clearly known. He prohibited Mulamasah (buying by touch without examination) and Munabadha (buying by throwing without inspection), Sahih al-Bukhari 2146. The buyer must know what they are acquiring.",
+      opts: [
+        { label: "Yes, the subject matter is fully specified and I have examined it", sub: "Identity, quantity, quality, all known", val: "known", w: {} },
+        { label: "I know the general type but not the exact specifications", sub: "Some details about quality or exact quantity are uncertain", val: "partial", w: { gharar_subject: 1 } },
+        { label: "Significant aspects of what I am buying are unknown to me", sub: "I am committing wealth to something I cannot fully describe", val: "unknown", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Can the seller deliver what has been promised, and does the subject matter exist?",
+      plain: "Is the thing being sold in the seller's possession? Is the seller able to hand it over? Or does it depend on future events?",
+      principle: "The Prophet (peace be upon him) said: 'Do not sell what is not with you' (Sunan al-Tirmidhi 1232). He prohibited the sale of habal al-habalah, the offspring of an unborn animal (Sahih al-Bukhari 2143). Selling what may not exist or what the seller cannot deliver is Gharar Fahish.",
+      opts: [
+        { label: "Yes, the item exists and the seller possesses it now", sub: "Delivery is immediate or certain", val: "exists", w: {} },
+        { label: "The item will be produced or delivered in the future", sub: "It does not exist yet but delivery is reasonably certain", val: "future", w: { gharar_delivery: 1 } },
+        { label: "The item may or may not come into existence or be deliverable", sub: "Delivery depends on uncertain future events", val: "uncertain", w: { gharar_delivery: 3, gharar_existence: 2 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -600,6 +939,51 @@ export const QS: Record<string, Question[]> = {
         { label: "To profit from exchange rate movements - currency speculation", sub: "", val: "speculative", w: { speculative: 2 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you know exactly what you are buying, its identity, quantity, quality, and specifications?",
+      plain: "Can you fully describe what you will receive? Is the subject matter clearly identified and specified?",
+      principle: "Gharar in the subject matter (al-Ma\\u2019qud \\u2019Alayh): the Prophet (peace be upon him) prohibited selling what is not clearly known. He prohibited Mulamasah (buying by touch without examination) and Munabadha (buying by throwing without inspection), Sahih al-Bukhari 2146. The buyer must know what they are acquiring.",
+      opts: [
+        { label: "Yes, the subject matter is fully specified and I have examined it", sub: "Identity, quantity, quality, all known", val: "known", w: {} },
+        { label: "I know the general type but not the exact specifications", sub: "Some details about quality or exact quantity are uncertain", val: "partial", w: { gharar_subject: 1 } },
+        { label: "Significant aspects of what I am buying are unknown to me", sub: "I am committing wealth to something I cannot fully describe", val: "unknown", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Can the seller deliver what has been promised, and does the subject matter exist?",
+      plain: "Is the thing being sold in the seller's possession? Is the seller able to hand it over? Or does it depend on future events?",
+      principle: "The Prophet (peace be upon him) said: 'Do not sell what is not with you' (Sunan al-Tirmidhi 1232). He prohibited the sale of habal al-habalah, the offspring of an unborn animal (Sahih al-Bukhari 2143). Selling what may not exist or what the seller cannot deliver is Gharar Fahish.",
+      opts: [
+        { label: "Yes, the item exists and the seller possesses it now", sub: "Delivery is immediate or certain", val: "exists", w: {} },
+        { label: "The item will be produced or delivered in the future", sub: "It does not exist yet but delivery is reasonably certain", val: "future", w: { gharar_delivery: 1 } },
+        { label: "The item may or may not come into existence or be deliverable", sub: "Delivery depends on uncertain future events", val: "uncertain", w: { gharar_delivery: 3, gharar_existence: 2 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -635,6 +1019,40 @@ export const QS: Record<string, Question[]> = {
       opts: [
         { label: "Yes, transparent, disclosed fee for the service", sub: "Halal service charge", val: "transparent", w: {} },
         { label: "Hidden margin in the exchange rate - no disclosed fee", sub: "Common practice - not prohibited, but worth noting", val: "hidden", w: { fee_structure: 1 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you know exactly what you are buying, its identity, quantity, quality, and specifications?",
+      plain: "Can you fully describe what you will receive? Is the subject matter clearly identified and specified?",
+      principle: "Gharar in the subject matter (al-Ma\\u2019qud \\u2019Alayh): the Prophet (peace be upon him) prohibited selling what is not clearly known. He prohibited Mulamasah (buying by touch without examination) and Munabadha (buying by throwing without inspection), Sahih al-Bukhari 2146. The buyer must know what they are acquiring.",
+      opts: [
+        { label: "Yes, the subject matter is fully specified and I have examined it", sub: "Identity, quantity, quality, all known", val: "known", w: {} },
+        { label: "I know the general type but not the exact specifications", sub: "Some details about quality or exact quantity are uncertain", val: "partial", w: { gharar_subject: 1 } },
+        { label: "Significant aspects of what I am buying are unknown to me", sub: "I am committing wealth to something I cannot fully describe", val: "unknown", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Can the seller deliver what has been promised, and does the subject matter exist?",
+      plain: "Is the thing being sold in the seller's possession? Is the seller able to hand it over? Or does it depend on future events?",
+      principle: "The Prophet (peace be upon him) said: 'Do not sell what is not with you' (Sunan al-Tirmidhi 1232). He prohibited the sale of habal al-habalah, the offspring of an unborn animal (Sahih al-Bukhari 2143). Selling what may not exist or what the seller cannot deliver is Gharar Fahish.",
+      opts: [
+        { label: "Yes, the item exists and the seller possesses it now", sub: "Delivery is immediate or certain", val: "exists", w: {} },
+        { label: "The item will be produced or delivered in the future", sub: "It does not exist yet but delivery is reasonably certain", val: "future", w: { gharar_delivery: 1 } },
+        { label: "The item may or may not come into existence or be deliverable", sub: "Delivery depends on uncertain future events", val: "uncertain", w: { gharar_delivery: 3, gharar_existence: 2 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -688,6 +1106,51 @@ export const QS: Record<string, Question[]> = {
         { label: "Yes, leveraged Bitcoin trading", sub: "", val: "leverage", w: { leverage: 3, speculative: 3 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you understand the technology, tokenomics, and purpose of this digital asset?",
+      plain: "Can you explain what this token does, how its supply works, who controls it, and why it has value, or are you buying based on price movement and social media?",
+      principle: "Gharar in digital assets is acute because the subject matter often has no physical form and no intrinsic utility. Al-Azhari in Tahdhib al-Lughah: 'Gharar is that whose outward appearance pleases the observer, but whose inner reality is unknown or detested.' A buyer who cannot explain what a token does is in Gharar about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the technology, supply mechanism, and use case", sub: "I can explain why this asset has or should have value", val: "understands", w: {} },
+        { label: "I understand some aspects but not the full picture", sub: "I know the basics but not the tokenomics or governance", val: "partial", w: { gharar_subject: 1 } },
+        { label: "I am buying based on price trends, social media, or recommendations", sub: "I cannot explain how this token works or why it has value", val: "none", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the project behind this asset real, operational, and delivering on its promises?",
+      plain: "Does this project have a working product, real users, and genuine economic activity, or is it based on promises, roadmaps, and future plans?",
+      principle: "Gharar in existence: the Prophet (peace be upon him) prohibited selling what does not yet exist. A token whose value depends entirely on future promises is a transaction in something whose existence is uncertain. The Hadith of habal al-habalah (Sahih al-Bukhari 2143) prohibits selling the offspring of that which has not yet been born.",
+      opts: [
+        { label: "Yes, the project is operational with real users and activity", sub: "Working product, measurable economic value", val: "operational", w: {} },
+        { label: "The project exists but is early stage with limited adoption", sub: "Product launched but not yet proven", val: "early", w: { gharar_existence: 1 } },
+        { label: "The project is pre-launch, based on promises and a roadmap", sub: "No working product yet", val: "vaporware", w: { gharar_existence: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -726,6 +1189,51 @@ export const QS: Record<string, Question[]> = {
         { label: "Genuine use - I need this token for the technology or service", sub: "", val: "use", w: {} },
         { label: "Speculation - hoping to profit from price increase", sub: "", val: "spec", w: { speculative: 2 } },
         { label: "Both", sub: "", val: "both", w: { speculative: 1 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you understand the technology, tokenomics, and purpose of this digital asset?",
+      plain: "Can you explain what this token does, how its supply works, who controls it, and why it has value, or are you buying based on price movement and social media?",
+      principle: "Gharar in digital assets is acute because the subject matter often has no physical form and no intrinsic utility. Al-Azhari in Tahdhib al-Lughah: 'Gharar is that whose outward appearance pleases the observer, but whose inner reality is unknown or detested.' A buyer who cannot explain what a token does is in Gharar about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the technology, supply mechanism, and use case", sub: "I can explain why this asset has or should have value", val: "understands", w: {} },
+        { label: "I understand some aspects but not the full picture", sub: "I know the basics but not the tokenomics or governance", val: "partial", w: { gharar_subject: 1 } },
+        { label: "I am buying based on price trends, social media, or recommendations", sub: "I cannot explain how this token works or why it has value", val: "none", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the project behind this asset real, operational, and delivering on its promises?",
+      plain: "Does this project have a working product, real users, and genuine economic activity, or is it based on promises, roadmaps, and future plans?",
+      principle: "Gharar in existence: the Prophet (peace be upon him) prohibited selling what does not yet exist. A token whose value depends entirely on future promises is a transaction in something whose existence is uncertain. The Hadith of habal al-habalah (Sahih al-Bukhari 2143) prohibits selling the offspring of that which has not yet been born.",
+      opts: [
+        { label: "Yes, the project is operational with real users and activity", sub: "Working product, measurable economic value", val: "operational", w: {} },
+        { label: "The project exists but is early stage with limited adoption", sub: "Product launched but not yet proven", val: "early", w: { gharar_existence: 1 } },
+        { label: "The project is pre-launch, based on promises and a roadmap", sub: "No working product yet", val: "vaporware", w: { gharar_existence: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
       ],
     },
   ],
@@ -767,6 +1275,51 @@ export const QS: Record<string, Question[]> = {
         { label: "Mixed - both permissible and impermissible uses", sub: "", val: "mixed", w: { mixed: 1 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you understand the technology, tokenomics, and purpose of this digital asset?",
+      plain: "Can you explain what this token does, how its supply works, who controls it, and why it has value, or are you buying based on price movement and social media?",
+      principle: "Gharar in digital assets is acute because the subject matter often has no physical form and no intrinsic utility. Al-Azhari in Tahdhib al-Lughah: 'Gharar is that whose outward appearance pleases the observer, but whose inner reality is unknown or detested.' A buyer who cannot explain what a token does is in Gharar about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the technology, supply mechanism, and use case", sub: "I can explain why this asset has or should have value", val: "understands", w: {} },
+        { label: "I understand some aspects but not the full picture", sub: "I know the basics but not the tokenomics or governance", val: "partial", w: { gharar_subject: 1 } },
+        { label: "I am buying based on price trends, social media, or recommendations", sub: "I cannot explain how this token works or why it has value", val: "none", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the project behind this asset real, operational, and delivering on its promises?",
+      plain: "Does this project have a working product, real users, and genuine economic activity, or is it based on promises, roadmaps, and future plans?",
+      principle: "Gharar in existence: the Prophet (peace be upon him) prohibited selling what does not yet exist. A token whose value depends entirely on future promises is a transaction in something whose existence is uncertain. The Hadith of habal al-habalah (Sahih al-Bukhari 2143) prohibits selling the offspring of that which has not yet been born.",
+      opts: [
+        { label: "Yes, the project is operational with real users and activity", sub: "Working product, measurable economic value", val: "operational", w: {} },
+        { label: "The project exists but is early stage with limited adoption", sub: "Product launched but not yet proven", val: "early", w: { gharar_existence: 1 } },
+        { label: "The project is pre-launch, based on promises and a roadmap", sub: "No working product yet", val: "vaporware", w: { gharar_existence: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -804,6 +1357,51 @@ export const QS: Record<string, Question[]> = {
         { label: "Yes, I earn yield on deposited stablecoins", sub: "", val: "yes", w: { riba_core: 3 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you understand the technology, tokenomics, and purpose of this digital asset?",
+      plain: "Can you explain what this token does, how its supply works, who controls it, and why it has value, or are you buying based on price movement and social media?",
+      principle: "Gharar in digital assets is acute because the subject matter often has no physical form and no intrinsic utility. Al-Azhari in Tahdhib al-Lughah: 'Gharar is that whose outward appearance pleases the observer, but whose inner reality is unknown or detested.' A buyer who cannot explain what a token does is in Gharar about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the technology, supply mechanism, and use case", sub: "I can explain why this asset has or should have value", val: "understands", w: {} },
+        { label: "I understand some aspects but not the full picture", sub: "I know the basics but not the tokenomics or governance", val: "partial", w: { gharar_subject: 1 } },
+        { label: "I am buying based on price trends, social media, or recommendations", sub: "I cannot explain how this token works or why it has value", val: "none", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the project behind this asset real, operational, and delivering on its promises?",
+      plain: "Does this project have a working product, real users, and genuine economic activity, or is it based on promises, roadmaps, and future plans?",
+      principle: "Gharar in existence: the Prophet (peace be upon him) prohibited selling what does not yet exist. A token whose value depends entirely on future promises is a transaction in something whose existence is uncertain. The Hadith of habal al-habalah (Sahih al-Bukhari 2143) prohibits selling the offspring of that which has not yet been born.",
+      opts: [
+        { label: "Yes, the project is operational with real users and activity", sub: "Working product, measurable economic value", val: "operational", w: {} },
+        { label: "The project exists but is early stage with limited adoption", sub: "Product launched but not yet proven", val: "early", w: { gharar_existence: 1 } },
+        { label: "The project is pre-launch, based on promises and a roadmap", sub: "No working product yet", val: "vaporware", w: { gharar_existence: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -832,6 +1430,51 @@ export const QS: Record<string, Question[]> = {
         { label: "No, the content involves prohibited activities or images", sub: "", val: "no", w: { haram: 3 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you understand the technology, tokenomics, and purpose of this digital asset?",
+      plain: "Can you explain what this token does, how its supply works, who controls it, and why it has value, or are you buying based on price movement and social media?",
+      principle: "Gharar in digital assets is acute because the subject matter often has no physical form and no intrinsic utility. Al-Azhari in Tahdhib al-Lughah: 'Gharar is that whose outward appearance pleases the observer, but whose inner reality is unknown or detested.' A buyer who cannot explain what a token does is in Gharar about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the technology, supply mechanism, and use case", sub: "I can explain why this asset has or should have value", val: "understands", w: {} },
+        { label: "I understand some aspects but not the full picture", sub: "I know the basics but not the tokenomics or governance", val: "partial", w: { gharar_subject: 1 } },
+        { label: "I am buying based on price trends, social media, or recommendations", sub: "I cannot explain how this token works or why it has value", val: "none", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the project behind this asset real, operational, and delivering on its promises?",
+      plain: "Does this project have a working product, real users, and genuine economic activity, or is it based on promises, roadmaps, and future plans?",
+      principle: "Gharar in existence: the Prophet (peace be upon him) prohibited selling what does not yet exist. A token whose value depends entirely on future promises is a transaction in something whose existence is uncertain. The Hadith of habal al-habalah (Sahih al-Bukhari 2143) prohibits selling the offspring of that which has not yet been born.",
+      opts: [
+        { label: "Yes, the project is operational with real users and activity", sub: "Working product, measurable economic value", val: "operational", w: {} },
+        { label: "The project exists but is early stage with limited adoption", sub: "Product launched but not yet proven", val: "early", w: { gharar_existence: 1 } },
+        { label: "The project is pre-launch, based on promises and a roadmap", sub: "No working product yet", val: "vaporware", w: { gharar_existence: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -857,6 +1500,51 @@ export const QS: Record<string, Question[]> = {
         { label: "Yes, atomic swap or immediate DEX settlement", sub: "Both sides in one transaction", val: "atomic", w: {} },
         { label: "Near-immediate - T+0 or same session on a centralised exchange", sub: "", val: "fast", w: {} },
         { label: "Delayed - one or both sides settle later", sub: "", val: "delayed", w: { dayn_grows: 2 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you understand the technology, tokenomics, and purpose of this digital asset?",
+      plain: "Can you explain what this token does, how its supply works, who controls it, and why it has value, or are you buying based on price movement and social media?",
+      principle: "Gharar in digital assets is acute because the subject matter often has no physical form and no intrinsic utility. Al-Azhari in Tahdhib al-Lughah: 'Gharar is that whose outward appearance pleases the observer, but whose inner reality is unknown or detested.' A buyer who cannot explain what a token does is in Gharar about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the technology, supply mechanism, and use case", sub: "I can explain why this asset has or should have value", val: "understands", w: {} },
+        { label: "I understand some aspects but not the full picture", sub: "I know the basics but not the tokenomics or governance", val: "partial", w: { gharar_subject: 1 } },
+        { label: "I am buying based on price trends, social media, or recommendations", sub: "I cannot explain how this token works or why it has value", val: "none", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the project behind this asset real, operational, and delivering on its promises?",
+      plain: "Does this project have a working product, real users, and genuine economic activity, or is it based on promises, roadmaps, and future plans?",
+      principle: "Gharar in existence: the Prophet (peace be upon him) prohibited selling what does not yet exist. A token whose value depends entirely on future promises is a transaction in something whose existence is uncertain. The Hadith of habal al-habalah (Sahih al-Bukhari 2143) prohibits selling the offspring of that which has not yet been born.",
+      opts: [
+        { label: "Yes, the project is operational with real users and activity", sub: "Working product, measurable economic value", val: "operational", w: {} },
+        { label: "The project exists but is early stage with limited adoption", sub: "Product launched but not yet proven", val: "early", w: { gharar_existence: 1 } },
+        { label: "The project is pre-launch, based on promises and a roadmap", sub: "No working product yet", val: "vaporware", w: { gharar_existence: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
       ],
     },
   ],
@@ -923,7 +1611,7 @@ export const QS: Record<string, Question[]> = {
       ],
     },
     {
-      phase: 5,
+      phase: 7,
       text: "What is your primary purpose in holding this token?",
       plain: "Why did you acquire this token - what do you intend to do with it?",
       principle: "Maqasid al-Shariah (objectives of the law) considers intention and outcome. Speculative flipping of tokenized assets - buying only to sell quickly at a higher price with no interest in the underlying asset - resembles Maysir (gambling). Long-term holding for genuine asset exposure, income generation, or wealth preservation aligns with the Shariah objective of Hifz al-Mal (preservation of wealth).",
@@ -932,6 +1620,51 @@ export const QS: Record<string, Question[]> = {
         { label: "Long-term investment - genuine exposure to the asset", sub: "Holding for wealth preservation or growth", val: "hold", w: {} },
         { label: "Income generation - earning yield from the asset", sub: "Rent, dividends, or commodity returns", val: "income", w: {} },
         { label: "Using as collateral or for portfolio diversification", sub: "", val: "collateral", w: {} },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you understand the technology, tokenomics, and purpose of this digital asset?",
+      plain: "Can you explain what this token does, how its supply works, who controls it, and why it has value, or are you buying based on price movement and social media?",
+      principle: "Gharar in digital assets is acute because the subject matter often has no physical form and no intrinsic utility. Al-Azhari in Tahdhib al-Lughah: 'Gharar is that whose outward appearance pleases the observer, but whose inner reality is unknown or detested.' A buyer who cannot explain what a token does is in Gharar about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the technology, supply mechanism, and use case", sub: "I can explain why this asset has or should have value", val: "understands", w: {} },
+        { label: "I understand some aspects but not the full picture", sub: "I know the basics but not the tokenomics or governance", val: "partial", w: { gharar_subject: 1 } },
+        { label: "I am buying based on price trends, social media, or recommendations", sub: "I cannot explain how this token works or why it has value", val: "none", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the project behind this asset real, operational, and delivering on its promises?",
+      plain: "Does this project have a working product, real users, and genuine economic activity, or is it based on promises, roadmaps, and future plans?",
+      principle: "Gharar in existence: the Prophet (peace be upon him) prohibited selling what does not yet exist. A token whose value depends entirely on future promises is a transaction in something whose existence is uncertain. The Hadith of habal al-habalah (Sahih al-Bukhari 2143) prohibits selling the offspring of that which has not yet been born.",
+      opts: [
+        { label: "Yes, the project is operational with real users and activity", sub: "Working product, measurable economic value", val: "operational", w: {} },
+        { label: "The project exists but is early stage with limited adoption", sub: "Product launched but not yet proven", val: "early", w: { gharar_existence: 1 } },
+        { label: "The project is pre-launch, based on promises and a roadmap", sub: "No working product yet", val: "vaporware", w: { gharar_existence: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
       ],
     },
   ],
@@ -984,6 +1717,40 @@ export const QS: Record<string, Question[]> = {
         { label: "No, this will likely trap them", sub: "", val: "no", w: { dayn_trap: 2 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you fully understand all the terms, costs, and obligations of this arrangement?",
+      plain: "Are there any fees, charges, conditions, or mechanisms in this contract that you do not fully understand or that were not clearly explained to you?",
+      principle: "The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar, the sale of Gharar (Sahih Muslim 1513). Gharar means excessive, avoidable uncertainty in a contract. Ibn Rushd al-Jadd defined it as uncertainty in the price (thaman), the object (muthman), or the term (ajal). A contract whose terms, costs, or obligations are unclear to one party contains Gharar that may render it defective.",
+      opts: [
+        { label: "Yes, every term, cost, and obligation is clear to me", sub: "I understand exactly what I am paying and receiving", val: "clear", w: {} },
+        { label: "Some terms are unclear but I signed anyway", sub: "There are clauses or mechanisms I do not fully understand", val: "unclear", w: { gharar_subject: 2 } },
+        { label: "Significant parts of this arrangement are opaque to me", sub: "I do not understand major elements of how this works", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Are there any hidden fees, variable charges, or conditions that could change the total cost?",
+      plain: "Could the total amount you pay end up being different from what you were initially told, due to hidden fees, variable rates, or conditional charges?",
+      principle: "Gharar in the price (al-Thaman) occurs when the total cost is not determinable at the time of contract. Al-Sarakhsi in Al-Mabsut: Gharar is that whose outcome is concealed. The Quran commands: 'Give full measure and weight with justice' (6:152).",
+      opts: [
+        { label: "No, the total cost is fixed and fully transparent", sub: "", val: "fixed", w: {} },
+        { label: "There are some variable elements but they are disclosed", sub: "I know they exist even if the exact amount may vary", val: "variable", w: { gharar_price: 1 } },
+        { label: "Yes, hidden or unpredictable charges could change the total significantly", sub: "", val: "hidden", w: { gharar_price: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -1019,6 +1786,40 @@ export const QS: Record<string, Question[]> = {
         { label: "Yes, this is clearly an interest-bearing loan", sub: "I am aware it involves Riba", val: "yes", w: { riba_core: 3 } },
         { label: "No, this is a genuine Qard Hasan from someone helping me", sub: "", val: "no", w: {} },
         { label: "I am taking this under genuine necessity - no other option exists", sub: "Darura (necessity) may apply", val: "darura", w: { darura: 1 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you fully understand all the terms, costs, and obligations of this arrangement?",
+      plain: "Are there any fees, charges, conditions, or mechanisms in this contract that you do not fully understand or that were not clearly explained to you?",
+      principle: "The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar, the sale of Gharar (Sahih Muslim 1513). Gharar means excessive, avoidable uncertainty in a contract. Ibn Rushd al-Jadd defined it as uncertainty in the price (thaman), the object (muthman), or the term (ajal). A contract whose terms, costs, or obligations are unclear to one party contains Gharar that may render it defective.",
+      opts: [
+        { label: "Yes, every term, cost, and obligation is clear to me", sub: "I understand exactly what I am paying and receiving", val: "clear", w: {} },
+        { label: "Some terms are unclear but I signed anyway", sub: "There are clauses or mechanisms I do not fully understand", val: "unclear", w: { gharar_subject: 2 } },
+        { label: "Significant parts of this arrangement are opaque to me", sub: "I do not understand major elements of how this works", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Are there any hidden fees, variable charges, or conditions that could change the total cost?",
+      plain: "Could the total amount you pay end up being different from what you were initially told, due to hidden fees, variable rates, or conditional charges?",
+      principle: "Gharar in the price (al-Thaman) occurs when the total cost is not determinable at the time of contract. Al-Sarakhsi in Al-Mabsut: Gharar is that whose outcome is concealed. The Quran commands: 'Give full measure and weight with justice' (6:152).",
+      opts: [
+        { label: "No, the total cost is fixed and fully transparent", sub: "", val: "fixed", w: {} },
+        { label: "There are some variable elements but they are disclosed", sub: "I know they exist even if the exact amount may vary", val: "variable", w: { gharar_price: 1 } },
+        { label: "Yes, hidden or unpredictable charges could change the total significantly", sub: "", val: "hidden", w: { gharar_price: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -1058,6 +1859,40 @@ export const QS: Record<string, Question[]> = {
         { label: "Yes, clearly permissible", sub: "", val: "yes", w: {} },
         { label: "No, involves Riba, alcohol, gambling, or other prohibition", sub: "", val: "no", w: { haram: 3 } },
         { label: "Mixed", sub: "", val: "mixed", w: { mixed: 1 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you understand what you are investing in, the underlying asset, business, or activity?",
+      plain: "Can you describe what your money is actually doing? Do you know where it goes, what it funds, and how returns are generated?",
+      principle: "Gharar in investment occurs when the investor does not know the nature of the underlying activity their wealth is supporting. The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar (Sahih Muslim 1513). An investor who cannot describe what their money funds is in a state of Jahalah (ignorance) about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the underlying business, asset, or activity clearly", sub: "I can describe what my money is doing", val: "clear", w: {} },
+        { label: "I understand the general category but not the specifics", sub: "I know it is in property/stocks/commodities but not the details", val: "general", w: { gharar_subject: 1 } },
+        { label: "I do not know what my money is actually doing", sub: "The fund, product, or structure is opaque to me", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the return on this investment linked to a real, identifiable economic activity?",
+      plain: "Does the profit come from an actual business, trade, rental income, or productive activity, or is it generated by financial engineering or mechanisms you cannot trace?",
+      principle: "Al-Nawawi stated that bay\\u2019 al-gharar is that whose nature or outcome or both is unknown. Returns that cannot be traced to genuine productive activity raise Gharar concerns. Genuine Bay\\u2019 and Musharakah generate returns from real economic activity.",
+      opts: [
+        { label: "Yes, the return comes from identifiable productive activity", sub: "Trade, rental, business profit, or services", val: "real", w: {} },
+        { label: "The return mechanism is complex but documented", sub: "Multiple layers or financial structures are involved", val: "complex", w: { gharar_subject: 1 } },
+        { label: "I cannot trace where the return actually comes from", sub: "The source of profit is opaque or relies on financial engineering", val: "opaque", w: { gharar_subject: 2, gharar_price: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -1100,6 +1935,51 @@ export const QS: Record<string, Question[]> = {
         { label: "Mixed tenants - some permissible, some questionable", sub: "", val: "mixed", w: { mixed: 1 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you understand what you are investing in, the underlying asset, business, or activity?",
+      plain: "Can you describe what your money is actually doing? Do you know where it goes, what it funds, and how returns are generated?",
+      principle: "Gharar in investment occurs when the investor does not know the nature of the underlying activity their wealth is supporting. The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar (Sahih Muslim 1513). An investor who cannot describe what their money funds is in a state of Jahalah (ignorance) about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the underlying business, asset, or activity clearly", sub: "I can describe what my money is doing", val: "clear", w: {} },
+        { label: "I understand the general category but not the specifics", sub: "I know it is in property/stocks/commodities but not the details", val: "general", w: { gharar_subject: 1 } },
+        { label: "I do not know what my money is actually doing", sub: "The fund, product, or structure is opaque to me", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the return on this investment linked to a real, identifiable economic activity?",
+      plain: "Does the profit come from an actual business, trade, rental income, or productive activity, or is it generated by financial engineering or mechanisms you cannot trace?",
+      principle: "Al-Nawawi stated that bay\\u2019 al-gharar is that whose nature or outcome or both is unknown. Returns that cannot be traced to genuine productive activity raise Gharar concerns. Genuine Bay\\u2019 and Musharakah generate returns from real economic activity.",
+      opts: [
+        { label: "Yes, the return comes from identifiable productive activity", sub: "Trade, rental, business profit, or services", val: "real", w: {} },
+        { label: "The return mechanism is complex but documented", sub: "Multiple layers or financial structures are involved", val: "complex", w: { gharar_subject: 1 } },
+        { label: "I cannot trace where the return actually comes from", sub: "The source of profit is opaque or relies on financial engineering", val: "opaque", w: { gharar_subject: 2, gharar_price: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -1134,6 +2014,40 @@ export const QS: Record<string, Question[]> = {
       opts: [
         { label: "No, the agreed price stays the same regardless of when they pay", sub: "", val: "no", w: {} },
         { label: "Yes, late payment triggers additional charges", sub: "", val: "yes", w: { dayn_grows: 3 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you know exactly what you are buying, its identity, quantity, quality, and specifications?",
+      plain: "Can you fully describe what you will receive? Is the subject matter clearly identified and specified?",
+      principle: "Gharar in the subject matter (al-Ma\\u2019qud \\u2019Alayh): the Prophet (peace be upon him) prohibited selling what is not clearly known. He prohibited Mulamasah (buying by touch without examination) and Munabadha (buying by throwing without inspection), Sahih al-Bukhari 2146. The buyer must know what they are acquiring.",
+      opts: [
+        { label: "Yes, the subject matter is fully specified and I have examined it", sub: "Identity, quantity, quality, all known", val: "known", w: {} },
+        { label: "I know the general type but not the exact specifications", sub: "Some details about quality or exact quantity are uncertain", val: "partial", w: { gharar_subject: 1 } },
+        { label: "Significant aspects of what I am buying are unknown to me", sub: "I am committing wealth to something I cannot fully describe", val: "unknown", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Can the seller deliver what has been promised, and does the subject matter exist?",
+      plain: "Is the thing being sold in the seller's possession? Is the seller able to hand it over? Or does it depend on future events?",
+      principle: "The Prophet (peace be upon him) said: 'Do not sell what is not with you' (Sunan al-Tirmidhi 1232). He prohibited the sale of habal al-habalah, the offspring of an unborn animal (Sahih al-Bukhari 2143). Selling what may not exist or what the seller cannot deliver is Gharar Fahish.",
+      opts: [
+        { label: "Yes, the item exists and the seller possesses it now", sub: "Delivery is immediate or certain", val: "exists", w: {} },
+        { label: "The item will be produced or delivered in the future", sub: "It does not exist yet but delivery is reasonably certain", val: "future", w: { gharar_delivery: 1 } },
+        { label: "The item may or may not come into existence or be deliverable", sub: "Delivery depends on uncertain future events", val: "uncertain", w: { gharar_delivery: 3, gharar_existence: 2 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -1173,6 +2087,40 @@ export const QS: Record<string, Question[]> = {
         { label: "Yes, late payment increases the total", sub: "", val: "yes", w: { dayn_grows: 3 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you know exactly what you are buying, its identity, quantity, quality, and specifications?",
+      plain: "Can you fully describe what you will receive? Is the subject matter clearly identified and specified?",
+      principle: "Gharar in the subject matter (al-Ma\\u2019qud \\u2019Alayh): the Prophet (peace be upon him) prohibited selling what is not clearly known. He prohibited Mulamasah (buying by touch without examination) and Munabadha (buying by throwing without inspection), Sahih al-Bukhari 2146. The buyer must know what they are acquiring.",
+      opts: [
+        { label: "Yes, the subject matter is fully specified and I have examined it", sub: "Identity, quantity, quality, all known", val: "known", w: {} },
+        { label: "I know the general type but not the exact specifications", sub: "Some details about quality or exact quantity are uncertain", val: "partial", w: { gharar_subject: 1 } },
+        { label: "Significant aspects of what I am buying are unknown to me", sub: "I am committing wealth to something I cannot fully describe", val: "unknown", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Can the seller deliver what has been promised, and does the subject matter exist?",
+      plain: "Is the thing being sold in the seller's possession? Is the seller able to hand it over? Or does it depend on future events?",
+      principle: "The Prophet (peace be upon him) said: 'Do not sell what is not with you' (Sunan al-Tirmidhi 1232). He prohibited the sale of habal al-habalah, the offspring of an unborn animal (Sahih al-Bukhari 2143). Selling what may not exist or what the seller cannot deliver is Gharar Fahish.",
+      opts: [
+        { label: "Yes, the item exists and the seller possesses it now", sub: "Delivery is immediate or certain", val: "exists", w: {} },
+        { label: "The item will be produced or delivered in the future", sub: "It does not exist yet but delivery is reasonably certain", val: "future", w: { gharar_delivery: 1 } },
+        { label: "The item may or may not come into existence or be deliverable", sub: "Delivery depends on uncertain future events", val: "uncertain", w: { gharar_delivery: 3, gharar_existence: 2 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -1208,6 +2156,40 @@ export const QS: Record<string, Question[]> = {
       opts: [
         { label: "Yes, seller is a genuine producer or reliable supplier", sub: "", val: "yes", w: {} },
         { label: "Uncertain - delivery depends on market availability", sub: "", val: "uncertain", w: { gharar: 1 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you know exactly what you are buying, its identity, quantity, quality, and specifications?",
+      plain: "Can you fully describe what you will receive? Is the subject matter clearly identified and specified?",
+      principle: "Gharar in the subject matter (al-Ma\\u2019qud \\u2019Alayh): the Prophet (peace be upon him) prohibited selling what is not clearly known. He prohibited Mulamasah (buying by touch without examination) and Munabadha (buying by throwing without inspection), Sahih al-Bukhari 2146. The buyer must know what they are acquiring.",
+      opts: [
+        { label: "Yes, the subject matter is fully specified and I have examined it", sub: "Identity, quantity, quality, all known", val: "known", w: {} },
+        { label: "I know the general type but not the exact specifications", sub: "Some details about quality or exact quantity are uncertain", val: "partial", w: { gharar_subject: 1 } },
+        { label: "Significant aspects of what I am buying are unknown to me", sub: "I am committing wealth to something I cannot fully describe", val: "unknown", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Can the seller deliver what has been promised, and does the subject matter exist?",
+      plain: "Is the thing being sold in the seller's possession? Is the seller able to hand it over? Or does it depend on future events?",
+      principle: "The Prophet (peace be upon him) said: 'Do not sell what is not with you' (Sunan al-Tirmidhi 1232). He prohibited the sale of habal al-habalah, the offspring of an unborn animal (Sahih al-Bukhari 2143). Selling what may not exist or what the seller cannot deliver is Gharar Fahish.",
+      opts: [
+        { label: "Yes, the item exists and the seller possesses it now", sub: "Delivery is immediate or certain", val: "exists", w: {} },
+        { label: "The item will be produced or delivered in the future", sub: "It does not exist yet but delivery is reasonably certain", val: "future", w: { gharar_delivery: 1 } },
+        { label: "The item may or may not come into existence or be deliverable", sub: "Delivery depends on uncertain future events", val: "uncertain", w: { gharar_delivery: 3, gharar_existence: 2 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -1246,6 +2228,51 @@ export const QS: Record<string, Question[]> = {
       opts: [
         { label: "No, only my own money", sub: "", val: "no", w: {} },
         { label: "Yes, leveraged or margin", sub: "", val: "yes", w: { leverage: 3 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you understand the technology, tokenomics, and purpose of this digital asset?",
+      plain: "Can you explain what this token does, how its supply works, who controls it, and why it has value, or are you buying based on price movement and social media?",
+      principle: "Gharar in digital assets is acute because the subject matter often has no physical form and no intrinsic utility. Al-Azhari in Tahdhib al-Lughah: 'Gharar is that whose outward appearance pleases the observer, but whose inner reality is unknown or detested.' A buyer who cannot explain what a token does is in Gharar about the subject matter.",
+      opts: [
+        { label: "Yes, I understand the technology, supply mechanism, and use case", sub: "I can explain why this asset has or should have value", val: "understands", w: {} },
+        { label: "I understand some aspects but not the full picture", sub: "I know the basics but not the tokenomics or governance", val: "partial", w: { gharar_subject: 1 } },
+        { label: "I am buying based on price trends, social media, or recommendations", sub: "I cannot explain how this token works or why it has value", val: "none", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Is the project behind this asset real, operational, and delivering on its promises?",
+      plain: "Does this project have a working product, real users, and genuine economic activity, or is it based on promises, roadmaps, and future plans?",
+      principle: "Gharar in existence: the Prophet (peace be upon him) prohibited selling what does not yet exist. A token whose value depends entirely on future promises is a transaction in something whose existence is uncertain. The Hadith of habal al-habalah (Sahih al-Bukhari 2143) prohibits selling the offspring of that which has not yet been born.",
+      opts: [
+        { label: "Yes, the project is operational with real users and activity", sub: "Working product, measurable economic value", val: "operational", w: {} },
+        { label: "The project exists but is early stage with limited adoption", sub: "Product launched but not yet proven", val: "early", w: { gharar_existence: 1 } },
+        { label: "The project is pre-launch, based on promises and a roadmap", sub: "No working product yet", val: "vaporware", w: { gharar_existence: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is your gain in this arrangement necessarily at another party's direct loss?",
+      plain: "If you profit, does someone else lose the exact same amount? Or can both parties benefit from the transaction?",
+      principle: "The first structural element of Maysir (gambling) is the zero-sum outcome: one party's gain is exactly another party's loss. The Quran states: 'Shaytan only wants to cause between you enmity and hatred through khamr and Maysir' (5:91). Genuine Bay\\u2019 creates mutual benefit; Maysir merely transfers wealth from loser to winner.",
+      opts: [
+        { label: "No, both parties can benefit, this creates genuine economic value", sub: "Trade, partnership, or service where both sides gain", val: "mutual", w: {} },
+        { label: "Yes, my gain comes at another party's direct expense", sub: "One wins, one loses, no new value is created", val: "zero_sum", w: { maysir_zerosum: 3 } },
+        { label: "Partially, there is some productive element but also a speculative component", sub: "", val: "mixed", w: { maysir_zerosum: 1 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Is the outcome determined by your effort, skill, and analysis, or primarily by chance and market fluctuations you cannot control?",
+      plain: "Did you commit wealth based on genuine analysis and productive intention, or are you betting on a price movement you cannot predict?",
+      principle: "The second element of Maysir: determination by chance. The Prophet (peace be upon him) prohibited the sale of pebbles (bay\\u2019 al-hasah) where the outcome depended on where a thrown pebble landed (Sahih Muslim 1513). Imam al-Qurtubi: 'Maysir is derived from Yusr (ease), because it involves the acquisition of wealth with ease and without effort.'",
+      opts: [
+        { label: "The outcome depends on genuine analysis, skill, or productive effort", sub: "I have done research and am making an informed decision", val: "skill", w: {} },
+        { label: "The outcome depends on market movements I cannot predict or control", sub: "I am effectively betting on a price direction", val: "chance", w: { maysir_chance: 2 } },
+        { label: "The outcome is entirely random or based on factors nobody can predict", sub: "Pure speculation on unknowable outcomes", val: "random", w: { maysir_chance: 3 } },
       ],
     },
   ],
@@ -1309,6 +2336,40 @@ export const QS: Record<string, Question[]> = {
         { label: "Yes, it is essentially a cash loan with an Islamic label", sub: "", val: "yes", w: { hila: 3 } },
       ],
     },
+  
+    {
+      phase: 5,
+      text: "Do you fully understand all the terms, costs, and obligations of this arrangement?",
+      plain: "Are there any fees, charges, conditions, or mechanisms in this contract that you do not fully understand or that were not clearly explained to you?",
+      principle: "The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar, the sale of Gharar (Sahih Muslim 1513). Gharar means excessive, avoidable uncertainty in a contract. Ibn Rushd al-Jadd defined it as uncertainty in the price (thaman), the object (muthman), or the term (ajal). A contract whose terms, costs, or obligations are unclear to one party contains Gharar that may render it defective.",
+      opts: [
+        { label: "Yes, every term, cost, and obligation is clear to me", sub: "I understand exactly what I am paying and receiving", val: "clear", w: {} },
+        { label: "Some terms are unclear but I signed anyway", sub: "There are clauses or mechanisms I do not fully understand", val: "unclear", w: { gharar_subject: 2 } },
+        { label: "Significant parts of this arrangement are opaque to me", sub: "I do not understand major elements of how this works", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Are there any hidden fees, variable charges, or conditions that could change the total cost?",
+      plain: "Could the total amount you pay end up being different from what you were initially told, due to hidden fees, variable rates, or conditional charges?",
+      principle: "Gharar in the price (al-Thaman) occurs when the total cost is not determinable at the time of contract. Al-Sarakhsi in Al-Mabsut: Gharar is that whose outcome is concealed. The Quran commands: 'Give full measure and weight with justice' (6:152).",
+      opts: [
+        { label: "No, the total cost is fixed and fully transparent", sub: "", val: "fixed", w: {} },
+        { label: "There are some variable elements but they are disclosed", sub: "I know they exist even if the exact amount may vary", val: "variable", w: { gharar_price: 1 } },
+        { label: "Yes, hidden or unpredictable charges could change the total significantly", sub: "", val: "hidden", w: { gharar_price: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
+      ],
+    },
   ],
 
   // ──────────────────────────────────────────
@@ -1346,6 +2407,40 @@ export const QS: Record<string, Question[]> = {
         { label: "Transparent, disclosed fee - I know exactly what I am paying", sub: "", val: "transparent", w: {} },
         { label: "No stated fee but the exchange rate is worse than the market", sub: "Hidden margin", val: "hidden_margin", w: { fee_structure: 1 } },
         { label: "Both a fee and a worse exchange rate", sub: "", val: "both", w: { fee_structure: 1 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you know exactly what you are buying, its identity, quantity, quality, and specifications?",
+      plain: "Can you fully describe what you will receive? Is the subject matter clearly identified and specified?",
+      principle: "Gharar in the subject matter (al-Ma\\u2019qud \\u2019Alayh): the Prophet (peace be upon him) prohibited selling what is not clearly known. He prohibited Mulamasah (buying by touch without examination) and Munabadha (buying by throwing without inspection), Sahih al-Bukhari 2146. The buyer must know what they are acquiring.",
+      opts: [
+        { label: "Yes, the subject matter is fully specified and I have examined it", sub: "Identity, quantity, quality, all known", val: "known", w: {} },
+        { label: "I know the general type but not the exact specifications", sub: "Some details about quality or exact quantity are uncertain", val: "partial", w: { gharar_subject: 1 } },
+        { label: "Significant aspects of what I am buying are unknown to me", sub: "I am committing wealth to something I cannot fully describe", val: "unknown", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Can the seller deliver what has been promised, and does the subject matter exist?",
+      plain: "Is the thing being sold in the seller's possession? Is the seller able to hand it over? Or does it depend on future events?",
+      principle: "The Prophet (peace be upon him) said: 'Do not sell what is not with you' (Sunan al-Tirmidhi 1232). He prohibited the sale of habal al-habalah, the offspring of an unborn animal (Sahih al-Bukhari 2143). Selling what may not exist or what the seller cannot deliver is Gharar Fahish.",
+      opts: [
+        { label: "Yes, the item exists and the seller possesses it now", sub: "Delivery is immediate or certain", val: "exists", w: {} },
+        { label: "The item will be produced or delivered in the future", sub: "It does not exist yet but delivery is reasonably certain", val: "future", w: { gharar_delivery: 1 } },
+        { label: "The item may or may not come into existence or be deliverable", sub: "Delivery depends on uncertain future events", val: "uncertain", w: { gharar_delivery: 3, gharar_existence: 2 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
@@ -1433,6 +2528,40 @@ export const QS: Record<string, Question[]> = {
       opts: [
         { label: "No, the transaction genuinely depends on the non-cash elements", sub: "", val: "no", w: {} },
         { label: "Yes, it is essentially a loan with extra steps", sub: "", val: "yes", w: { hila: 3 } },
+      ],
+    },
+  
+    {
+      phase: 5,
+      text: "Do you fully understand all the terms, costs, and obligations of this arrangement?",
+      plain: "Are there any fees, charges, conditions, or mechanisms in this contract that you do not fully understand or that were not clearly explained to you?",
+      principle: "The Prophet (peace be upon him) prohibited bay\\u2019 al-gharar, the sale of Gharar (Sahih Muslim 1513). Gharar means excessive, avoidable uncertainty in a contract. Ibn Rushd al-Jadd defined it as uncertainty in the price (thaman), the object (muthman), or the term (ajal). A contract whose terms, costs, or obligations are unclear to one party contains Gharar that may render it defective.",
+      opts: [
+        { label: "Yes, every term, cost, and obligation is clear to me", sub: "I understand exactly what I am paying and receiving", val: "clear", w: {} },
+        { label: "Some terms are unclear but I signed anyway", sub: "There are clauses or mechanisms I do not fully understand", val: "unclear", w: { gharar_subject: 2 } },
+        { label: "Significant parts of this arrangement are opaque to me", sub: "I do not understand major elements of how this works", val: "opaque", w: { gharar_subject: 3 } },
+      ],
+    },
+    {
+      phase: 5,
+      text: "Are there any hidden fees, variable charges, or conditions that could change the total cost?",
+      plain: "Could the total amount you pay end up being different from what you were initially told, due to hidden fees, variable rates, or conditional charges?",
+      principle: "Gharar in the price (al-Thaman) occurs when the total cost is not determinable at the time of contract. Al-Sarakhsi in Al-Mabsut: Gharar is that whose outcome is concealed. The Quran commands: 'Give full measure and weight with justice' (6:152).",
+      opts: [
+        { label: "No, the total cost is fixed and fully transparent", sub: "", val: "fixed", w: {} },
+        { label: "There are some variable elements but they are disclosed", sub: "I know they exist even if the exact amount may vary", val: "variable", w: { gharar_price: 1 } },
+        { label: "Yes, hidden or unpredictable charges could change the total significantly", sub: "", val: "hidden", w: { gharar_price: 3 } },
+      ],
+    },
+    {
+      phase: 6,
+      text: "Does this transaction involve committing wealth to an uncertain outcome without any productive economic contribution?",
+      plain: "Are you putting money at risk without creating any goods, services, jobs, or genuine economic activity? Is this purely about winning or losing money?",
+      principle: "Ibn Taymiyyah in Majmu\\u2019 al-Fatawa: 'Maysir involves the consumption of wealth by falsehood (akl al-mal bi al-batil), because the gain is not from any productive activity, any service provided, or any genuine exchange.' The Quran: 'Do not consume each other\\'s wealth unjustly' (4:29).",
+      opts: [
+        { label: "This transaction involves genuine productive activity", sub: "Goods produced, services rendered, or real assets built", val: "productive", w: {} },
+        { label: "There is some productive element but also a significant speculative component", sub: "The activity has real substance but speculation plays a role", val: "mixed", w: { maysir_no_value: 1 } },
+        { label: "No productive contribution, purely about gaining or losing money", sub: "No goods, services, or economic value created", val: "none", w: { maysir_no_value: 3 } },
       ],
     },
   ],
