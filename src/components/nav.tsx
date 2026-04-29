@@ -95,7 +95,7 @@ export function Nav() {
                 fontFamily: "var(--font-body)",
                 fontSize: "11px",
                 fontStyle: "italic",
-                color: "var(--fg3)",
+                color: "var(--fg2)",
                 letterSpacing: "0.01em",
                 marginTop: "-2px",
               }}

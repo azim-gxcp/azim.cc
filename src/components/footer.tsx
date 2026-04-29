@@ -32,7 +32,7 @@ export function Footer() {
               fontSize: "15px",
               fontStyle: "italic",
               lineHeight: 1.65,
-              opacity: 0.7,
+              color: "rgba(255,255,255,0.75)",
               maxWidth: "36ch",
             }}
           >
@@ -50,7 +50,7 @@ export function Footer() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                opacity: 0.55,
+                color: "rgba(255,255,255,0.65)",
                 marginBottom: "4px",
               }}
             >
@@ -73,8 +73,7 @@ export function Footer() {
                   style={{
                     fontFamily: "var(--font-body)",
                     fontSize: "15px",
-                    color: "inherit",
-                    opacity: 0.8,
+                    color: "rgba(255,255,255,0.85)",
                     textDecoration: "none",
                   }}
                 >
@@ -92,7 +91,7 @@ export function Footer() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                opacity: 0.55,
+                color: "rgba(255,255,255,0.65)",
                 marginBottom: "4px",
               }}
             >
@@ -114,8 +113,7 @@ export function Footer() {
                     style={{
                       fontFamily: "var(--font-body)",
                       fontSize: "15px",
-                      color: "inherit",
-                      opacity: 0.8,
+                      color: "rgba(255,255,255,0.85)",
                       textDecoration: "none",
                     }}
                   >
@@ -134,7 +132,7 @@ export function Footer() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                opacity: 0.55,
+                color: "rgba(255,255,255,0.65)",
                 marginBottom: "4px",
               }}
             >
@@ -155,8 +153,7 @@ export function Footer() {
                   style={{
                     fontFamily: "var(--font-body)",
                     fontSize: "15px",
-                    color: "inherit",
-                    opacity: 0.8,
+                    color: "rgba(255,255,255,0.85)",
                     textDecoration: "none",
                   }}
                 >
@@ -174,7 +171,7 @@ export function Footer() {
           borderTop: "1px solid rgba(255,255,255,0.15)",
           fontFamily: "var(--font-body)",
           fontSize: "12px",
-          opacity: 0.55,
+          color: "rgba(255,255,255,0.65)",
         }}
       >
         <span>Opinions are mine alone.</span>

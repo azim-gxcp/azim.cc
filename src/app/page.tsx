@@ -6,20 +6,16 @@ import { ArticleCard } from "@/components/article-card";
 import { ArticleGrid } from "@/components/article-grid";
 import { NewsletterForm } from "@/components/newsletter-form";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 async function getFeaturedSlugs(): Promise<string[]> {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_URL || "https://api.azim.cc"}/api/settings/featured`;
-    console.log("[featured] fetching:", url);
-    const res = await fetch(url, { cache: "no-store" });
-    console.log("[featured] status:", res.status);
+    const res = await fetch(url, { next: { revalidate: 300 } });
     if (!res.ok) return [];
     const data = await res.json();
-    console.log("[featured] data:", JSON.stringify(data));
     return Array.isArray(data.slugs) ? data.slugs : [];
-  } catch (err) {
-    console.error("[featured] fetch failed:", err);
+  } catch {
     return [];
   }
 }

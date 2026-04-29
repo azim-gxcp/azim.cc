@@ -8,7 +8,7 @@ export function Hero() {
           fontWeight: 600,
           textTransform: "uppercase",
           letterSpacing: "0.08em",
-          color: "var(--fg3)",
+          color: "var(--fg2)",
           marginBottom: "20px",
         }}
       >
@@ -19,7 +19,7 @@ export function Hero() {
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 600,
-          fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+          fontSize: "clamp(2rem, 5vw, 3rem)",
           lineHeight: 1.05,
           letterSpacing: "-0.025em",
           color: "var(--fg1)",
@@ -39,7 +39,7 @@ export function Hero() {
         className="m-0"
         style={{
           fontFamily: "var(--font-body)",
-          fontSize: "18px",
+          fontSize: "16px",
           fontWeight: 400,
           lineHeight: 1.65,
           color: "var(--fg2)",

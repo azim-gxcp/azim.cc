@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
 
 export function FeatureCard({ post }: { post: PostMeta }) {
-  const kickerColor = "var(--purple-4)";
+  const kickerColor = "#6d28d9";
 
   return (
     <Link href={`/blog/${post.slug}`} className="block no-underline mb-[72px]">
