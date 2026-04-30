@@ -20,7 +20,23 @@
       "Bash(npx next:*)",
       "Bash(npx tsc:*)",
       "Bash(pdftotext:*)",
-      "WebFetch(domain:gxcoin.money)"
+      "WebFetch(domain:gxcoin.money)",
+      "Bash(where gh:*)",
+      "Bash(winget install:*)",
+      "Bash(export:*)",
+      "Bash(ssh:*)",
+      "Bash(nslookup:*)",
+      "Bash(ls:*)",
+      "WebFetch(domain:www.journal.jibep.org)",
+      "WebFetch(domain:www.islamicfinancereview.co.uk)",
+      "WebFetch(domain:journal.jibep.org)",
+      "WebFetch(domain:islamicfinancereview.co.uk)",
+      "WebFetch(domain:jibep.org)",
+      "Bash(pandoc:*)",
+      "Bash(pip install:*)",
+      "Bash(xargs grep:*)",
+      "Bash(sed:*)",
+      "WebFetch(domain:www.linkedin.com)"
     ]
   }
 }

@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
+import { useState } from "react";
 
 export function SecondaryFeatureCard({ post }: { post: PostMeta }) {
   const kickerColor =
@@ -7,17 +10,21 @@ export function SecondaryFeatureCard({ post }: { post: PostMeta }) {
       ? "var(--green-5)"
       : "var(--brand)";
 
+        const [hovered, setHovered] = useState(false);
+
   return (
     <Link href={`/blog/${post.slug}`} className="block no-underline group">
       <article
-        className="h-full transition-all duration-200 group-hover:-translate-y-0.5"
+        className="h-full transition-all duration-200 group-hover:-translate-y-0.5 bg-blur-lg"
         style={{
-          background: "var(--bg-elev)",
+          background: "var(--bg-glass-card)",
           borderRadius: "10px",
           padding: "clamp(24px, 3vw, 32px)",
           border: "1px solid var(--border-subtle)",
           position: "relative",
         }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
         <span
           style={{
@@ -46,7 +53,7 @@ export function SecondaryFeatureCard({ post }: { post: PostMeta }) {
           {post.kicker} &middot; {post.readTime} min
         </div>
         <h3
-          className="m-0 mb-2 group-hover:text-[var(--brand)] transition-colors duration-150"
+          className="m-0 mb-2 group-hover:text-brand transition-colors duration-150"
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(1.1rem, 2vw, 1.35rem)",
@@ -54,7 +61,7 @@ export function SecondaryFeatureCard({ post }: { post: PostMeta }) {
             lineHeight: 1.2,
             letterSpacing: "-0.015em",
             fontVariationSettings: "'opsz' 72",
-            color: "var(--fg1)",
+            color: hovered ? "var(--brand)" : "var(--fg1)",
           }}
         >
           {post.title}

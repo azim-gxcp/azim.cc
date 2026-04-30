@@ -1,0 +1,138 @@
+ISO3,Country,Account_Ownership_Pct,Year
+ALB,Albania,46.07,2024
+DZA,Algeria,35.29,2024
+ARG,Argentina,81.74,2024
+ARM,Armenia,71.37,2024
+AUS,Australia,98.01,2024
+AUT,Austria,99.51,2024
+AZE,Azerbaijan,56.30,2024
+BHR,Bahrain,82.32,2024
+BGD,Bangladesh,43.28,2024
+BEL,Belgium,98.24,2024
+BLZ,Belize,67.97,2024
+BEN,Benin,51.84,2024
+BOL,Bolivia,56.85,2024
+BIH,Bosnia and Herzegovina,77.46,2024
+BWA,Botswana,61.44,2024
+BRA,Brazil,86.38,2024
+BGR,Bulgaria,84.72,2024
+BFA,Burkina Faso,51.43,2024
+KHM,Cambodia,39.03,2024
+CMR,Cameroon,60.87,2024
+CAN,Canada,98.40,2024
+TCD,Chad,20.90,2024
+CHL,Chile,85.07,2024
+CHN,China,89.38,2024
+COL,Colombia,57.06,2024
+COM,Comoros,45.46,2024
+COD,"Congo, Dem. Rep.",39.21,2024
+COG,"Congo, Rep.",55.58,2024
+CRI,Costa Rica,71.35,2024
+CIV,Cote d'Ivoire,57.57,2024
+HRV,Croatia,92.64,2024
+CYP,Cyprus,96.13,2024
+CZE,Czechia,92.28,2024
+DNK,Denmark,98.65,2024
+DOM,Dominican Republic,64.78,2024
+ECU,Ecuador,64.51,2024
+EGY,"Egypt, Arab Rep.",43.11,2024
+SLV,El Salvador,43.40,2024
+EST,Estonia,98.90,2024
+SWZ,Eswatini,65.12,2024
+ETH,Ethiopia,48.83,2024
+FIN,Finland,99.84,2024
+FRA,France,99.19,2024
+GAB,Gabon,68.18,2024
+GMB,"Gambia, The",38.16,2024
+GEO,Georgia,78.82,2024
+DEU,Germany,98.30,2024
+GHA,Ghana,81.24,2024
+GRC,Greece,88.55,2024
+GTM,Guatemala,38.28,2024
+GIN,Guinea,36.05,2024
+HND,Honduras,42.44,2024
+HUN,Hungary,86.96,2024
+ISL,Iceland,99.85,2024
+IND,India,89.02,2024
+IDN,Indonesia,56.33,2024
+IRN,"Iran, Islamic Rep.",91.06,2024
+IRQ,Iraq,30.16,2024
+IRL,Ireland,98.29,2024
+ISR,Israel,89.27,2024
+ITA,Italy,86.02,2024
+JPN,Japan,98.52,2024
+JOR,Jordan,46.46,2024
+KAZ,Kazakhstan,87.05,2024
+KEN,Kenya,90.12,2024
+KOR,"Korea, Rep.",96.89,2024
+XKX,Kosovo,64.16,2024
+KWT,Kuwait,74.46,2024
+KGZ,Kyrgyz Republic,72.26,2024
+LAO,Lao PDR,37.65,2024
+LVA,Latvia,94.97,2024
+LBN,Lebanon,23.04,2024
+LSO,Lesotho,61.57,2024
+LBR,Liberia,52.21,2024
+LBY,Libya,33.12,2024
+LTU,Lithuania,98.99,2024
+MDG,Madagascar,24.45,2024
+MWI,Malawi,50.37,2024
+MYS,Malaysia,88.69,2024
+MLI,Mali,54.75,2024
+MLT,Malta,96.56,2024
+MRT,Mauritania,27.31,2024
+MUS,Mauritius,89.60,2024
+MEX,Mexico,53.03,2024
+MDA,Moldova,55.54,2024
+MNG,Mongolia,98.28,2024
+MNE,Montenegro,75.41,2024
+MAR,Morocco,44.39,2024
+MOZ,Mozambique,54.39,2024
+NAM,Namibia,72.92,2024
+NPL,Nepal,59.99,2024
+NLD,Netherlands,99.17,2024
+NZL,New Zealand,97.86,2024
+NIC,Nicaragua,23.47,2024
+NER,Niger,14.83,2024
+NGA,Nigeria,63.26,2024
+MKD,North Macedonia,84.25,2024
+NOR,Norway,98.56,2024
+OMN,Oman,69.54,2024
+PAK,Pakistan,27.30,2024
+PAN,Panama,64.10,2024
+PRY,Paraguay,60.92,2024
+PER,Peru,59.31,2024
+PHL,Philippines,50.18,2024
+POL,Poland,86.14,2024
+PRT,Portugal,91.40,2024
+ROU,Romania,71.34,2024
+RUS,Russian Federation,79.34,2024
+SAU,Saudi Arabia,78.84,2024
+SEN,Senegal,76.46,2024
+SRB,Serbia,83.25,2024
+SLE,Sierra Leone,38.62,2024
+SGP,Singapore,97.97,2024
+SVK,Slovak Republic,92.22,2024
+SVN,Slovenia,98.75,2024
+ZAF,South Africa,81.13,2024
+ESP,Spain,98.38,2024
+LKA,Sri Lanka,81.69,2024
+SWE,Sweden,98.57,2024
+CHE,Switzerland,98.41,2024
+TJK,Tajikistan,54.52,2024
+TZA,Tanzania,59.83,2024
+THA,Thailand,91.82,2024
+TGO,Togo,57.43,2024
+TTO,Trinidad and Tobago,74.59,2024
+TUN,Tunisia,37.84,2024
+TUR,Turkiye,81.55,2024
+UGA,Uganda,72.83,2024
+UKR,Ukraine,87.58,2024
+GBR,United Kingdom,99.28,2024
+USA,United States,97.02,2024
+URY,Uruguay,73.75,2024
+UZB,Uzbekistan,59.66,2024
+VEN,"Venezuela, RB",87.32,2024
+VNM,Viet Nam,70.55,2024
+ZMB,Zambia,72.70,2024
+ZWE,Zimbabwe,49.52,2024

@@ -1,0 +1,221 @@
+ISO3,Country,Pop_15_64_Pct,Year
+AFG,Afghanistan,54.7115,2024
+ALB,Albania,66.2365,2024
+DZA,Algeria,63.0888,2024
+ASM,American Samoa,64.9471,2024
+AND,Andorra,72.169,2024
+AGO,Angola,52.7966,2024
+ATG,Antigua and Barbuda,70.4159,2024
+ARG,Argentina,65.9801,2024
+ARM,Armenia,67.0602,2024
+ABW,Aruba,66.0988,2024
+AUS,Australia,64.4281,2024
+AUT,Austria,65.1656,2024
+AZE,Azerbaijan,69.6326,2024
+BHS,"Bahamas, The",70.3114,2024
+BHR,Bahrain,77.4298,2024
+BGD,Bangladesh,65.5126,2024
+BRB,Barbados,66.2085,2024
+BLR,Belarus,66.0362,2024
+BEL,Belgium,63.4458,2024
+BLZ,Belize,68.3977,2024
+BEN,Benin,55.3294,2024
+BMU,Bermuda,64.6492,2024
+BTN,Bhutan,72.5964,2024
+BOL,Bolivia,64.572,2024
+BIH,Bosnia and Herzegovina,64.7319,2024
+BWA,Botswana,63.8345,2024
+BRA,Brazil,69.2857,2024
+VGB,British Virgin Islands,75.8848,2024
+BRN,Brunei Darussalam,72.3069,2024
+BGR,Bulgaria,63.4952,2024
+BFA,Burkina Faso,55.5462,2024
+BDI,Burundi,52.7693,2024
+CPV,Cabo Verde,67.5945,2024
+KHM,Cambodia,64.0432,2024
+CMR,Cameroon,55.763,2024
+CAN,Canada,65.0891,2024
+CYM,Cayman Islands,74.8145,2024
+CAF,Central African Republic,48.8456,2024
+TCD,Chad,51.8348,2024
+CHI,Channel Islands,65.766,2024
+CHL,Chile,68.8987,2024
+CHN,China,69.3269,2024
+COL,Colombia,69.9495,2024
+COM,Comoros,58.4064,2024
+COD,"Congo, Dem. Rep.",50.8915,2024
+COG,"Congo, Rep.",56.5686,2024
+CRI,Costa Rica,68.9756,2024
+CIV,Cote d'Ivoire,56.5197,2024
+HRV,Croatia,62.889,2024
+CUB,Cuba,68.137,2024
+CUW,Curacao,68.2904,2024
+CYP,Cyprus,69.3116,2024
+CZE,Czechia,63.7573,2024
+DNK,Denmark,63.4375,2024
+DJI,Djibouti,65.9791,2024
+DMA,Dominica,69.1708,2024
+DOM,Dominican Republic,65.5419,2024
+ECU,Ecuador,67.2002,2024
+EGY,"Egypt, Arab Rep.",62.889,2024
+SLV,El Salvador,67.0453,2024
+GNQ,Equatorial Guinea,59.0266,2024
+ERI,Eritrea,57.6601,2024
+EST,Estonia,63.065,2024
+SWZ,Eswatini,62.3858,2024
+ETH,Ethiopia,57.7101,2024
+FRO,Faroe Islands,62.2966,2024
+FJI,Fiji,66.4197,2024
+FIN,Finland,61.4696,2024
+FRA,France,61.3483,2024
+PYF,French Polynesia,69.5745,2024
+GAB,Gabon,59.4329,2024
+GMB,"Gambia, The",56.6738,2024
+GEO,Georgia,63.5635,2024
+DEU,Germany,62.8943,2024
+GHA,Ghana,60.4735,2024
+GIB,Gibraltar,64.7372,2024
+GRC,Greece,62.8408,2024
+GRL,Greenland,68.388,2024
+GRD,Grenada,68.3194,2024
+GUM,Guam,61.4149,2024
+GTM,Guatemala,63.5735,2024
+GIN,Guinea,55.6437,2024
+GNB,Guinea-Bissau,58.0222,2024
+GUY,Guyana,64.1045,2024
+HTI,Haiti,64.1061,2024
+XD,High income,64.7279,2024
+HND,Honduras,64.9611,2024
+HKG,"Hong Kong SAR, China",66.825,2024
+HUN,Hungary,64.6054,2024
+ISL,Iceland,66.5918,2024
+IND,India,68.2296,2024
+IDN,Indonesia,68.1136,2024
+IRN,"Iran, Islamic Rep.",69.3204,2024
+IRQ,Iraq,60.0043,2024
+IRL,Ireland,65.5524,2024
+IMN,Isle of Man,62.6238,2024
+ISR,Israel,60.038,2024
+ITA,Italy,63.4829,2024
+JAM,Jamaica,73.088,2024
+JPN,Japan,58.7831,2024
+JOR,Jordan,64.8084,2024
+KAZ,Kazakhstan,61.9735,2024
+KEN,Kenya,60.1978,2024
+KIR,Kiribati,61.0695,2024
+PRK,"Korea, Dem. People's Rep.",68.653,2024
+KOR,"Korea, Rep.",70.1584,2024
+KWT,Kuwait,78.6764,2024
+KGZ,Kyrgyz Republic,61.9765,2024
+LAO,Lao PDR,65.1358,2024
+LVA,Latvia,62.8509,2024
+LBN,Lebanon,63.675,2024
+LSO,Lesotho,61.6243,2024
+LBR,Liberia,57.1654,2024
+LBY,Libya,67.5684,2024
+LIE,Liechtenstein,65.0113,2024
+LTU,Lithuania,65.1275,2024
+XM,Low income,55.1117,2024
+XN,Lower middle income,64.4774,2024
+LUX,Luxembourg,68.7464,2024
+MAC,"Macao SAR, China",71.8214,2024
+MDG,Madagascar,57.338,2024
+MWI,Malawi,56.7083,2024
+MYS,Malaysia,70.4758,2024
+MDV,Maldives,75.7678,2024
+MLI,Mali,51.4737,2024
+MLT,Malta,66.7572,2024
+MHL,Marshall Islands,60.8847,2024
+MRT,Mauritania,54.0604,2024
+MUS,Mauritius,71.6632,2024
+MEX,Mexico,67.2419,2024
+FSM,"Micronesia, Fed. Sts.",62.2024,2024
+MDA,Moldova,63.9998,2024
+MCO,Monaco,50.3611,2024
+MNG,Mongolia,62.6691,2024
+MNE,Montenegro,64.0411,2024
+MAR,Morocco,66.2284,2024
+MOZ,Mozambique,52.7672,2024
+MMR,Myanmar,68.395,2024
+NAM,Namibia,59.3473,2024
+NRU,Nauru,59.373,2024
+NPL,Nepal,65.0674,2024
+NLD,Netherlands,64.4783,2024
+NCL,New Caledonia,67.2677,2024
+NZL,New Zealand,64.6856,2024
+NIC,Nicaragua,65.7075,2024
+NER,Niger,50.8046,2024
+NGA,Nigeria,55.9375,2024
+MKD,North Macedonia,65.1525,2024
+MNP,Northern Mariana Islands,68.2457,2024
+NOR,Norway,65.026,2024
+OMN,Oman,72.6411,2024
+PAK,Pakistan,59.0344,2024
+PLW,Palau,70.4134,2024
+PAN,Panama,65.752,2024
+PNG,Papua New Guinea,63.0559,2024
+PRY,Paraguay,64.8744,2024
+PER,Peru,66.8015,2024
+PHL,Philippines,66.64,2024
+POL,Poland,65.0508,2024
+PRT,Portugal,62.6679,2024
+PRI,Puerto Rico (US),63.6526,2024
+QAT,Qatar,83.2534,2024
+ROU,Romania,64.3032,2024
+RUS,Russian Federation,65.5442,2024
+RWA,Rwanda,58.7131,2024
+WSM,Samoa,55.6549,2024
+SMR,San Marino,65.3331,2024
+STP,Sao Tome and Principe,58.2714,2024
+SAU,Saudi Arabia,73.2306,2024
+SEN,Senegal,58.1999,2024
+SRB,Serbia,63.0029,2024
+SYC,Seychelles,71.5098,2024
+SLE,Sierra Leone,58.6686,2024
+SGP,Singapore,74.6576,2024
+SXM,Sint Maarten (Dutch part),70.9219,2024
+SVK,Slovak Republic,65.7014,2024
+SVN,Slovenia,63.5127,2024
+SLB,Solomon Islands,59.3908,2024
+SOM,"Somalia, Fed. Rep.",50.8152,2024
+ZAF,South Africa,67.4257,2024
+SSD,South Sudan,58.0909,2024
+ESP,Spain,65.9328,2024
+LKA,Sri Lanka,65.8658,2024
+KNA,St. Kitts and Nevis,70.5847,2024
+LCA,St. Lucia,72.8463,2024
+MAF,St. Martin (French part),60.2568,2024
+VCT,St. Vincent and the Grenadines,66.8174,2024
+SDN,Sudan,56.2269,2024
+SUR,Suriname,66.4615,2024
+SWE,Sweden,62.2675,2024
+CHE,Switzerland,65.0301,2024
+SYR,Syrian Arab Republic,66.0949,2024
+TJK,Tajikistan,59.8869,2024
+TZA,Tanzania,54.4189,2024
+THA,Thailand,69.8878,2024
+TLS,Timor-Leste,61.0639,2024
+TGO,Togo,57.2607,2024
+TON,Tonga,57.8812,2024
+TTO,Trinidad and Tobago,69.8613,2024
+TUN,Tunisia,66.4314,2024
+TUR,Turkiye,68.2669,2024
+TKM,Turkmenistan,63.9629,2024
+TCA,Turks and Caicos Islands,72.6773,2024
+TUV,Tuvalu,60.3857,2024
+UGA,Uganda,54.2684,2024
+UKR,Ukraine,67.149,2024
+ARE,United Arab Emirates,82.1221,2024
+GBR,United Kingdom,63.3152,2024
+USA,United States,64.7467,2024
+XT,Upper middle income,68.4625,2024
+URY,Uruguay,65.6618,2024
+UZB,Uzbekistan,63.0321,2024
+VUT,Vanuatu,57.3903,2024
+VEN,"Venezuela, RB",64.7938,2024
+VNM,Viet Nam,67.7288,2024
+VIR,Virgin Islands (U.S.),60.8133,2024
+PSE,West Bank and Gaza,58.1152,2024
+YEM,"Yemen, Rep.",56.3485,2024
+ZMB,Zambia,56.5959,2024
+ZWE,Zimbabwe,55.5246,2024

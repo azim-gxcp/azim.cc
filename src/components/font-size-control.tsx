@@ -7,11 +7,11 @@ import { Minus, Plus } from "lucide-react";
 // 2px body increments: XS=10, S=12, M=14, L=16, XL=18
 // Everything else scales proportionally from M ratios.
 const SIZES = [
-  { body: 10, lede: 14, h1Min: 24, h1Max: 39, h2: 17, h3: 14, kicker: 9, label: "XS" },
-  { body: 12, lede: 16, h1Min: 29, h1Max: 46, h2: 21, h3: 17, kicker: 10, label: "S" },
-  { body: 14, lede: 19, h1Min: 34, h1Max: 54, h2: 24, h3: 20, kicker: 12, label: "M" },
-  { body: 16, lede: 22, h1Min: 38, h1Max: 62, h2: 27, h3: 23, kicker: 13, label: "L" },
-  { body: 18, lede: 24, h1Min: 43, h1Max: 69, h2: 31, h3: 26, kicker: 15, label: "XL" },
+  { body: 10, lede: 13, h1Min: 13, h1Max: 26, h2: 17, h3: 15, kicker: 9, label: "XS" },
+  { body: 12, lede: 15, h1Min: 15, h1Max: 31, h2: 21, h3: 18, kicker: 10, label: "S" },
+  { body: 14, lede: 18, h1Min: 18, h1Max: 36, h2: 24, h3: 21, kicker: 12, label: "M" },
+  { body: 16, lede: 21, h1Min: 21, h1Max: 41, h2: 27, h3: 24, kicker: 14, label: "L" },
+  { body: 18, lede: 23, h1Min: 23, h1Max: 46, h2: 31, h3: 27, kicker: 15, label: "XL" },
 ];
 
 const DEFAULT_INDEX = 2; // M

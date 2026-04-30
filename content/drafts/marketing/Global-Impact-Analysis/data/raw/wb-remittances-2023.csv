@@ -1,0 +1,176 @@
+ISO3,Country,Remittance_Pct_GDP,Year
+ALB,Albania,8.6678,2023
+DZA,Algeria,0.7533,2023
+AND,Andorra,1.2754,2023
+AGO,Angola,0.0113,2023
+ATG,Antigua and Barbuda,1.739,2023
+ARG,Argentina,0.1554,2023
+ARM,Armenia,6.3962,2023
+ABW,Aruba,1.0161,2023
+AUS,Australia,0.0929,2023
+AUT,Austria,0.6314,2023
+AZE,Azerbaijan,2.641,2023
+BHS,"Bahamas, The",0.4104,2023
+BGD,Bangladesh,5.0456,2023
+BLR,Belarus,2.3273,2023
+BEL,Belgium,2.248,2023
+BLZ,Belize,4.9,2023
+BEN,Benin,1.7208,2023
+BMU,Bermuda,23.7238,2023
+BTN,Bhutan,3.5825,2023
+BOL,Bolivia,2.7677,2023
+BIH,Bosnia and Herzegovina,10.2333,2023
+BWA,Botswana,0.3607,2023
+BRA,Brazil,0.2023,2023
+BGR,Bulgaria,2.2372,2023
+BFA,Burkina Faso,2.9056,2023
+BDI,Burundi,5.7035,2023
+CPV,Cabo Verde,12.6323,2023
+KHM,Cambodia,6.571,2023
+CMR,Cameroon,1.6113,2023
+CAN,Canada,0.039,2023
+CYM,Cayman Islands,0.1497,2023
+CHL,Chile,0.0289,2023
+CHN,China,0.1614,2023
+COL,Colombia,2.7605,2023
+COM,Comoros,23.0304,2023
+COD,"Congo, Dem. Rep.",4.7224,2023
+CRI,Costa Rica,0.7655,2023
+CIV,Cote d'Ivoire,1.623,2023
+HRV,Croatia,7.0961,2023
+CUW,Curacao,5.3821,2023
+CYP,Cyprus,1.8056,2023
+CZE,Czechia,1.2392,2023
+DNK,Denmark,0.3757,2023
+DJI,Djibouti,1.503,2023
+DMA,Dominica,5.2293,2023
+DOM,Dominican Republic,8.8158,2023
+ECU,Ecuador,4.5007,2023
+EGY,"Egypt, Arab Rep.",4.9333,2023
+SLV,El Salvador,24.4784,2023
+EST,Estonia,1.175,2023
+SWZ,Eswatini,1.73,2023
+ETH,Ethiopia,0.397,2023
+FJI,Fiji,8.7526,2023
+FIN,Finland,0.2536,2023
+FRA,France,1.2008,2023
+GMB,"Gambia, The",21.6141,2023
+GEO,Georgia,13.6504,2023
+DEU,Germany,0.4608,2023
+GHA,Ghana,3.0471,2023
+GRC,Greece,0.2231,2023
+GRD,Grenada,3.0453,2023
+GTM,Guatemala,19.1446,2023
+GIN,Guinea,2.2173,2023
+GNB,Guinea-Bissau,9.6058,2023
+GUY,Guyana,3.2248,2023
+HTI,Haiti,18.9075,2023
+HND,Honduras,26.1039,2023
+HKG,"Hong Kong SAR, China",0.1191,2023
+HUN,Hungary,2.4098,2023
+ISL,Iceland,0.6972,2023
+IND,India,3.285,2023
+IDN,Indonesia,1.0551,2023
+IRQ,Iraq,0.432,2023
+IRL,Ireland,0.1006,2023
+ISR,Israel,0.1933,2023
+ITA,Italy,0.5224,2023
+JAM,Jamaica,16.8114,2023
+JPN,Japan,0.1118,2023
+JOR,Jordan,8.5342,2023
+KAZ,Kazakhstan,0.116,2023
+KEN,Kenya,3.9326,2023
+KIR,Kiribati,4.0305,2023
+KOR,"Korea, Rep.",0.3852,2023
+KWT,Kuwait,0.0129,2023
+KGZ,Kyrgyz Republic,26.5776,2022
+LAO,Lao PDR,1.8127,2023
+LVA,Latvia,2.8863,2023
+LBN,Lebanon,33.3498,2023
+LSO,Lesotho,22.6517,2023
+LBR,Liberia,21.6448,2023
+LTU,Lithuania,1.2241,2023
+LUX,Luxembourg,2.8393,2023
+MAC,"Macao SAR, China",0.2444,2023
+MDG,Madagascar,1.9625,2023
+MWI,Malawi,1.3528,2023
+MYS,Malaysia,0.4262,2023
+MDV,Maldives,0.0813,2023
+MLI,Mali,4.2119,2023
+MLT,Malta,0.0689,2023
+MHL,Marshall Islands,22.3246,2023
+MRT,Mauritania,1.5637,2023
+MUS,Mauritius,2.2412,2023
+MEX,Mexico,3.6833,2023
+MDA,Moldova,12.0387,2023
+MNG,Mongolia,2.24,2023
+MNE,Montenegro,10.5301,2023
+MAR,Morocco,8.0457,2023
+MOZ,Mozambique,1.2171,2023
+NAM,Namibia,0.6759,2023
+NRU,Nauru,0.5815,2023
+NPL,Nepal,26.2241,2023
+NLD,Netherlands,0.3763,2023
+NZL,New Zealand,0.1632,2022
+NIC,Nicaragua,26.1841,2023
+NER,Niger,3.7359,2023
+NGA,Nigeria,4.0111,2023
+MKD,North Macedonia,2.9168,2023
+NOR,Norway,0.1991,2023
+OMN,Oman,0.0367,2023
+PAK,Pakistan,7.8881,2023
+PLW,Palau,0.8015,2023
+PAN,Panama,0.6153,2023
+PNG,Papua New Guinea,0.0438,2023
+PRY,Paraguay,2.1588,2023
+PER,Peru,1.6657,2023
+PHL,Philippines,8.9455,2023
+POL,Poland,1.0511,2023
+PRT,Portugal,0.5937,2023
+QAT,Qatar,0.6613,2023
+ROU,Romania,2.8655,2023
+RUS,Russian Federation,0.1263,2023
+RWA,Rwanda,3.6148,2023
+WSM,Samoa,25.3547,2023
+SMR,San Marino,1.0994,2023
+STP,Sao Tome and Principe,14.1514,2023
+SAU,Saudi Arabia,0.0256,2023
+SEN,Senegal,10.6434,2023
+SRB,Serbia,7.0961,2023
+SYC,Seychelles,0.5219,2023
+SLE,Sierra Leone,4.5668,2023
+SXM,Sint Maarten (Dutch part),2.8474,2023
+SVK,Slovak Republic,2.0429,2023
+SVN,Slovenia,1.3349,2023
+SLB,Solomon Islands,5.6139,2023
+ZAF,South Africa,0.2106,2023
+ESP,Spain,0.3391,2023
+LKA,Sri Lanka,7.1941,2023
+KNA,St. Kitts and Nevis,3.5231,2023
+LCA,St. Lucia,2.6043,2023
+VCT,St. Vincent and the Grenadines,8.5466,2023
+SDN,Sudan,2.9021,2022
+SUR,Suriname,4.23,2023
+SWE,Sweden,0.6703,2023
+CHE,Switzerland,0.3902,2023
+TJK,Tajikistan,37.8446,2023
+TZA,Tanzania,1.5663,2023
+THA,Thailand,1.8786,2023
+TLS,Timor-Leste,9.2793,2023
+TON,Tonga,42.6104,2023
+TTO,Trinidad and Tobago,0.8081,2023
+TUN,Tunisia,5.9581,2023
+TUR,Turkiye,0.0902,2023
+TUV,Tuvalu,4.1631,2023
+UGA,Uganda,3.104,2023
+UKR,Ukraine,8.259,2023
+ARE,United Arab Emirates,0.3595,2023
+GBR,United Kingdom,0.1312,2023
+USA,United States,0.0308,2023
+,Upper middle income,0.8159,2023
+URY,Uruguay,0.1726,2023
+UZB,Uzbekistan,13.8042,2023
+VUT,Vanuatu,18.751,2022
+PSE,West Bank and Gaza,18.1772,2023
+ZMB,Zambia,0.8909,2023
+ZWE,Zimbabwe,9.203,2023

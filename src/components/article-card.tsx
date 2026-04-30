@@ -41,7 +41,7 @@ export function ArticleCard({ post }: { post: PostMeta }) {
           className="m-0 mb-3"
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "26px",
+            fontSize: "22px",
             fontWeight: 600,
             lineHeight: 1.2,
             letterSpacing: "-0.015em",
@@ -56,7 +56,7 @@ export function ArticleCard({ post }: { post: PostMeta }) {
           className="m-0 mb-4"
           style={{
             fontFamily: "var(--font-body)",
-            fontSize: "16px",
+            fontSize: "14px",
             lineHeight: 1.6,
             color: "var(--fg2)",
           }}

@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GX Protocol - Gen Z &amp; Gen Alpha Analysis Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gx-purple: #470A60;
+    --gx-purple-light: #6B1D8E;
+    --gx-green: #17A210;
+    --gx-green-light: #1FC516;
+    --tier1-color: #E74C3C;
+    --tier2-color: #F39C12;
+    --tier3-color: #3498DB;
+    --tier4-color: #95A5A6;
+    --tier5-color: #D5D8DC;
+    --bg-body: #F5F6FA;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #FAFBFF;
+    --text-primary: #1A1A2E;
+    --text-secondary: #555770;
+    --border-color: #E2E4ED;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-body);
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--gx-purple) 0%, #2D0640 100%);
+    color: #fff;
+    padding: 48px 40px 40px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .header h1 span { color: var(--gx-green-light); }
+  .header p {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.75);
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* Container */
+  .container { max-width: 1360px; margin: 0 auto; padding: 0 24px; }
+
+  /* Summary Cards */
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin: 24px 0 32px;
+  }
+  .card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: 1px solid var(--border-color);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+  .card-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 8px; }
+  .card-value { font-size: 2rem; font-weight: 800; color: var(--gx-purple); }
+  .card-value.green { color: var(--gx-green); }
+  .card-sub { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+
+  /* Sections */
+  .section {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: 1px solid var(--border-color);
+  }
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--gx-purple);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 22px;
+    background: var(--gx-green);
+    border-radius: 2px;
+  }
+
+  /* Charts grid */
+  .charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .chart-box { position: relative; }
+  .chart-box canvas { max-height: 480px; }
+
+  /* Table */
+  .table-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .search-input {
+    padding: 8px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-family: inherit;
+    width: 280px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--gx-purple); }
+  .tier-filter {
+    padding: 8px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-family: inherit;
+    outline: none;
+    background: #fff;
+    cursor: pointer;
+  }
+  .result-count { font-size: 0.82rem; color: var(--text-secondary); margin-left: auto; }
+
+  .data-table-wrapper { overflow-x: auto; max-height: 620px; }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+  }
+  .data-table th {
+    background: var(--gx-purple);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .data-table th:hover { background: var(--gx-purple-light); }
+  .data-table th .sort-arrow { margin-left: 4px; font-size: 0.7rem; opacity: 0.6; }
+  .data-table th .sort-arrow.active { opacity: 1; }
+  .data-table td { padding: 8px 12px; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+  .data-table tbody tr { cursor: pointer; }
+  .data-table tbody tr:hover { background: #F0EDF5; }
+
+  .tier-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .tier-badge.t1 { background: var(--tier1-color); }
+  .tier-badge.t2 { background: var(--tier2-color); }
+  .tier-badge.t3 { background: var(--tier3-color); }
+  .tier-badge.t4 { background: var(--tier4-color); }
+  .tier-badge.t5 { background: var(--tier5-color); color: #555; }
+
+  .row-t1 { border-left: 3px solid var(--tier1-color); }
+  .row-t2 { border-left: 3px solid var(--tier2-color); }
+  .row-t3 { border-left: 3px solid var(--tier3-color); }
+  .row-t4 { border-left: 3px solid var(--tier4-color); }
+  .row-t5 { border-left: 3px solid var(--tier5-color); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+    margin-top: 16px;
+  }
+
+  /* Country Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    animation: modalIn 0.2s ease-out;
+  }
+  @keyframes modalIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-header {
+    background: linear-gradient(135deg, var(--gx-purple) 0%, #2D0640 100%);
+    color: #fff;
+    padding: 24px 28px 20px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .modal-header h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+  .modal-header .modal-sub { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+  .modal-close {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.3); }
+  .modal-body { padding: 24px 28px; }
+  .modal-scores {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .modal-score-card {
+    text-align: center;
+    padding: 14px 8px;
+    border-radius: 10px;
+    background: #F8F6FA;
+  }
+  .modal-score-card .score-val { font-size: 1.6rem; font-weight: 800; color: var(--gx-purple); }
+  .modal-score-card .score-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-top: 2px; }
+  .modal-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .modal-stat {
+    background: #fff;
+    padding: 12px 16px;
+  }
+  .modal-stat .stat-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
+  .modal-stat .stat-val { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-top: 2px; }
+  .modal-allocation {
+    background: linear-gradient(135deg, #F8F6FA 0%, #F0FFF0 100%);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+  }
+  .modal-allocation h4 { font-size: 0.85rem; font-weight: 700; color: var(--gx-purple); margin-bottom: 10px; }
+  .modal-alloc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .modal-alloc-item .a-label { font-size: 0.72rem; color: var(--text-secondary); }
+  .modal-alloc-item .a-val { font-size: 1.1rem; font-weight: 800; color: var(--gx-purple); }
+  .modal-insight {
+    background: #F0FFF0;
+    border: 1px solid #B8E6B0;
+    border-left: 3px solid var(--gx-green);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+  }
+  .modal-insight h5 { font-size: 0.82rem; font-weight: 700; color: #1A5C14; margin-bottom: 8px; }
+  .modal-insight p { font-size: 0.82rem; color: #2D6B25; line-height: 1.6; margin-bottom: 6px; }
+  .modal-insight p:last-child { margin-bottom: 0; }
+  .modal-assumptions {
+    background: #FFF8F0;
+    border: 1px solid #E8D5C0;
+    border-left: 3px solid #E8A838;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 16px;
+  }
+  .modal-assumptions h5 { font-size: 0.78rem; font-weight: 700; color: #8B6914; margin-bottom: 6px; }
+  .modal-assumptions ul { font-size: 0.78rem; color: #6B5A3E; padding-left: 16px; margin: 0; line-height: 1.6; }
+
+  /* About Panel */
+  .about-panel {
+    background: #F8F6FA;
+    padding: 20px 24px;
+    border-radius: 10px;
+    border-left: 4px solid #470A60;
+    margin-bottom: 24px;
+  }
+  .about-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #470A60;
+    font-size: 1rem;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+  }
+  .about-toggle .toggle-icon {
+    transition: transform 0.2s;
+    font-size: 0.75rem;
+  }
+  .about-toggle.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+  }
+  .about-content {
+    margin-top: 14px;
+    font-size: 0.88rem;
+    color: #444;
+    line-height: 1.65;
+  }
+  .about-content p {
+    margin-bottom: 12px;
+  }
+  .about-content p:last-child {
+    margin-bottom: 0;
+  }
+  .about-content.hidden {
+    display: none;
+  }
+
+  /* Methodology Panel */
+  .methodology-panel {
+    background: #F8F6FA;
+    padding: 24px 28px;
+    border-radius: 10px;
+    border-left: 4px solid #470A60;
+    margin-bottom: 24px;
+  }
+  .methodology-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #470A60;
+    font-size: 1rem;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+  }
+  .methodology-toggle .toggle-icon {
+    transition: transform 0.2s;
+    font-size: 0.75rem;
+  }
+  .methodology-toggle.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+  }
+  .methodology-content.hidden {
+    display: none;
+  }
+  .methodology-content {
+    margin-top: 16px;
+  }
+  .methodology-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .method-card {
+    background: #FFFFFF;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+  }
+  .method-card h4 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--gx-purple);
+    margin-bottom: 8px;
+  }
+  .method-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .method-card ul li {
+    font-size: 0.82rem;
+    color: #555;
+    line-height: 1.55;
+    padding: 3px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+  .method-card ul li::before {
+    content: '\2022';
+    position: absolute;
+    left: 0;
+    color: var(--gx-green);
+    font-weight: 700;
+  }
+  .tier-legend {
+    font-size: 0.84rem;
+    color: #555;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+  }
+
+  /* Disclaimer */
+  .disclaimer {
+    background: #FFF8F0;
+    border: 1px solid #E8D5C0;
+    border-left: 4px solid #E8A838;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    font-size: 0.84rem;
+    color: #6B5A3E;
+    line-height: 1.65;
+  }
+  .disclaimer h4 { font-size: 0.88rem; font-weight: 700; color: #8B6914; margin-bottom: 8px; }
+
+  /* Tooltip cursor for table headers */
+  th[title] { cursor: help; }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .summary-cards { grid-template-columns: repeat(2, 1fr); }
+    .charts-row { grid-template-columns: 1fr; }
+    .methodology-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .summary-cards { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.5rem; }
+    .header { padding: 32px 20px 28px; }
+    .section { padding: 20px 16px; }
+    .methodology-grid { grid-template-columns: 1fr; }
+    .modal-scores { grid-template-columns: 1fr; }
+    .modal-stats { grid-template-columns: 1fr; }
+    .modal-alloc-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>GX <span>Protocol</span> - Gen Z &amp; Gen Alpha: The Digital-Native Opportunity</h1>
+  <p>Where 1.9 Billion Young People Can Build a New Economy<br>205 Countries &nbsp;|&nbsp; World Bank, ILO, ITU Data</p>
+</div>
+
+<div class="container">
+
+  <!-- About This Analysis -->
+  <div class="about-panel" style="margin-top: 24px;">
+    <button class="about-toggle collapsed" onclick="toggleAbout()" id="aboutToggle">
+      <span class="toggle-icon">&#9660;</span> About This Analysis
+    </button>
+    <div class="about-content hidden" id="aboutContent">
+      <p>This dashboard identifies where GX Protocol has the strongest opportunity among Gen Z (ages 15-29) and Gen Alpha (ages 2-14, becoming eligible from 2028). Gen Z is the most digitally connected, economically squeezed, and institutionally skeptical generation in history. They have high mobile/internet penetration but low bank account ownership. They have entrepreneurial energy but limited access to capital. GX Protocol offers them a grant (average GX 210, approximately USD 25,200 at genesis rate) with no capital required, interest-free business lending through profit-sharing, and a digital-native economy to build from scratch.</p>
+      <p>Gen Z, as the most digitally connected generation, is expected to be the first wave of adopters, disproportionately filling the early, higher-value distribution phases (Phase 1A: GX 1,000, Phase 1B: GX 750, Phase 1C: GX 500). This results in a higher weighted average of GX 210 per Gen Z participant compared to the global average of GX 136.</p>
+      <p>The Gen Z Impact Index scores each country on Youth Need (60% - financial exclusion, unemployment, economic vulnerability, youth population share) and Youth Readiness (40% - mobile, internet, youth population scale).</p>
+      <p>Data: World Bank Global Findex 2025 (youth account ownership ages 15-24), ILO/World Bank (youth unemployment), UN Population Division (age demographics), ITU (mobile/internet).</p>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="card">
+      <div class="card-label">Global Gen Z (15-24)</div>
+      <div class="card-value" id="card-youth1524">--</div>
+      <div class="card-sub">across 205 countries</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Global Gen Z (15-29 Est.)</div>
+      <div class="card-value green" id="card-youth1529">--</div>
+      <div class="card-sub">GX-eligible right now</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Youth Unbanked (Avg)</div>
+      <div class="card-value" id="card-unbanked">--</div>
+      <div class="card-sub">of young adults 15-24 lack a financial account</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Total Gen Z GX Allocation</div>
+      <div class="card-value green" id="card-allocation">--</div>
+      <div class="card-sub">in GX grants at genesis rate</div>
+    </div>
+  </div>
+
+  <!-- Methodology -->
+  <div class="methodology-panel">
+    <button class="methodology-toggle collapsed" onclick="toggleMethodology()" id="methodToggle">
+      <span class="toggle-icon">&#9660;</span> How the Gen Z Impact Index Is Calculated
+    </button>
+    <div class="methodology-content hidden" id="methodContent">
+      <div class="methodology-grid">
+        <div class="method-card">
+          <h4>Youth Need (60%)</h4>
+          <ul>
+            <li>Youth unbanked % (20%) - share of 15-24 year-olds without a financial account</li>
+            <li>Youth unemployment (15%) - ILO youth unemployment rate</li>
+            <li>Economic vulnerability (10%) - inverse GDP per capita, measuring how far income lags</li>
+            <li>Youth population share (15%) - proportion of population aged 15-24</li>
+          </ul>
+        </div>
+        <div class="method-card">
+          <h4>Youth Readiness (40%)</h4>
+          <ul>
+            <li>Mobile penetration (15%) - mobile subscriptions per 100 people</li>
+            <li>Internet access (15%) - percentage of population using the internet</li>
+            <li>Youth population scale (10%) - absolute number of youth (adoption potential)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tier-legend">
+        <strong>Tier Classification:</strong>
+        Tier 1: Prime Target (70+) |
+        Tier 2: Strong Opportunity (55-69) |
+        Tier 3: Moderate Opportunity (40-54) |
+        Tier 4: Emerging Opportunity (25-39) |
+        Tier 5: Long-Term (<25)
+      </div>
+    </div>
+  </div>
+
+  <!-- World Map -->
+  <div class="section">
+    <div class="section-title">Gen Z Impact Index - World Map</div>
+    <div style="display:flex;gap:24px;align-items:flex-start;">
+      <div id="mapContainer" style="flex:1;min-height:450px;"></div>
+      <div id="mapLegend" style="flex:0 0 180px;padding-top:20px;"></div>
+    </div>
+    <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px;">Scroll to zoom. Drag to pan. Double-click to reset. Click any country for details.</div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-row">
+    <div class="section chart-box">
+      <div class="section-title">Top 20 by Gen Z Impact Index</div>
+      <canvas id="chartIndex"></canvas>
+    </div>
+    <div class="section chart-box">
+      <div class="section-title">Top 20 by Youth Population (15-24)</div>
+      <canvas id="chartYouthPop"></canvas>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="section">
+    <div class="section-title">Full Country Data (205 Countries)</div>
+    <div class="table-controls">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search countries...">
+      <select class="tier-filter" id="tierFilter">
+        <option value="">All Tiers</option>
+        <option value="Tier 1">Tier 1: Prime Target</option>
+        <option value="Tier 2">Tier 2: Strong Opportunity</option>
+        <option value="Tier 3">Tier 3: Moderate</option>
+        <option value="Tier 4">Tier 4: Emerging</option>
+        <option value="Tier 5">Tier 5: Long-Term</option>
+      </select>
+      <span class="result-count" id="resultCount"></span>
+    </div>
+    <div class="data-table-wrapper">
+      <table class="data-table" id="dataTable">
+        <thead>
+          <tr>
+            <th data-col="rank" title="Global rank by Gen Z Impact Index">#<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="country" title="Country name">Country<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="pop" title="Total population in millions">Pop (M)<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="youth1524" title="Population aged 15-24 in millions">Youth 15-24 (M)<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="youth1529" title="Estimated population aged 15-29 in millions (1.5x the 15-24 cohort)">Youth 15-29 (M)<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="youthPct" title="Youth aged 15-24 as percentage of total population">Youth %<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="youthUnemp" title="ILO youth unemployment rate (%)">Unemp %<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="youthUnbanked" title="Percentage of young adults 15-24 without a financial account">Unbanked %<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="mobile" title="Mobile subscriptions per 100 people">Mobile<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="internet" title="Percentage of population using the internet">Internet %<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="gdp" title="GDP per capita in USD">GDP/Cap<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="genzUsd" title="Total Gen Z GX allocation value in USD billions">GX (USD B)<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="grantMult" title="Grant impact multiple - how many years of avg income the GX grant represents">Grant Mult<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="need" title="Youth Need Score (0-100)">Need<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="readiness" title="Youth Readiness Score (0-100)">Ready<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="index" title="Gen Z Impact Index (Need + Readiness)">Index<span class="sort-arrow">&#9650;</span></th>
+            <th data-col="tier" title="Tier classification based on Index score">Tier<span class="sort-arrow">&#9650;</span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <h4>Important Disclaimer</h4>
+    <p>Distribution amounts are illustrative projections. GX units are issued to verified individuals aged 15-70 across six distribution phases. The Gen Z average grant of GX 210 (USD 25,200) reflects this generation's expected concentration in early distribution phases due to higher digital adoption rates; the global population average is GX 136 (USD 16,320). Not all eligible youth may register. Actual amounts depend on individual registration. Youth population 15-29 is estimated at 1.5x the verified 15-24 cohort from UN data.</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Data Sources: World Bank Global Findex 2025, ILO, UN Population Division, ITU &nbsp;|&nbsp; Analysis by GXC Protocol Foundation
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h2 id="modalCountry"></h2>
+        <div class="modal-sub" id="modalSubtitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-scores" id="modalScores"></div>
+      <div class="modal-stats" id="modalStats"></div>
+      <div class="modal-allocation" id="modalAllocation"></div>
+      <div class="modal-insight" id="modalInsight"></div>
+      <div class="modal-assumptions">
+        <h5>Assumptions &amp; Caveats</h5>
+        <ul>
+          <li>1 GX = 1 gram of gold = USD 120 at genesis calibration</li>
+          <li>Gen Z average grant of GX 210 (USD 25,200) assumes this generation disproportionately fills early distribution phases due to higher digital adoption rates. The global population average is GX 136.</li>
+          <li>Eligibility: ages 15-70 (approximately 60% of total population)</li>
+          <li>15-29 population estimated at 1.5x the 15-24 cohort from UN Population Division data</li>
+          <li>Youth unbanked % from World Bank Global Findex 2025 (ages 15-24); blank = data unavailable</li>
+          <li>Not all eligible youth may register; actual distributions depend on participation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== EMBEDDED DATA =====
+const DATA = [
+  {rank:1,country:"Libya",iso3:"LBY",pop:7.4,youth1524:1.28,youth1529:1.92,youthPct:17.4,youthUnemp:50.6,youthUnbanked:80.6,mobile:193.0,internet:82.1,gdp:6569,genzUsd:48.50,grantMult:3.8,need:43.0,readiness:31.5,index:74.5,tier:"Tier 1: Prime Target"},
+  {rank:2,country:"Palestine",iso3:"PSE",pop:5.3,youth1524:1.01,youth1529:1.52,youthPct:19.2,youthUnemp:null,youthUnbanked:76.56,mobile:76.69,internet:86.64,gdp:2592,genzUsd:38.29,grantMult:9.7,need:42.2,readiness:23.2,index:65.4,tier:"Tier 2: Strong Opportunity"},
+  {rank:3,country:"Iraq",iso3:"IRQ",pop:46.0,youth1524:9.04,youth1529:13.55,youthPct:19.6,youthUnemp:31.7,youthUnbanked:70.1,mobile:101.4,internet:81.8,gdp:6074,genzUsd:341.57,grantMult:4.1,need:38.0,readiness:26.4,index:64.4,tier:"Tier 2: Strong Opportunity"},
+  {rank:4,country:"Morocco",iso3:"MAR",pop:38.1,youth1524:6.12,youth1529:9.18,youthPct:16.1,youthUnemp:22.4,youthUnbanked:69.8,mobile:148.2,internet:91.0,gdp:4153,genzUsd:231.39,grantMult:6.1,need:33.3,readiness:31.0,index:64.2,tier:"Tier 2: Strong Opportunity"},
+  {rank:5,country:"Djibouti",iso3:"DJI",pop:1.2,youth1524:0.23,youth1529:0.34,youthPct:19.6,youthUnemp:76.5,youthUnbanked:null,mobile:48.5,internet:64.8,gdp:3553,genzUsd:8.68,grantMult:7.1,need:47.3,readiness:16.4,index:63.6,tier:"Tier 2: Strong Opportunity"},
+  {rank:6,country:"Eswatini",iso3:"SWZ",pop:1.2,youth1524:0.25,youth1529:0.37,youthPct:20.0,youthUnemp:54.4,youthUnbanked:55.9,mobile:128.4,internet:61.3,gdp:3910,genzUsd:9.41,grantMult:6.4,need:41.5,readiness:21.9,index:63.5,tier:"Tier 2: Strong Opportunity"},
+  {rank:7,country:"Jordan",iso3:"JOR",pop:11.6,youth1524:2.13,youth1529:3.20,youthPct:18.5,youthUnemp:39.1,youthUnbanked:70.8,mobile:67.5,internet:92.5,gdp:4618,genzUsd:80.59,grantMult:5.5,need:39.3,readiness:24.1,index:63.5,tier:"Tier 2: Strong Opportunity"},
+  {rank:8,country:"Timor-Leste",iso3:"TLS",pop:1.4,youth1524:0.30,youth1529:0.46,youthPct:21.7,youthUnemp:null,youthUnbanked:null,mobile:112.7,internet:null,gdp:1332,genzUsd:11.50,grantMult:18.9,need:44.5,readiness:18.8,index:63.3,tier:"Tier 2: Strong Opportunity"},
+  {rank:9,country:"Tunisia",iso3:"TUN",pop:12.3,youth1524:1.68,youth1529:2.52,youthPct:13.7,youthUnemp:null,youthUnbanked:88.3,mobile:132.7,internet:null,gdp:4181,genzUsd:63.62,grantMult:6.0,need:39.5,readiness:23.8,index:63.3,tier:"Tier 2: Strong Opportunity"},
+  {rank:10,country:"Botswana",iso3:"BWA",pop:2.5,youth1524:0.49,youth1529:0.74,youthPct:19.5,youthUnemp:45.3,youthUnbanked:47.7,mobile:179.0,internet:57.9,gdp:7696,genzUsd:18.57,grantMult:3.3,need:36.4,readiness:25.9,index:62.3,tier:"Tier 2: Strong Opportunity"},
+  {rank:11,country:"Algeria",iso3:"DZA",pop:46.8,youth1524:6.56,youth1529:9.84,youthPct:14.0,youthUnemp:29.9,youthUnbanked:81.5,mobile:111.6,internet:76.2,gdp:5753,genzUsd:247.96,grantMult:4.4,need:35.6,readiness:26.1,index:61.7,tier:"Tier 2: Strong Opportunity"},
+  {rank:12,country:"Uzbekistan",iso3:"UZB",pop:36.4,youth1524:5.26,youth1529:7.88,youthPct:14.5,youthUnemp:null,youthUnbanked:64.6,mobile:106.9,internet:89.0,gdp:3162,genzUsd:198.64,grantMult:8.0,need:34.2,readiness:27.4,index:61.6,tier:"Tier 2: Strong Opportunity"},
+  {rank:13,country:"Lebanon",iso3:"LBN",pop:5.8,youth1524:1.00,youth1529:1.50,youthPct:17.2,youthUnemp:22.7,youthUnbanked:94.0,mobile:74.0,internet:81.7,gdp:3478,genzUsd:37.74,grantMult:7.2,need:39.2,readiness:22.3,index:61.4,tier:"Tier 2: Strong Opportunity"},
+  {rank:14,country:"Philippines",iso3:"PHL",pop:115.8,youth1524:22.04,youth1529:33.06,youthPct:19.0,youthUnemp:null,youthUnbanked:44.9,mobile:117.3,internet:77.9,gdp:3985,genzUsd:833.16,grantMult:6.3,need:33.3,readiness:27.9,index:61.2,tier:"Tier 2: Strong Opportunity"},
+  {rank:15,country:"Sudan",iso3:"SDN",pop:50.4,youth1524:10.24,youth1529:15.36,youthPct:20.3,youthUnemp:null,youthUnbanked:null,mobile:70.2,internet:null,gdp:985,genzUsd:387.14,grantMult:25.6,need:42.1,readiness:19.1,index:61.2,tier:"Tier 2: Strong Opportunity"},
+  {rank:16,country:"Suriname",iso3:"SUR",pop:0.6,youth1524:0.11,youth1529:0.16,youthPct:17.3,youthUnemp:null,youthUnbanked:null,mobile:157.2,internet:87.4,gdp:6962,genzUsd:4.14,grantMult:3.6,need:33.8,readiness:27.2,index:61.0,tier:"Tier 2: Strong Opportunity"},
+  {rank:17,country:"Yemen, Rep.",iso3:"YEM",pop:40.6,youth1524:7.84,youth1529:11.76,youthPct:19.3,youthUnemp:null,youthUnbanked:95.0,mobile:50.9,internet:null,gdp:null,genzUsd:296.44,grantMult:null,need:44.6,readiness:16.4,index:61.0,tier:"Tier 2: Strong Opportunity"},
+  {rank:18,country:"Rwanda",iso3:"RWA",pop:14.3,youth1524:2.95,youth1529:4.43,youthPct:20.7,youthUnemp:null,youthUnbanked:null,mobile:91.5,internet:28.8,gdp:1000,genzUsd:111.58,grantMult:25.2,need:42.8,readiness:16.7,index:59.5,tier:"Tier 2: Strong Opportunity"},
+  {rank:19,country:"Syrian Arab Republic",iso3:"SYR",pop:24.7,youth1524:5.80,youth1529:8.70,youthPct:23.5,youthUnemp:null,youthUnbanked:null,mobile:72.4,internet:null,gdp:null,genzUsd:219.17,grantMult:null,need:40.5,readiness:18.5,index:59.0,tier:"Tier 2: Strong Opportunity"},
+  {rank:20,country:"Montenegro",iso3:"MNE",pop:0.6,youth1524:0.08,youth1529:0.12,youthPct:12.4,youthUnemp:24.0,youthUnbanked:66.9,mobile:207.2,internet:88.5,gdp:13263,genzUsd:2.92,grantMult:1.9,need:28.5,readiness:30.3,index:58.7,tier:"Tier 2: Strong Opportunity"},
+  {rank:21,country:"Zimbabwe",iso3:"ZWE",pop:16.6,youth1524:3.50,youth1529:5.24,youthPct:21.0,youthUnemp:null,youthUnbanked:61.8,mobile:91.6,internet:38.7,gdp:2497,genzUsd:132.13,grantMult:10.1,need:40.2,readiness:18.3,index:58.5,tier:"Tier 2: Strong Opportunity"},
+  {rank:22,country:"Egypt, Arab Rep.",iso3:"EGY",pop:116.5,youth1524:20.50,youth1529:30.76,youthPct:17.6,youthUnemp:17.3,youthUnbanked:67.5,mobile:92.8,internet:74.0,gdp:3338,genzUsd:775.07,grantMult:7.5,need:32.8,readiness:25.4,index:58.3,tier:"Tier 2: Strong Opportunity"},
+  {rank:23,country:"Paraguay",iso3:"PRY",pop:6.9,youth1524:1.17,youth1529:1.75,youthPct:16.8,youthUnemp:null,youthUnbanked:52.7,mobile:126.6,internet:78.1,gdp:6416,genzUsd:44.07,grantMult:3.9,need:32.5,readiness:25.8,index:58.3,tier:"Tier 2: Strong Opportunity"},
+  {rank:24,country:"South Africa",iso3:"ZAF",pop:64.0,youth1524:10.46,youth1529:15.69,youthPct:16.3,youthUnemp:null,youthUnbanked:33.4,mobile:171.5,internet:78.3,gdp:6267,genzUsd:395.47,grantMult:4.0,need:26.9,readiness:31.3,index:58.2,tier:"Tier 2: Strong Opportunity"},
+  {rank:25,country:"Tajikistan",iso3:"TJK",pop:10.6,youth1524:1.81,youth1529:2.71,youthPct:17.1,youthUnemp:null,youthUnbanked:70.2,mobile:76.2,internet:54.4,gdp:1341,genzUsd:68.31,grantMult:18.8,need:38.8,readiness:18.9,index:57.7,tier:"Tier 2: Strong Opportunity"},
+  {rank:26,country:"Peru",iso3:"PER",pop:34.2,youth1524:5.69,youth1529:8.53,youthPct:16.6,youthUnemp:null,youthUnbanked:47.0,mobile:122.0,internet:79.5,gdp:8452,genzUsd:214.99,grantMult:3.0,need:30.2,readiness:27.2,index:57.4,tier:"Tier 2: Strong Opportunity"},
+  {rank:27,country:"Sao Tome and Principe",iso3:"STP",pop:0.2,youth1524:0.05,youth1529:0.07,youthPct:21.1,youthUnemp:null,youthUnbanked:null,mobile:63.5,internet:58.7,gdp:3491,genzUsd:1.88,grantMult:7.2,need:42.3,readiness:15.1,index:57.4,tier:"Tier 2: Strong Opportunity"},
+  {rank:28,country:"Senegal",iso3:"SEN",pop:18.5,youth1524:3.84,youth1529:5.76,youthPct:20.8,youthUnemp:null,youthUnbanked:36.7,mobile:123.9,internet:59.2,gdp:1773,genzUsd:145.17,grantMult:14.2,need:33.4,readiness:23.9,index:57.3,tier:"Tier 2: Strong Opportunity"},
+  {rank:29,country:"Sierra Leone",iso3:"SLE",pop:8.6,youth1524:1.78,youth1529:2.68,youthPct:20.6,youthUnemp:null,youthUnbanked:63.5,mobile:107.9,internet:23.7,gdp:807,genzUsd:67.43,grantMult:31.2,need:40.7,readiness:16.7,index:57.3,tier:"Tier 2: Strong Opportunity"},
+  {rank:30,country:"El Salvador",iso3:"SLV",pop:6.3,youth1524:1.16,youth1529:1.74,youthPct:18.3,youthUnemp:7.5,youthUnbanked:63.2,mobile:179.7,internet:62.6,gdp:5580,genzUsd:43.88,grantMult:4.5,need:29.6,readiness:27.5,index:57.1,tier:"Tier 2: Strong Opportunity"},
+  {rank:31,country:"Mauritania",iso3:"MRT",pop:5.2,youth1524:1.02,youth1529:1.53,youthPct:19.8,youthUnemp:23.0,youthUnbanked:79.1,mobile:90.8,internet:45.0,gdp:2110,genzUsd:38.65,grantMult:11.9,need:38.5,readiness:18.0,index:56.5,tier:"Tier 2: Strong Opportunity"},
+  {rank:32,country:"Nepal",iso3:"NPL",pop:29.7,youth1524:5.84,youth1529:8.76,youthPct:19.7,youthUnemp:20.6,youthUnbanked:60.9,mobile:117.8,internet:45.8,gdp:1447,genzUsd:220.68,grantMult:17.4,need:34.3,readiness:21.9,index:56.2,tier:"Tier 2: Strong Opportunity"},
+  {rank:33,country:"Haiti",iso3:"HTI",pop:11.8,youth1524:2.26,youth1529:3.39,youthPct:19.2,youthUnemp:36.8,youthUnbanked:null,mobile:65.2,internet:48.0,gdp:2143,genzUsd:85.45,grantMult:11.8,need:38.5,readiness:17.3,index:55.8,tier:"Tier 2: Strong Opportunity"},
+  {rank:34,country:"Colombia",iso3:"COL",pop:52.9,youth1524:8.33,youth1529:12.50,youthPct:15.8,youthUnemp:19.4,youthUnbanked:37.8,mobile:167.0,internet:77.3,gdp:7919,genzUsd:314.88,grantMult:3.2,need:25.1,readiness:30.6,index:55.7,tier:"Tier 2: Strong Opportunity"},
+  {rank:35,country:"Somalia, Fed. Rep.",iso3:"SOM",pop:19.0,youth1524:3.79,youth1529:5.68,youthPct:19.9,youthUnemp:null,youthUnbanked:null,mobile:54.0,internet:26.1,gdp:630,genzUsd:143.09,grantMult:40.0,need:41.5,readiness:13.7,index:55.2,tier:"Tier 2: Strong Opportunity"},
+  {rank:36,country:"Tanzania",iso3:"TZA",pop:68.6,youth1524:13.85,youth1529:20.77,youthPct:20.2,youthUnemp:null,youthUnbanked:46.9,mobile:105.4,internet:28.4,gdp:1187,genzUsd:523.45,grantMult:21.2,need:35.7,readiness:19.2,index:54.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:37,country:"Tonga",iso3:"TON",pop:0.1,youth1524:0.02,youth1529:0.03,youthPct:20.2,youthUnemp:null,youthUnbanked:null,mobile:61.7,internet:64.1,gdp:5652,genzUsd:0.80,grantMult:4.5,need:39.7,readiness:15.0,index:54.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:38,country:"Azerbaijan",iso3:"AZE",pop:10.2,youth1524:1.39,youth1529:2.08,youthPct:13.6,youthUnemp:13.5,youthUnbanked:68.3,mobile:107.7,internet:89.0,gdp:7284,genzUsd:52.36,grantMult:3.5,need:28.3,readiness:26.2,index:54.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:39,country:"Nicaragua",iso3:"NIC",pop:6.9,youth1524:1.27,youth1529:1.91,youthPct:18.4,youthUnemp:9.6,youthUnbanked:71.7,mobile:105.8,internet:60.3,gdp:2848,genzUsd:48.05,grantMult:8.8,need:32.4,readiness:21.7,index:54.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:40,country:"Pakistan",iso3:"PAK",pop:251.3,youth1524:49.94,youth1529:74.91,youthPct:19.9,youthUnemp:9.5,youthUnbanked:75.7,mobile:76.5,internet:36.5,gdp:1479,genzUsd:1887.62,grantMult:17.0,need:34.6,readiness:19.4,index:54.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:41,country:"Cabo Verde",iso3:"CPV",pop:0.5,youth1524:0.09,youth1529:0.14,youthPct:17.2,youthUnemp:28.1,youthUnbanked:null,mobile:113.0,internet:74.6,gdp:5192,genzUsd:3.41,grantMult:4.9,need:32.1,readiness:21.8,index:53.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:42,country:"Kiribati",iso3:"KIR",pop:0.1,youth1524:0.02,youth1529:0.03,youthPct:17.3,youthUnemp:null,youthUnbanked:null,mobile:51.2,internet:88.0,gdp:2289,genzUsd:0.88,grantMult:11.0,need:36.1,readiness:17.9,index:53.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:43,country:"Bangladesh",iso3:"BGD",pop:173.6,youth1524:33.16,youth1529:49.75,youthPct:19.1,youthUnemp:9.1,youthUnbanked:61.3,mobile:111.3,internet:44.5,gdp:2593,genzUsd:1253.57,grantMult:9.7,need:30.8,readiness:22.8,index:53.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:44,country:"Congo, Rep.",iso3:"COG",pop:6.3,youth1524:1.21,youth1529:1.82,youthPct:19.2,youthUnemp:40.6,youthUnbanked:44.6,mobile:94.9,internet:43.1,gdp:2482,genzUsd:45.88,grantMult:10.2,need:35.4,readiness:18.2,index:53.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:45,country:"Gabon",iso3:"GAB",pop:2.5,youth1524:0.44,youth1529:0.66,youthPct:17.4,youthUnemp:36.3,youthUnbanked:38.0,mobile:122.6,internet:68.2,gdp:8230,genzUsd:16.73,grantMult:3.1,need:30.6,readiness:23.1,index:53.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:46,country:"Guatemala",iso3:"GTM",pop:18.4,youth1524:3.74,youth1529:5.62,youthPct:20.3,youthUnemp:4.6,youthUnbanked:65.2,mobile:113.7,internet:56.7,gdp:6150,genzUsd:141.52,grantMult:4.1,need:30.7,readiness:22.8,index:53.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:47,country:"Gambia, The",iso3:"GMB",pop:2.8,youth1524:0.56,youth1529:0.84,youthPct:20.3,youthUnemp:10.8,youthUnbanked:65.2,mobile:117.1,internet:48.7,gdp:871,genzUsd:21.23,grantMult:28.9,need:33.3,readiness:20.0,index:53.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:48,country:"Albania",iso3:"ALB",pop:2.4,youth1524:0.30,youth1529:0.46,youthPct:12.8,youthUnemp:25.6,youthUnbanked:70.6,mobile:93.0,internet:83.1,gdp:11378,genzUsd:11.47,grantMult:2.2,need:30.3,readiness:22.7,index:53.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:49,country:"Cote d'Ivoire",iso3:"CIV",pop:31.9,youth1524:6.18,youth1529:9.27,youthPct:19.4,youthUnemp:4.2,youthUnbanked:51.4,mobile:172.0,internet:40.6,gdp:2728,genzUsd:233.66,grantMult:9.2,need:27.8,readiness:25.2,index:53.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:50,country:"Serbia",iso3:"SRB",pop:6.6,youth1524:0.67,youth1529:1.01,youthPct:10.2,youthUnemp:null,youthUnbanked:62.1,mobile:128.5,internet:85.4,gdp:13679,genzUsd:25.49,grantMult:1.8,need:26.5,readiness:26.5,index:53.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:51,country:"Mexico",iso3:"MEX",pop:130.9,youth1524:22.23,youth1529:33.34,youthPct:17.0,youthUnemp:5.8,youthUnbanked:55.3,mobile:111.7,internet:81.2,gdp:14186,genzUsd:840.24,grantMult:1.8,need:24.9,readiness:28.0,index:52.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:52,country:"South Sudan",iso3:"SSD",pop:11.9,youth1524:2.73,youth1529:4.10,youthPct:22.9,youthUnemp:null,youthUnbanked:null,mobile:46.6,internet:null,gdp:null,genzUsd:103.30,grantMult:null,need:38.6,readiness:14.3,index:52.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:53,country:"Marshall Islands",iso3:"MHL",pop:0.0,youth1524:0.01,youth1529:0.01,youthPct:21.0,youthUnemp:null,youthUnbanked:null,mobile:39.7,internet:64.1,gdp:7726,genzUsd:0.30,grantMult:3.3,need:40.2,readiness:12.6,index:52.8,tier:"Tier 3: Moderate Opportunity"},
+  {rank:54,country:"Namibia",iso3:"NAM",pop:3.0,youth1524:0.54,youth1529:0.82,youthPct:18.0,youthUnemp:37.2,youthUnbanked:40.9,mobile:87.7,internet:63.7,gdp:4413,genzUsd:20.59,grantMult:5.7,need:32.6,readiness:20.0,index:52.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:55,country:"Bhutan",iso3:"BTN",pop:0.8,youth1524:0.14,youth1529:0.21,youthPct:17.8,youthUnemp:17.9,youthUnbanked:null,mobile:95.6,internet:90.0,gdp:3831,genzUsd:5.32,grantMult:6.6,need:29.3,readiness:23.2,index:52.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:56,country:"Togo",iso3:"TGO",pop:9.5,youth1524:1.85,youth1529:2.78,youthPct:19.5,youthUnemp:null,youthUnbanked:51.0,mobile:75.8,internet:37.6,gdp:1119,genzUsd:70.12,grantMult:22.5,need:36.1,readiness:16.4,index:52.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:57,country:"Zambia",iso3:"ZMB",pop:21.3,youth1524:4.41,youth1529:6.61,youthPct:20.7,youthUnemp:null,youthUnbanked:38.5,mobile:102.1,internet:33.0,gdp:1187,genzUsd:166.62,grantMult:21.2,need:34.0,readiness:18.5,index:52.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:58,country:"Indonesia",iso3:"IDN",pop:283.5,youth1524:45.27,youth1529:67.90,youthPct:16.0,youthUnemp:13.1,youthUnbanked:38.0,mobile:125.2,internet:69.2,gdp:4925,genzUsd:1711.10,grantMult:5.1,need:24.4,readiness:27.9,index:52.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:59,country:"Angola",iso3:"AGO",pop:37.9,youth1524:7.25,youth1529:10.87,youthPct:19.1,youthUnemp:26.7,youthUnbanked:null,mobile:70.0,internet:37.9,gdp:2666,genzUsd:273.90,grantMult:9.5,need:34.5,readiness:17.3,index:51.8,tier:"Tier 3: Moderate Opportunity"},
+  {rank:60,country:"Cambodia",iso3:"KHM",pop:17.6,youth1524:3.03,youth1529:4.55,youthPct:17.2,youthUnemp:0.7,youthUnbanked:59.5,mobile:120.8,internet:68.9,gdp:2628,genzUsd:114.59,grantMult:9.6,need:26.9,readiness:24.9,index:51.8,tier:"Tier 3: Moderate Opportunity"},
+  {rank:61,country:"Dominican Republic",iso3:"DOM",pop:11.4,youth1524:1.94,youth1529:2.91,youthPct:17.0,youthUnemp:12.9,youthUnbanked:52.6,mobile:91.9,internet:86.1,gdp:10876,genzUsd:73.37,grantMult:2.3,need:26.8,readiness:24.9,index:51.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:62,country:"Nigeria",iso3:"NGA",pop:232.7,youth1524:47.93,youth1529:71.89,youthPct:20.6,youthUnemp:5.1,youthUnbanked:55.6,mobile:98.5,internet:40.1,gdp:1084,genzUsd:1811.71,grantMult:23.2,need:30.1,readiness:21.6,index:51.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:63,country:"Panama",iso3:"PAN",pop:4.5,youth1524:0.72,youth1529:1.09,youthPct:16.0,youthUnemp:null,youthUnbanked:42.5,mobile:156.6,internet:68.5,gdp:19161,genzUsd:27.35,grantMult:1.3,need:25.6,readiness:26.2,index:51.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:64,country:"Solomon Islands",iso3:"SLB",pop:0.8,youth1524:0.16,youth1529:0.24,youthPct:19.5,youthUnemp:null,youthUnbanked:null,mobile:62.1,internet:28.7,gdp:1934,genzUsd:6.02,grantMult:13.0,need:40.1,readiness:11.6,index:51.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:65,country:"Viet Nam",iso3:"VNM",pop:101.0,youth1524:13.78,youth1529:20.67,youthPct:13.6,youthUnemp:null,youthUnbanked:27.8,mobile:131.0,internet:78.1,gdp:4717,genzUsd:520.96,grantMult:5.3,need:23.1,readiness:28.5,index:51.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:66,country:"Kyrgyz Republic",iso3:"KGZ",pop:7.2,youth1524:1.14,youth1529:1.72,youthPct:15.8,youthUnemp:8.4,youthUnbanked:44.8,mobile:108.6,internet:91.0,gdp:2420,genzUsd:43.24,grantMult:10.4,need:25.0,readiness:26.4,index:51.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:67,country:"Saudi Arabia",iso3:"SAU",pop:35.3,youth1524:5.22,youth1529:7.83,youthPct:14.8,youthUnemp:null,youthUnbanked:35.1,mobile:157.8,internet:100.0,gdp:35122,genzUsd:197.30,grantMult:0.7,need:18.1,readiness:32.9,index:51.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:68,country:"Myanmar",iso3:"MMR",pop:54.5,youth1524:8.90,youth1529:13.35,youthPct:16.3,youthUnemp:10.0,youthUnbanked:44.3,mobile:121.0,internet:null,gdp:1359,genzUsd:336.39,grantMult:18.5,need:25.8,readiness:25.0,index:50.8,tier:"Tier 3: Moderate Opportunity"},
+  {rank:69,country:"Turkiye",iso3:"TUR",pop:85.5,youth1524:12.56,youth1529:18.85,youthPct:14.7,youthUnemp:null,youthUnbanked:34.8,mobile:105.7,internet:86.0,gdp:15893,genzUsd:474.92,grantMult:1.6,need:23.1,readiness:27.7,index:50.8,tier:"Tier 3: Moderate Opportunity"},
+  {rank:70,country:"Georgia",iso3:"GEO",pop:3.7,youth1524:0.43,youth1529:0.65,youthPct:11.6,youthUnemp:29.9,youthUnbanked:31.3,mobile:155.2,internet:81.9,gdp:9241,genzUsd:16.29,grantMult:2.7,need:23.1,readiness:27.6,index:50.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:71,country:"Bolivia",iso3:"BOL",pop:12.4,youth1524:2.30,youth1529:3.45,youthPct:18.5,youthUnemp:5.2,youthUnbanked:46.2,mobile:101.6,internet:77.3,gdp:4421,genzUsd:87.00,grantMult:5.7,need:26.1,readiness:24.5,index:50.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:72,country:"Iran, Islamic Rep.",iso3:"IRN",pop:91.6,youth1524:12.18,youth1529:18.27,youthPct:13.3,youthUnemp:21.3,youthUnbanked:8.2,mobile:166.3,internet:83.7,gdp:5190,genzUsd:460.32,grantMult:4.9,need:18.4,readiness:31.9,index:50.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:73,country:"Nauru",iso3:"NRU",pop:0.0,youth1524:0.00,youth1529:0.00,youthPct:17.6,youthUnemp:null,youthUnbanked:null,mobile:87.2,internet:83.0,gdp:13609,genzUsd:0.08,grantMult:1.9,need:31.2,readiness:19.0,index:50.2,tier:"Tier 3: Moderate Opportunity"},
+  {rank:74,country:"Guinea",iso3:"GIN",pop:14.8,youth1524:2.99,youth1529:4.49,youthPct:20.3,youthUnemp:7.1,youthUnbanked:66.3,mobile:97.9,internet:32.3,gdp:1695,genzUsd:113.15,grantMult:14.9,need:32.4,readiness:17.7,index:50.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:75,country:"Lao PDR",iso3:"LAO",pop:7.8,youth1524:1.45,youth1529:2.18,youthPct:18.7,youthUnemp:2.2,youthUnbanked:69.8,mobile:64.8,internet:64.4,gdp:2124,genzUsd:54.86,grantMult:11.9,need:30.6,readiness:19.3,index:49.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:76,country:"Honduras",iso3:"HND",pop:10.8,youth1524:2.12,youth1529:3.18,youthPct:19.6,youthUnemp:8.3,youthUnbanked:58.8,mobile:74.4,internet:58.1,gdp:3426,genzUsd:80.17,grantMult:7.4,need:30.3,readiness:19.5,index:49.8,tier:"Tier 3: Moderate Opportunity"},
+  {rank:77,country:"Malaysia",iso3:"MYS",pop:35.6,youth1524:5.92,youth1529:8.88,youthPct:16.6,youthUnemp:12.2,youthUnbanked:12.9,mobile:142.7,internet:97.7,gdp:11874,genzUsd:223.79,grantMult:2.1,need:18.3,readiness:31.5,index:49.8,tier:"Tier 3: Moderate Opportunity"},
+  {rank:78,country:"Armenia",iso3:"ARM",pop:3.0,youth1524:0.38,youth1529:0.57,youthPct:12.5,youthUnemp:26.7,youthUnbanked:36.3,mobile:134.5,internet:80.0,gdp:8556,genzUsd:14.28,grantMult:2.9,need:24.1,readiness:25.6,index:49.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:79,country:"Thailand",iso3:"THA",pop:71.7,youth1524:8.94,youth1529:13.40,youthPct:12.5,youthUnemp:null,youthUnbanked:11.9,mobile:168.6,internet:89.5,gdp:7347,genzUsd:337.77,grantMult:3.4,need:17.0,readiness:32.6,index:49.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:80,country:"Vanuatu",iso3:"VUT",pop:0.3,youth1524:0.06,youth1529:0.09,youthPct:17.6,youthUnemp:null,youthUnbanked:null,mobile:89.3,internet:null,gdp:3411,genzUsd:2.19,grantMult:7.4,need:36.1,readiness:13.4,index:49.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:81,country:"Papua New Guinea",iso3:"PNG",pop:10.6,youth1524:2.02,youth1529:3.03,youthPct:19.1,youthUnemp:null,youthUnbanked:null,mobile:34.1,internet:18.6,gdp:3007,genzUsd:76.28,grantMult:8.4,need:38.9,readiness:10.5,index:49.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:82,country:"Argentina",iso3:"ARG",pop:45.7,youth1524:7.02,youth1529:10.53,youthPct:15.4,youthUnemp:19.2,youthUnbanked:15.6,mobile:137.7,internet:89.2,gdp:13970,genzUsd:265.37,grantMult:1.8,need:19.2,readiness:30.0,index:49.2,tier:"Tier 3: Moderate Opportunity"},
+  {rank:83,country:"Mali",iso3:"MLI",pop:24.5,youth1524:4.99,youth1529:7.49,youthPct:20.4,youthUnemp:3.8,youthUnbanked:54.2,mobile:112.1,internet:36.0,gdp:1095,genzUsd:188.77,grantMult:23.0,need:29.4,readiness:19.8,index:49.2,tier:"Tier 3: Moderate Opportunity"},
+  {rank:84,country:"North Macedonia",iso3:"MKD",pop:1.8,youth1524:0.21,youth1529:0.31,youthPct:11.4,youthUnemp:28.7,youthUnbanked:42.6,mobile:106.5,internet:88.5,gdp:9292,genzUsd:7.89,grantMult:2.7,need:24.9,readiness:24.2,index:49.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:85,country:"Uruguay",iso3:"URY",pop:3.4,youth1524:0.48,youth1529:0.71,youthPct:14.1,youthUnemp:null,youthUnbanked:37.6,mobile:141.7,internet:90.9,gdp:23907,genzUsd:18.01,grantMult:1.1,need:21.0,readiness:28.0,index:49.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:86,country:"Venezuela, RB",iso3:"VEN",pop:28.4,youth1524:5.04,youth1529:7.56,youthPct:17.7,youthUnemp:null,youthUnbanked:23.6,mobile:70.2,internet:76.3,gdp:4218,genzUsd:190.53,grantMult:6.0,need:26.2,readiness:22.7,index:49.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:87,country:"Lesotho",iso3:"LSO",pop:2.3,youth1524:0.46,youth1529:0.69,youthPct:19.8,youthUnemp:24.7,youthUnbanked:46.8,mobile:69.3,internet:49.0,gdp:972,genzUsd:17.47,grantMult:25.9,need:32.7,readiness:16.2,index:48.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:88,country:"Fiji",iso3:"FJI",pop:0.9,youth1524:0.16,youth1529:0.23,youthPct:16.8,youthUnemp:15.1,youthUnbanked:null,mobile:112.0,internet:74.1,gdp:6426,genzUsd:5.90,grantMult:3.9,need:26.4,readiness:22.2,index:48.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:89,country:"Burkina Faso",iso3:"BFA",pop:23.5,youth1524:4.89,youth1529:7.33,youthPct:20.8,youthUnemp:6.5,youthUnbanked:52.7,mobile:116.2,internet:25.4,gdp:982,genzUsd:184.73,grantMult:25.7,need:30.0,readiness:18.5,index:48.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:90,country:"Bosnia and Herzegovina",iso3:"BIH",pop:3.2,youth1524:0.33,youth1529:0.50,youthPct:10.5,youthUnemp:27.3,youthUnbanked:41.6,mobile:117.7,internet:83.4,gdp:9359,genzUsd:12.55,grantMult:2.7,need:23.7,readiness:24.7,index:48.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:91,country:"Madagascar",iso3:"MDG",pop:32.0,youth1524:6.45,youth1529:9.68,youthPct:20.2,youthUnemp:5.5,youthUnbanked:74.6,mobile:75.5,internet:18.2,gdp:545,genzUsd:243.84,grantMult:46.2,need:33.8,readiness:14.6,index:48.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:92,country:"Benin",iso3:"BEN",pop:14.5,youth1524:2.84,youth1529:4.26,youthPct:19.6,youthUnemp:3.1,youthUnbanked:58.0,mobile:116.0,internet:32.4,gdp:1485,genzUsd:107.36,grantMult:17.0,need:29.3,readiness:19.0,index:48.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:93,country:"Costa Rica",iso3:"CRI",pop:5.1,youth1524:0.74,youth1529:1.11,youthPct:14.4,youthUnemp:20.5,youthUnbanked:32.9,mobile:133.5,internet:85.4,gdp:18587,genzUsd:27.94,grantMult:1.4,need:21.3,readiness:27.0,index:48.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:94,country:"Ecuador",iso3:"ECU",pop:18.1,youth1524:3.13,youth1529:4.70,youthPct:17.3,youthUnemp:8.6,youthUnbanked:39.5,mobile:101.0,internet:72.7,gdp:6875,genzUsd:118.48,grantMult:3.7,need:24.1,readiness:24.0,index:48.2,tier:"Tier 3: Moderate Opportunity"},
+  {rank:95,country:"Comoros",iso3:"COM",pop:0.9,youth1524:0.17,youth1529:0.25,youthPct:19.2,youthUnemp:8.8,youthUnbanked:67.5,mobile:109.9,internet:31.9,gdp:1663,genzUsd:6.28,grantMult:15.2,need:32.3,readiness:15.7,index:48.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:96,country:"Micronesia, Fed. Sts.",iso3:"FSM",pop:0.1,youth1524:0.02,youth1529:0.03,youthPct:19.9,youthUnemp:null,youthUnbanked:null,mobile:20.0,internet:39.4,gdp:4166,genzUsd:0.85,grantMult:6.0,need:39.9,readiness:8.2,index:48.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:97,country:"Sri Lanka",iso3:"LKA",pop:21.9,youth1524:3.33,youth1529:5.00,youthPct:15.2,youthUnemp:null,youthUnbanked:24.9,mobile:142.3,internet:51.2,gdp:4516,genzUsd:125.91,grantMult:5.6,need:24.0,readiness:24.0,index:47.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:98,country:"Niger",iso3:"NER",pop:27.0,youth1524:5.55,youth1529:8.32,youthPct:20.5,youthUnemp:0.4,youthUnbanked:84.3,mobile:65.7,internet:13.0,gdp:735,genzUsd:209.68,grantMult:34.3,need:34.7,readiness:13.0,index:47.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:99,country:"India",iso3:"IND",pop:1450.9,youth1524:257.37,youth1529:386.05,youthPct:17.7,youthUnemp:15.7,youthUnbanked:16.7,mobile:80.6,internet:60.2,gdp:2695,genzUsd:9728.47,grantMult:9.4,need:22.5,readiness:24.9,index:47.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:100,country:"Russian Federation",iso3:"RUS",pop:143.5,youth1524:15.06,youth1529:22.59,youthPct:10.5,youthUnemp:null,youthUnbanked:11.5,mobile:180.8,internet:92.2,gdp:14889,genzUsd:569.33,grantMult:1.7,need:12.9,readiness:34.5,index:47.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:101,country:"Uganda",iso3:"UGA",pop:50.0,youth1524:10.83,youth1529:16.25,youthPct:21.7,youthUnemp:null,youthUnbanked:33.3,mobile:76.3,internet:9.3,gdp:1078,genzUsd:409.41,grantMult:23.4,need:33.6,readiness:13.9,index:47.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:102,country:"Afghanistan",iso3:"AFG",pop:42.6,youth1524:9.04,youth1529:13.55,youthPct:21.2,youthUnemp:17.2,youthUnbanked:null,mobile:55.5,internet:15.9,gdp:414,genzUsd:341.57,grantMult:60.9,need:33.9,readiness:13.1,index:47.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:103,country:"China",iso3:"CHN",pop:1409.0,youth1524:161.36,youth1529:242.03,youthPct:11.5,youthUnemp:15.0,youthUnbanked:11.4,mobile:128.2,internet:90.6,gdp:13303,genzUsd:6099.27,grantMult:1.9,need:14.5,readiness:32.6,index:47.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:104,country:"Ethiopia",iso3:"ETH",pop:132.1,youth1524:27.81,youth1529:41.72,youthPct:21.1,youthUnemp:5.4,youthUnbanked:62.1,mobile:59.9,internet:20.3,gdp:1134,genzUsd:1051.33,grantMult:22.2,need:31.8,readiness:15.2,index:47.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:105,country:"Cameroon",iso3:"CMR",pop:29.1,youth1524:5.78,youth1529:8.67,youthPct:19.8,youthUnemp:6.6,youthUnbanked:42.8,mobile:96.5,internet:42.2,gdp:1830,genzUsd:218.39,grantMult:13.8,need:27.2,readiness:19.7,index:46.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:106,country:"Chile",iso3:"CHL",pop:19.8,youth1524:2.54,youth1529:3.81,youthPct:12.9,youthUnemp:21.0,youthUnbanked:14.6,mobile:135.9,internet:94.5,gdp:16710,genzUsd:96.11,grantMult:1.5,need:17.0,readiness:29.7,index:46.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:107,country:"Congo, Dem. Rep.",iso3:"COD",pop:109.3,youth1524:20.85,youth1529:31.28,youthPct:19.1,youthUnemp:8.0,youthUnbanked:68.4,mobile:53.2,internet:19.0,gdp:649,genzUsd:788.17,grantMult:38.8,need:32.3,readiness:14.2,index:46.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:108,country:"Guyana",iso3:"GUY",pop:0.8,youth1524:0.14,youth1529:0.22,youthPct:17.3,youthUnemp:24.7,youthUnbanked:null,mobile:112.6,internet:79.4,gdp:29675,genzUsd:5.43,grantMult:0.8,need:23.6,readiness:22.9,index:46.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:109,country:"Chad",iso3:"TCD",pop:20.3,youth1524:4.06,youth1529:6.09,youthPct:20.0,youthUnemp:1.5,youthUnbanked:79.3,mobile:70.2,internet:12.0,gdp:962,genzUsd:153.34,grantMult:26.2,need:33.5,readiness:12.9,index:46.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:110,country:"Turkmenistan",iso3:"TKM",pop:7.5,youth1524:1.07,youth1529:1.60,youthPct:14.2,youthUnemp:null,youthUnbanked:null,mobile:null,internet:null,gdp:6857,genzUsd:40.32,grantMult:3.7,need:28.3,readiness:18.0,index:46.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:111,country:"Brazil",iso3:"BRA",pop:212.0,youth1524:30.61,youth1529:45.91,youthPct:14.4,youthUnemp:15.7,youthUnbanked:15.6,mobile:101.0,internet:84.2,gdp:10311,genzUsd:1156.96,grantMult:2.4,need:18.3,readiness:27.9,index:46.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:112,country:"Jamaica",iso3:"JAM",pop:2.8,youth1524:0.46,youth1529:0.69,youthPct:16.1,youthUnemp:10.4,youthUnbanked:24.6,mobile:115.1,internet:89.5,gdp:7754,genzUsd:17.27,grantMult:3.3,need:20.5,readiness:25.7,index:46.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:113,country:"Antigua and Barbuda",iso3:"ATG",pop:0.1,youth1524:0.01,youth1529:0.02,youthPct:14.1,youthUnemp:null,youthUnbanked:null,mobile:200.5,internet:72.1,gdp:23542,genzUsd:0.50,grantMult:1.1,need:20.0,readiness:26.1,index:46.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:114,country:"Ghana",iso3:"GHA",pop:34.4,youth1524:6.62,youth1529:9.93,youthPct:19.2,youthUnemp:5.3,youthUnbanked:20.0,mobile:98.8,internet:70.7,gdp:2391,genzUsd:250.25,grantMult:10.5,need:21.8,readiness:24.3,index:46.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:115,country:"Kazakhstan",iso3:"KAZ",pop:20.6,youth1524:2.82,youth1529:4.22,youthPct:13.7,youthUnemp:3.8,youthUnbanked:31.7,mobile:127.1,internet:92.9,gdp:14155,genzUsd:106.43,grantMult:1.8,need:17.2,readiness:28.9,index:46.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:116,country:"St. Vincent and the Grenadines",iso3:"VCT",pop:0.1,youth1524:0.01,youth1529:0.02,youthPct:14.4,youthUnemp:null,youthUnbanked:null,mobile:101.6,internet:75.5,gdp:11501,genzUsd:0.55,grantMult:2.2,need:26.5,readiness:19.3,index:45.8,tier:"Tier 3: Moderate Opportunity"},
+  {rank:117,country:"Belize",iso3:"BLZ",pop:0.4,youth1524:0.08,youth1529:0.12,youthPct:18.9,youthUnemp:18.6,youthUnbanked:42.0,mobile:67.2,internet:70.2,gdp:7681,genzUsd:2.98,grantMult:3.3,need:28.2,readiness:17.6,index:45.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:118,country:"Oman",iso3:"OMN",pop:5.3,youth1524:0.72,youth1529:1.07,youthPct:13.6,youthUnemp:13.5,youthUnbanked:28.6,mobile:122.3,internet:95.2,gdp:20285,genzUsd:27.08,grantMult:1.2,need:17.7,readiness:27.6,index:45.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:119,country:"Guinea-Bissau",iso3:"GNB",pop:2.2,youth1524:0.45,youth1529:0.67,youthPct:20.3,youthUnemp:2.8,youthUnbanked:null,mobile:128.1,internet:28.7,gdp:1008,genzUsd:16.92,grantMult:25.0,need:27.4,readiness:17.6,index:45.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:120,country:"Samoa",iso3:"WSM",pop:0.2,youth1524:0.04,youth1529:0.06,youthPct:17.7,youthUnemp:null,youthUnbanked:null,mobile:62.4,internet:null,gdp:5393,genzUsd:1.46,grantMult:4.7,need:35.3,readiness:9.6,index:44.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:121,country:"Kenya",iso3:"KEN",pop:56.4,youth1524:12.07,youth1529:18.11,youthPct:21.4,youthUnemp:15.5,youthUnbanked:10.2,mobile:120.6,internet:32.1,gdp:2132,genzUsd:456.26,grantMult:11.8,need:24.0,readiness:20.7,index:44.7,tier:"Tier 3: Moderate Opportunity"},
+  {rank:122,country:"Italy",iso3:"ITA",pop:59.0,youth1524:5.89,youth1529:8.84,youthPct:10.0,youthUnemp:20.2,youthUnbanked:42.6,mobile:131.9,internet:87.0,gdp:40385,genzUsd:222.64,grantMult:0.6,need:15.5,readiness:29.1,index:44.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:123,country:"Grenada",iso3:"GRD",pop:0.1,youth1524:0.02,youth1529:0.03,youthPct:14.4,youthUnemp:null,youthUnbanked:null,mobile:95.8,internet:69.4,gdp:11705,genzUsd:0.64,grantMult:2.2,need:26.4,readiness:18.1,index:44.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:124,country:"Belarus",iso3:"BLR",pop:9.1,youth1524:0.92,youth1529:1.39,youthPct:10.1,youthUnemp:10.5,youthUnbanked:null,mobile:129.0,internet:91.5,gdp:8318,genzUsd:34.96,grantMult:3.0,need:16.6,readiness:27.8,index:44.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:125,country:"Maldives",iso3:"MDV",pop:0.5,youth1524:0.06,youth1529:0.10,youthPct:12.2,youthUnemp:14.8,youthUnbanked:null,mobile:141.6,internet:84.5,gdp:13379,genzUsd:2.43,grantMult:1.9,need:19.0,readiness:25.1,index:44.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:126,country:"Malawi",iso3:"MWI",pop:21.7,youth1524:4.69,youth1529:7.04,youthPct:21.7,youthUnemp:6.9,youthUnbanked:52.2,mobile:61.1,internet:18.0,gdp:523,genzUsd:177.30,grantMult:48.2,need:30.8,readiness:13.2,index:44.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:127,country:"Mauritius",iso3:"MUS",pop:1.2,youth1524:0.18,youth1529:0.26,youthPct:14.1,youthUnemp:16.5,youthUnbanked:10.2,mobile:165.3,internet:79.5,gdp:11991,genzUsd:6.63,grantMult:2.1,need:16.8,readiness:27.1,index:43.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:128,country:"St. Lucia",iso3:"LCA",pop:0.2,youth1524:0.03,youth1529:0.04,youthPct:14.6,youthUnemp:null,youthUnbanked:null,mobile:98.7,internet:67.4,gdp:14182,genzUsd:0.99,grantMult:1.8,need:25.5,readiness:18.4,index:43.9,tier:"Tier 3: Moderate Opportunity"},
+  {rank:129,country:"Equatorial Guinea",iso3:"GNQ",pop:1.9,youth1524:0.33,youth1529:0.49,youthPct:17.3,youthUnemp:15.6,youthUnbanked:null,mobile:49.5,internet:63.5,gdp:6745,genzUsd:12.37,grantMult:3.7,need:27.0,readiness:16.6,index:43.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:130,country:"Israel",iso3:"ISR",pop:10.0,youth1524:1.54,youth1529:2.31,youthPct:15.5,youthUnemp:6.2,youthUnbanked:42.5,mobile:153.3,internet:87.0,gdp:54177,genzUsd:58.32,grantMult:0.5,need:14.2,readiness:29.4,index:43.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:131,country:"Dominica",iso3:"DMA",pop:0.1,youth1524:0.01,youth1529:0.01,youthPct:13.3,youthUnemp:null,youthUnbanked:null,mobile:85.2,internet:81.3,gdp:10405,genzUsd:0.33,grantMult:2.4,need:24.9,readiness:18.6,index:43.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:132,country:"Kosovo",iso3:"XKX",pop:1.6,youth1524:0.27,youth1529:0.41,youthPct:17.1,youthUnemp:null,youthUnbanked:58.6,mobile:34.5,internet:null,gdp:7023,genzUsd:10.32,grantMult:3.6,need:34.2,readiness:9.3,index:43.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:133,country:"Kuwait",iso3:"KWT",pop:4.9,youth1524:0.52,youth1529:0.78,youthPct:10.6,youthUnemp:15.1,youthUnbanked:22.2,mobile:167.7,internet:99.8,gdp:32718,genzUsd:19.66,grantMult:0.8,need:12.2,readiness:31.4,index:43.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:134,country:"Croatia",iso3:"HRV",pop:3.9,youth1524:0.40,youth1529:0.60,youthPct:10.4,youthUnemp:16.5,youthUnbanked:44.8,mobile:117.1,internet:83.2,gdp:24050,genzUsd:15.19,grantMult:1.0,need:18.6,readiness:24.8,index:43.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:135,country:"Seychelles",iso3:"SYC",pop:0.1,youth1524:0.02,youth1529:0.02,youthPct:12.8,youthUnemp:null,youthUnbanked:null,mobile:129.2,internet:86.0,gdp:17859,genzUsd:0.58,grantMult:1.4,need:20.4,readiness:23.0,index:43.4,tier:"Tier 3: Moderate Opportunity"},
+  {rank:136,country:"Mozambique",iso3:"MOZ",pop:34.6,youth1524:6.99,youth1529:10.48,youthPct:20.2,youthUnemp:11.5,youthUnbanked:50.0,mobile:47.5,internet:19.9,gdp:657,genzUsd:264.12,grantMult:38.4,need:30.4,readiness:12.9,index:43.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:137,country:"Palau",iso3:"PLW",pop:0.0,youth1524:0.00,youth1529:0.00,youthPct:12.3,youthUnemp:null,youthUnbanked:null,mobile:135.4,internet:82.9,gdp:15611,genzUsd:0.08,grantMult:1.6,need:20.6,readiness:22.6,index:43.2,tier:"Tier 3: Moderate Opportunity"},
+  {rank:138,country:"United Arab Emirates",iso3:"ARE",pop:11.0,youth1524:1.42,youth1529:2.13,youthPct:12.9,youthUnemp:null,youthUnbanked:20.6,mobile:199.4,internet:100.0,gdp:50274,genzUsd:53.56,grantMult:0.5,need:8.4,readiness:34.7,index:43.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:139,country:"Moldova",iso3:"MDA",pop:2.4,youth1524:0.27,youth1529:0.40,youthPct:11.1,youthUnemp:4.5,youthUnbanked:41.0,mobile:129.6,internet:76.5,gdp:7576,genzUsd:10.07,grantMult:3.3,need:18.6,readiness:24.4,index:43.0,tier:"Tier 3: Moderate Opportunity"},
+  {rank:140,country:"Brunei Darussalam",iso3:"BRN",pop:0.5,youth1524:0.07,youth1529:0.10,youthPct:14.7,youthUnemp:17.9,youthUnbanked:null,mobile:118.7,internet:99.0,gdp:33153,genzUsd:2.57,grantMult:0.8,need:17.0,readiness:25.6,index:42.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:141,country:"Greece",iso3:"GRC",pop:10.4,youth1524:1.08,youth1529:1.61,youthPct:10.3,youthUnemp:22.4,youthUnbanked:30.1,mobile:110.8,internet:85.0,gdp:24626,genzUsd:40.69,grantMult:1.0,need:16.9,readiness:25.6,index:42.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:142,country:"Poland",iso3:"POL",pop:36.6,youth1524:3.62,youth1529:5.44,youthPct:9.9,youthUnemp:null,youthUnbanked:26.4,mobile:135.2,internet:86.4,gdp:25104,genzUsd:136.99,grantMult:1.0,need:13.7,readiness:28.8,index:42.5,tier:"Tier 3: Moderate Opportunity"},
+  {rank:143,country:"Mongolia",iso3:"MNG",pop:3.5,youth1524:0.49,youth1529:0.74,youthPct:14.0,youthUnemp:11.5,youthUnbanked:4.1,mobile:141.1,internet:83.7,gdp:6751,genzUsd:18.67,grantMult:3.7,need:15.4,readiness:26.9,index:42.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:144,country:"Central African Republic",iso3:"CAF",pop:5.3,youth1524:1.20,youth1529:1.79,youthPct:22.4,youthUnemp:10.0,youthUnbanked:null,mobile:38.8,internet:13.8,gdp:516,genzUsd:45.21,grantMult:48.8,need:32.6,readiness:9.6,index:42.2,tier:"Tier 3: Moderate Opportunity"},
+  {rank:145,country:"Ukraine",iso3:"UKR",pop:37.9,youth1524:3.80,youth1529:5.71,youthPct:10.0,youthUnemp:null,youthUnbanked:7.1,mobile:133.4,internet:81.6,gdp:5389,genzUsd:143.82,grantMult:4.7,need:13.8,readiness:28.0,index:41.8,tier:"Tier 3: Moderate Opportunity"},
+  {rank:146,country:"Bahrain",iso3:"BHR",pop:1.6,youth1524:0.19,youth1529:0.29,youthPct:12.1,youthUnemp:5.5,youthUnbanked:23.4,mobile:153.9,internet:100.0,gdp:29654,genzUsd:7.28,grantMult:0.8,need:11.7,readiness:29.4,index:41.1,tier:"Tier 3: Moderate Opportunity"},
+  {rank:147,country:"Romania",iso3:"ROU",pop:19.1,youth1524:2.10,youth1529:3.15,youthPct:11.0,youthUnemp:null,youthUnbanked:14.4,mobile:123.2,internet:89.2,gdp:20080,genzUsd:79.34,grantMult:1.3,need:12.8,readiness:27.8,index:40.6,tier:"Tier 3: Moderate Opportunity"},
+  {rank:148,country:"Liberia",iso3:"LBR",pop:5.6,youth1524:1.17,youth1529:1.76,youthPct:20.9,youthUnemp:2.2,youthUnbanked:50.2,mobile:32.1,internet:31.2,gdp:852,genzUsd:44.25,grantMult:29.6,need:28.6,readiness:11.7,index:40.3,tier:"Tier 3: Moderate Opportunity"},
+  {rank:149,country:"St. Kitts and Nevis",iso3:"KNA",pop:0.0,youth1524:0.01,youth1529:0.01,youthPct:13.5,youthUnemp:null,youthUnbanked:null,mobile:118.9,internet:76.6,gdp:23961,genzUsd:0.24,grantMult:1.1,need:18.8,readiness:20.4,index:39.2,tier:"Tier 4: Emerging Opportunity"},
+  {rank:150,country:"Bulgaria",iso3:"BGR",pop:6.4,youth1524:0.63,youth1529:0.94,youthPct:9.8,youthUnemp:12.5,youthUnbanked:20.8,mobile:117.9,internet:80.4,gdp:17596,genzUsd:23.75,grantMult:1.4,need:13.8,readiness:24.9,index:38.7,tier:"Tier 4: Emerging Opportunity"},
+  {rank:151,country:"Slovak Republic",iso3:"SVK",pop:5.4,youth1524:0.54,youth1529:0.81,youthPct:9.9,youthUnemp:null,youthUnbanked:18.9,mobile:138.2,internet:87.2,gdp:25993,genzUsd:20.30,grantMult:1.0,need:11.4,readiness:27.3,index:38.7,tier:"Tier 4: Emerging Opportunity"},
+  {rank:152,country:"Burundi",iso3:"BDI",pop:14.0,youth1524:2.80,youth1529:4.21,youthPct:20.0,youthUnemp:1.7,youthUnbanked:null,mobile:63.2,internet:7.2,gdp:219,genzUsd:106.02,grantMult:114.8,need:26.8,readiness:11.3,index:38.0,tier:"Tier 4: Emerging Opportunity"},
+  {rank:153,country:"Japan",iso3:"JPN",pop:124.0,youth1524:11.77,youth1529:17.65,youthPct:9.5,youthUnemp:3.9,youthUnbanked:2.6,mobile:178.4,internet:85.0,gdp:32487,genzUsd:444.78,grantMult:0.8,need:5.0,readiness:33.0,index:38.0,tier:"Tier 4: Emerging Opportunity"},
+  {rank:154,country:"Bahamas, The",iso3:"BHS",pop:0.4,youth1524:0.06,youth1529:0.09,youthPct:14.2,youthUnemp:18.3,youthUnbanked:null,mobile:100.0,internet:92.4,gdp:39455,genzUsd:2.16,grantMult:0.6,need:14.8,readiness:23.0,index:37.8,tier:"Tier 4: Emerging Opportunity"},
+  {rank:155,country:"Barbados",iso3:"BRB",pop:0.3,youth1524:0.04,youth1529:0.06,youthPct:13.1,youthUnemp:18.0,youthUnbanked:null,mobile:114.6,internet:69.7,gdp:26545,genzUsd:1.40,grantMult:0.9,need:17.3,readiness:20.3,index:37.6,tier:"Tier 4: Emerging Opportunity"},
+  {rank:156,country:"Korea, Rep.",iso3:"KOR",pop:51.8,youth1524:5.14,youth1529:7.72,youthPct:9.9,youthUnemp:6.4,youthUnbanked:1.6,mobile:162.1,internet:97.4,gdp:36239,genzUsd:194.45,grantMult:0.7,need:4.7,readiness:32.8,index:37.5,tier:"Tier 4: Emerging Opportunity"},
+  {rank:157,country:"Eritrea",iso3:"ERI",pop:3.5,youth1524:0.79,youth1529:1.18,youthPct:22.2,youthUnemp:10.1,youthUnbanked:null,mobile:59.1,internet:null,gdp:null,genzUsd:29.69,grantMult:null,need:23.4,readiness:13.8,index:37.2,tier:"Tier 4: Emerging Opportunity"},
+  {rank:158,country:"Estonia",iso3:"EST",pop:1.4,youth1524:0.14,youth1529:0.21,youthPct:10.4,youthUnemp:19.3,youthUnbanked:1.8,mobile:150.2,internet:93.2,gdp:31428,genzUsd:5.40,grantMult:0.8,need:9.2,readiness:27.8,index:37.0,tier:"Tier 4: Emerging Opportunity"},
+  {rank:159,country:"United States",iso3:"USA",pop:340.1,youth1524:44.71,youth1529:67.07,youthPct:13.1,youthUnemp:null,youthUnbanked:12.3,mobile:112.4,internet:93.5,gdp:84534,genzUsd:1690.09,grantMult:0.3,need:6.4,readiness:30.6,index:37.0,tier:"Tier 4: Emerging Opportunity"},
+  {rank:160,country:"Singapore",iso3:"SGP",pop:6.0,youth1524:0.91,youth1529:1.36,youthPct:15.0,youthUnemp:null,youthUnbanked:1.1,mobile:173.2,internet:94.3,gdp:90674,genzUsd:34.25,grantMult:0.3,need:5.3,readiness:31.5,index:36.8,tier:"Tier 4: Emerging Opportunity"},
+  {rank:161,country:"Latvia",iso3:"LVA",pop:1.9,youth1524:0.19,youth1529:0.29,youthPct:10.3,youthUnemp:13.6,youthUnbanked:10.3,mobile:119.9,internet:92.2,gdp:23409,genzUsd:7.24,grantMult:1.1,need:11.0,readiness:25.7,index:36.7,tier:"Tier 4: Emerging Opportunity"},
+  {rank:162,country:"Luxembourg",iso3:"LUX",pop:0.7,youth1524:0.07,youth1529:0.11,youthPct:10.8,youthUnemp:21.7,youthUnbanked:null,mobile:144.5,internet:99.3,gdp:137782,genzUsd:2.75,grantMult:0.2,need:9.0,readiness:27.7,index:36.6,tier:"Tier 4: Emerging Opportunity"},
+  {rank:163,country:"Hong Kong SAR, China",iso3:"HKG",pop:7.5,youth1524:0.56,youth1529:0.85,youthPct:7.5,youthUnemp:9.5,youthUnbanked:4.1,mobile:319.5,internet:96.0,gdp:54075,genzUsd:21.35,grantMult:0.5,need:3.2,readiness:33.3,index:36.5,tier:"Tier 4: Emerging Opportunity"},
+  {rank:164,country:"Hungary",iso3:"HUN",pop:9.6,youth1524:1.00,youth1529:1.50,youthPct:10.4,youthUnemp:15.1,youthUnbanked:3.6,mobile:105.0,internet:91.5,gdp:23292,genzUsd:37.70,grantMult:1.1,need:10.1,readiness:26.0,index:36.2,tier:"Tier 4: Emerging Opportunity"},
+  {rank:165,country:"France",iso3:"FRA",pop:68.6,youth1524:8.45,youth1529:12.67,youthPct:12.3,youthUnemp:18.6,youthUnbanked:0.0,mobile:116.7,internet:86.8,gdp:46103,genzUsd:319.31,grantMult:0.5,need:7.2,readiness:28.3,index:35.5,tier:"Tier 4: Emerging Opportunity"},
+  {rank:166,country:"Puerto Rico (US)",iso3:"PRI",pop:3.2,youth1524:0.39,youth1529:0.59,youthPct:12.3,youthUnemp:null,youthUnbanked:null,mobile:124.5,internet:87.3,gdp:39344,genzUsd:14.84,grantMult:0.6,need:9.2,readiness:26.0,index:35.2,tier:"Tier 4: Emerging Opportunity"},
+  {rank:167,country:"Czechia",iso3:"CZE",pop:10.9,youth1524:1.13,youth1529:1.70,youthPct:10.4,youthUnemp:9.2,youthUnbanked:8.7,mobile:126.0,internet:86.0,gdp:31823,genzUsd:42.71,grantMult:0.8,need:7.9,readiness:26.9,index:34.8,tier:"Tier 4: Emerging Opportunity"},
+  {rank:168,country:"Lithuania",iso3:"LTU",pop:2.9,youth1524:0.30,youth1529:0.45,youthPct:10.4,youthUnemp:13.7,youthUnbanked:0.0,mobile:137.2,internet:88.5,gdp:29384,genzUsd:11.39,grantMult:0.9,need:7.9,readiness:26.9,index:34.7,tier:"Tier 4: Emerging Opportunity"},
+  {rank:169,country:"Portugal",iso3:"PRT",pop:10.7,youth1524:1.11,youth1529:1.66,youthPct:10.4,youthUnemp:null,youthUnbanked:7.0,mobile:123.0,internet:85.8,gdp:29292,genzUsd:41.86,grantMult:0.9,need:7.7,readiness:26.6,index:34.4,tier:"Tier 4: Emerging Opportunity"},
+  {rank:170,country:"Spain",iso3:"ESP",pop:48.8,youth1524:5.14,youth1529:7.70,youthPct:10.5,youthUnemp:null,youthUnbanked:0.0,mobile:127.7,internet:95.5,gdp:35327,genzUsd:194.15,grantMult:0.7,need:4.4,readiness:29.9,index:34.3,tier:"Tier 4: Emerging Opportunity"},
+  {rank:171,country:"New Zealand",iso3:"NZL",pop:5.3,youth1524:0.67,youth1529:1.00,youthPct:12.7,youthUnemp:14.0,youthUnbanked:4.6,mobile:126.8,internet:93.3,gdp:49205,genzUsd:25.31,grantMult:0.5,need:6.6,readiness:27.6,index:34.2,tier:"Tier 4: Emerging Opportunity"},
+  {rank:172,country:"Cyprus",iso3:"CYP",pop:1.4,youth1524:0.14,youth1529:0.21,youthPct:10.4,youthUnemp:12.9,youthUnbanked:4.7,mobile:148.3,internet:91.2,gdp:38674,genzUsd:5.35,grantMult:0.7,need:6.7,readiness:27.4,index:34.1,tier:"Tier 4: Emerging Opportunity"},
+  {rank:173,country:"Finland",iso3:"FIN",pop:5.6,youth1524:0.63,youth1529:0.94,youthPct:11.1,youthUnemp:18.7,youthUnbanked:1.4,mobile:127.5,internet:93.5,gdp:53150,genzUsd:23.66,grantMult:0.5,need:5.8,readiness:27.6,index:33.4,tier:"Tier 4: Emerging Opportunity"},
+  {rank:174,country:"Denmark",iso3:"DNK",pop:6.0,youth1524:0.72,youth1529:1.08,youthPct:12.1,youthUnemp:11.8,youthUnbanked:2.1,mobile:126.7,internet:98.8,gdp:71026,genzUsd:27.22,grantMult:0.4,need:4.9,readiness:28.4,index:33.3,tier:"Tier 4: Emerging Opportunity"},
+  {rank:175,country:"Germany",iso3:"DEU",pop:83.5,youth1524:7.96,youth1529:11.94,youthPct:9.5,youthUnemp:6.6,youthUnbanked:9.1,mobile:124.7,internet:92.5,gdp:56104,genzUsd:300.99,grantMult:0.4,need:3.5,readiness:29.7,index:33.1,tier:"Tier 4: Emerging Opportunity"},
+  {rank:176,country:"Netherlands",iso3:"NLD",pop:18.0,youth1524:2.17,youth1529:3.25,youthPct:12.1,youthUnemp:8.8,youthUnbanked:0.0,mobile:125.3,internet:97.0,gdp:67520,genzUsd:82.01,grantMult:0.4,need:3.7,readiness:29.1,index:32.9,tier:"Tier 4: Emerging Opportunity"},
+  {rank:177,country:"Norway",iso3:"NOR",pop:5.6,youth1524:0.68,youth1529:1.02,youthPct:12.2,youthUnemp:12.1,youthUnbanked:5.6,mobile:109.7,internet:99.0,gdp:86785,genzUsd:25.71,grantMult:0.3,need:5.8,readiness:27.1,index:32.9,tier:"Tier 4: Emerging Opportunity"},
+  {rank:178,country:"Australia",iso3:"AUS",pop:27.2,youth1524:3.29,youth1529:4.94,youthPct:12.1,youthUnemp:9.4,youthUnbanked:1.2,mobile:112.5,internet:96.1,gdp:64604,genzUsd:124.52,grantMult:0.4,need:4.2,readiness:28.5,index:32.6,tier:"Tier 4: Emerging Opportunity"},
+  {rank:179,country:"Belgium",iso3:"BEL",pop:11.9,youth1524:1.36,youth1529:2.04,youthPct:11.5,youthUnemp:17.3,youthUnbanked:2.0,mobile:103.2,internet:94.6,gdp:56615,genzUsd:51.50,grantMult:0.4,need:5.9,readiness:26.7,index:32.5,tier:"Tier 4: Emerging Opportunity"},
+  {rank:180,country:"Ireland",iso3:"IRL",pop:5.4,youth1524:0.72,youth1529:1.07,youthPct:13.3,youthUnemp:10.4,youthUnbanked:1.5,mobile:110.8,internet:96.9,gdp:112895,genzUsd:27.03,grantMult:0.2,need:5.3,readiness:27.0,index:32.3,tier:"Tier 4: Emerging Opportunity"},
+  {rank:181,country:"Macao SAR, China",iso3:"MAC",pop:0.7,youth1524:0.07,youth1529:0.10,youthPct:9.6,youthUnemp:6.7,youthUnbanked:null,mobile:192.5,internet:89.8,gdp:72005,genzUsd:2.49,grantMult:0.3,need:2.5,readiness:29.7,index:32.2,tier:"Tier 4: Emerging Opportunity"},
+  {rank:182,country:"Canada",iso3:"CAN",pop:41.3,youth1524:4.80,youth1529:7.21,youthPct:11.6,youthUnemp:13.3,youthUnbanked:0.0,mobile:94.2,internet:94.2,gdp:54340,genzUsd:181.57,grantMult:0.5,need:4.5,readiness:27.1,index:31.7,tier:"Tier 4: Emerging Opportunity"},
+  {rank:183,country:"United Kingdom",iso3:"GBR",pop:69.2,youth1524:8.09,youth1529:12.14,youthPct:11.7,youthUnemp:null,youthUnbanked:0.0,mobile:122.8,internet:95.5,gdp:53246,genzUsd:305.95,grantMult:0.5,need:1.7,readiness:30.0,index:31.7,tier:"Tier 4: Emerging Opportunity"},
+  {rank:184,country:"Sint Maarten (Dutch part)",iso3:"SXM",pop:0.0,youth1524:0.01,youth1529:0.01,youthPct:11.8,youthUnemp:null,youthUnbanked:null,mobile:205.4,internet:null,gdp:41473,genzUsd:0.19,grantMult:0.6,need:7.2,readiness:24.0,index:31.2,tier:"Tier 4: Emerging Opportunity"},
+  {rank:185,country:"Sweden",iso3:"SWE",pop:10.6,youth1524:1.21,youth1529:1.82,youthPct:11.4,youthUnemp:null,youthUnbanked:0.0,mobile:140.3,internet:95.7,gdp:57117,genzUsd:45.74,grantMult:0.4,need:1.4,readiness:29.5,index:31.0,tier:"Tier 4: Emerging Opportunity"},
+  {rank:186,country:"Slovenia",iso3:"SVN",pop:2.1,youth1524:0.21,youth1529:0.31,youthPct:9.7,youthUnemp:null,youthUnbanked:1.4,mobile:129.2,internet:90.4,gdp:34301,genzUsd:7.78,grantMult:0.7,need:4.6,readiness:26.2,index:30.7,tier:"Tier 4: Emerging Opportunity"},
+  {rank:187,country:"Austria",iso3:"AUT",pop:9.2,youth1524:0.91,youth1529:1.37,youthPct:9.9,youthUnemp:10.4,youthUnbanked:0.0,mobile:121.8,internet:95.3,gdp:58269,genzUsd:34.45,grantMult:0.4,need:2.6,readiness:27.8,index:30.4,tier:"Tier 4: Emerging Opportunity"},
+  {rank:188,country:"Malta",iso3:"MLT",pop:0.6,youth1524:0.05,youth1529:0.08,youthPct:9.0,youthUnemp:9.1,youthUnbanked:3.9,mobile:140.6,internet:92.1,gdp:43899,genzUsd:1.93,grantMult:0.6,need:4.3,readiness:25.9,index:30.2,tier:"Tier 4: Emerging Opportunity"},
+  {rank:189,country:"Iceland",iso3:"ISL",pop:0.4,youth1524:0.05,youth1529:0.08,youthPct:13.0,youthUnemp:8.8,youthUnbanked:0.0,mobile:121.5,internet:98.0,gdp:86041,genzUsd:1.89,grantMult:0.3,need:4.4,readiness:25.4,index:29.8,tier:"Tier 4: Emerging Opportunity"},
+  {rank:190,country:"Curacao",iso3:"CUW",pop:0.2,youth1524:0.02,youth1529:0.03,youthPct:12.4,youthUnemp:null,youthUnbanked:null,mobile:93.8,internet:null,gdp:22833,genzUsd:0.73,grantMult:1.1,need:17.4,readiness:12.3,index:29.7,tier:"Tier 4: Emerging Opportunity"},
+  {rank:191,country:"Switzerland",iso3:"CHE",pop:9.0,youth1524:0.90,youth1529:1.35,youthPct:10.0,youthUnemp:null,youthUnbanked:1.9,mobile:130.2,internet:97.3,gdp:103998,genzUsd:33.92,grantMult:0.2,need:0.5,readiness:28.7,index:29.2,tier:"Tier 4: Emerging Opportunity"},
+  {rank:192,country:"Andorra",iso3:"AND",pop:0.1,youth1524:0.01,youth1529:0.01,youthPct:11.0,youthUnemp:null,youthUnbanked:null,mobile:156.1,internet:94.2,gdp:49304,genzUsd:0.34,grantMult:0.5,need:2.2,readiness:25.8,index:28.0,tier:"Tier 4: Emerging Opportunity"},
+  {rank:193,country:"Aruba",iso3:"ABW",pop:0.1,youth1524:0.01,youth1529:0.02,youthPct:12.7,youthUnemp:null,youthUnbanked:null,mobile:130.7,internet:null,gdp:39499,genzUsd:0.52,grantMult:0.6,need:9.9,readiness:16.2,index:26.0,tier:"Tier 4: Emerging Opportunity"},
+  {rank:194,country:"Liechtenstein",iso3:"LIE",pop:0.0,youth1524:0.00,youth1529:0.01,youthPct:10.4,youthUnemp:null,youthUnbanked:null,mobile:127.1,internet:98.1,gdp:206781,genzUsd:0.16,grantMult:0.1,need:0.6,readiness:24.2,index:24.9,tier:"Tier 5: Long-Term"},
+  {rank:195,country:"Cuba",iso3:"CUB",pop:11.0,youth1524:1.24,youth1529:1.86,youthPct:11.3,youthUnemp:4.3,youthUnbanked:null,mobile:69.6,internet:69.6,gdp:null,genzUsd:46.90,grantMult:null,need:4.1,readiness:20.3,index:24.4,tier:"Tier 5: Long-Term"},
+  {rank:196,country:"San Marino",iso3:"SMR",pop:0.0,youth1524:0.00,youth1529:0.01,youthPct:10.3,youthUnemp:null,youthUnbanked:null,mobile:120.3,internet:97.3,gdp:59880,genzUsd:0.13,grantMult:0.4,need:0.5,readiness:23.6,index:24.1,tier:"Tier 5: Long-Term"},
+  {rank:197,country:"Korea, Dem. People's Rep.",iso3:"PRK",pop:26.5,youth1524:3.44,youth1529:5.16,youthPct:13.0,youthUnemp:7.8,youthUnbanked:null,mobile:24.1,internet:null,gdp:null,genzUsd:130.06,grantMult:null,need:8.4,readiness:11.9,index:20.3,tier:"Tier 5: Long-Term"},
+  {rank:198,country:"British Virgin Islands",iso3:"VGB",pop:0.0,youth1524:0.01,youth1529:0.01,youthPct:13.0,youthUnemp:null,youthUnbanked:null,mobile:90.8,internet:null,gdp:null,genzUsd:0.19,grantMult:null,need:9.1,readiness:10.9,index:20.0,tier:"Tier 5: Long-Term"},
+  {rank:199,country:"Faroe Islands",iso3:"FRO",pop:0.1,youth1524:0.01,youth1529:0.01,youthPct:13.9,youthUnemp:null,youthUnbanked:null,mobile:105.8,internet:null,gdp:74120,genzUsd:0.29,grantMult:0.3,need:6.9,readiness:12.7,index:19.6,tier:"Tier 5: Long-Term"},
+  {rank:200,country:"Gibraltar",iso3:"GIB",pop:0.0,youth1524:0.00,youth1529:0.01,youthPct:12.5,youthUnemp:null,youthUnbanked:null,mobile:97.6,internet:null,gdp:null,genzUsd:0.19,grantMult:null,need:7.6,readiness:11.7,index:19.3,tier:"Tier 5: Long-Term"},
+  {rank:201,country:"Greenland",iso3:"GRL",pop:0.1,youth1524:0.01,youth1529:0.01,youthPct:12.3,youthUnemp:null,youthUnbanked:null,mobile:118.6,internet:null,gdp:58499,genzUsd:0.27,grantMult:0.4,need:4.2,readiness:14.2,index:18.5,tier:"Tier 5: Long-Term"},
+  {rank:202,country:"Cayman Islands",iso3:"CYM",pop:0.1,youth1524:0.01,youth1529:0.01,youthPct:10.3,youthUnemp:null,youthUnbanked:null,mobile:139.3,internet:null,gdp:99144,genzUsd:0.29,grantMult:0.3,need:0.6,readiness:16.7,index:17.3,tier:"Tier 5: Long-Term"},
+  {rank:203,country:"Guam",iso3:"GUM",pop:0.2,youth1524:0.02,youth1529:0.04,youthPct:14.0,youthUnemp:12.9,youthUnbanked:null,mobile:null,internet:null,gdp:null,genzUsd:0.89,grantMult:null,need:12.5,readiness:3.3,index:15.8,tier:"Tier 5: Long-Term"},
+  {rank:204,country:"Virgin Islands (U.S.)",iso3:"VIR",pop:0.1,youth1524:0.01,youth1529:0.02,youthPct:11.4,youthUnemp:null,youthUnbanked:null,mobile:91.5,internet:null,gdp:null,genzUsd:0.45,grantMult:null,need:4.1,readiness:11.2,index:15.3,tier:"Tier 5: Long-Term"},
+  {rank:205,country:"Channel Islands",iso3:"CHI",pop:0.2,youth1524:0.02,youth1529:0.03,youthPct:10.6,youthUnemp:13.7,youthUnbanked:null,mobile:null,internet:null,gdp:74586,genzUsd:0.67,grantMult:0.3,need:5.8,readiness:2.2,index:8.1,tier:"Tier 5: Long-Term"}
+];
+
+// ===== TIER COLORS =====
+const TIER_COLORS = {
+  'Tier 1: Prime Target': '#E74C3C',
+  'Tier 2: Strong Opportunity': '#F39C12',
+  'Tier 3: Moderate Opportunity': '#3498DB',
+  'Tier 4: Emerging Opportunity': '#95A5A6',
+  'Tier 5: Long-Term': '#D5D8DC'
+};
+
+const TIER_SHORT = {
+  'Tier 1: Prime Target': 'Tier 1',
+  'Tier 2: Strong Opportunity': 'Tier 2',
+  'Tier 3: Moderate Opportunity': 'Tier 3',
+  'Tier 4: Emerging Opportunity': 'Tier 4',
+  'Tier 5: Long-Term': 'Tier 5'
+};
+
+function tierColor(tier) { return TIER_COLORS[tier] || '#E0E0E0'; }
+function tierNum(tier) {
+  if (tier.includes('1')) return 1;
+  if (tier.includes('2')) return 2;
+  if (tier.includes('3')) return 3;
+  if (tier.includes('4')) return 4;
+  return 5;
+}
+function tierBadgeClass(tier) { return 't' + tierNum(tier); }
+
+function fmt(v, dec) {
+  if (v === null || v === undefined || v === '') return '--';
+  return Number(v).toLocaleString('en-US', { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 });
+}
+function fmtDec(v, dec) {
+  if (v === null || v === undefined || v === '') return '--';
+  return Number(v).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+// ===== SUMMARY CARDS =====
+(function() {
+  let totalYouth1524 = 0, totalYouth1529 = 0, totalGenzUsd = 0;
+  let unbankedSum = 0, unbankedCount = 0;
+  DATA.forEach(d => {
+    totalYouth1524 += d.youth1524 || 0;
+    totalYouth1529 += d.youth1529 || 0;
+    totalGenzUsd += d.genzUsd || 0;
+    if (d.youthUnbanked !== null && d.youthUnbanked !== undefined) {
+      unbankedSum += d.youthUnbanked;
+      unbankedCount++;
+    }
+  });
+  const avgUnbanked = unbankedCount > 0 ? (unbankedSum / unbankedCount) : 0;
+
+  document.getElementById('card-youth1524').textContent = fmtDec(totalYouth1524 / 1000, 2) + ' Billion';
+  document.getElementById('card-youth1529').textContent = fmtDec(totalYouth1529 / 1000, 2) + ' Billion';
+  document.getElementById('card-unbanked').textContent = fmtDec(avgUnbanked, 1) + '%';
+  const totalGenzGx = totalGenzUsd / 120;
+  document.getElementById('card-allocation').textContent = 'GX ' + fmtDec(totalGenzGx / 1000, 2) + 'T';
+  document.getElementById('card-allocation').nextElementSibling.textContent = 'USD ' + fmtDec(totalGenzUsd / 1000, 1) + 'T at genesis rate (1 GX = USD 120)';
+})();
+
+// ===== TOGGLE FUNCTIONS =====
+function toggleAbout() {
+  const btn = document.getElementById('aboutToggle');
+  const content = document.getElementById('aboutContent');
+  btn.classList.toggle('collapsed');
+  content.classList.toggle('hidden');
+}
+function toggleMethodology() {
+  const btn = document.getElementById('methodToggle');
+  const content = document.getElementById('methodContent');
+  btn.classList.toggle('collapsed');
+  content.classList.toggle('hidden');
+}
+
+// ===== CHARTS =====
+const top20Index = DATA.slice(0, 20);
+const top20Pop = [...DATA].sort((a, b) => (b.youth1524 || 0) - (a.youth1524 || 0)).slice(0, 20);
+
+function makeBarChart(canvasId, data, labelKey, valueKey, title) {
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: data.map(d => d.country),
+      datasets: [{
+        label: title,
+        data: data.map(d => d[valueKey]),
+        backgroundColor: data.map(d => tierColor(d.tier)),
+        borderWidth: 0,
+        borderRadius: 4,
+        barPercentage: 0.75
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const d = data[ctx.dataIndex];
+              const tier = TIER_SHORT[d.tier] || d.tier;
+              if (valueKey === 'index') return 'Index: ' + fmtDec(ctx.raw, 1) + ' | ' + tier;
+              return fmtDec(ctx.raw, 2) + 'M | ' + tier;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(0,0,0,0.06)' },
+          ticks: { font: { size: 11 } }
+        },
+        y: {
+          ticks: { font: { size: 11, weight: '500' } }
+        }
+      }
+    }
+  });
+}
+
+makeBarChart('chartIndex', top20Index, 'country', 'index', 'Gen Z Impact Index');
+makeBarChart('chartYouthPop', top20Pop, 'country', 'youth1524', 'Youth Population 15-24 (M)');
+
+// Resize chart canvases
+document.querySelectorAll('.chart-box canvas').forEach(c => { c.style.height = '480px'; });
+
+// ===== DATA TABLE =====
+let sortCol = 'rank';
+let sortAsc = true;
+let currentData = [...DATA];
+
+function renderTable(data) {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = data.map(d => {
+    const tn = tierNum(d.tier);
+    return '<tr class="row-t' + tn + '" onclick="showCountry(\'' + d.country.replace(/'/g, "\\'") + '\')">' +
+      '<td>' + d.rank + '</td>' +
+      '<td><strong>' + d.country + '</strong></td>' +
+      '<td>' + fmtDec(d.pop, 1) + '</td>' +
+      '<td>' + fmtDec(d.youth1524, 2) + '</td>' +
+      '<td>' + fmtDec(d.youth1529, 2) + '</td>' +
+      '<td>' + fmtDec(d.youthPct, 1) + '%</td>' +
+      '<td>' + (d.youthUnemp !== null ? fmtDec(d.youthUnemp, 1) + '%' : '--') + '</td>' +
+      '<td>' + (d.youthUnbanked !== null ? fmtDec(d.youthUnbanked, 1) + '%' : '--') + '</td>' +
+      '<td>' + (d.mobile !== null ? fmtDec(d.mobile, 1) : '--') + '</td>' +
+      '<td>' + (d.internet !== null ? fmtDec(d.internet, 1) + '%' : '--') + '</td>' +
+      '<td>' + (d.gdp !== null ? '$' + fmt(d.gdp) : '--') + '</td>' +
+      '<td>' + fmtDec(d.genzUsd, 2) + '</td>' +
+      '<td>' + (d.grantMult !== null ? fmtDec(d.grantMult, 1) + 'x' : '--') + '</td>' +
+      '<td>' + fmtDec(d.need, 1) + '</td>' +
+      '<td>' + fmtDec(d.readiness, 1) + '</td>' +
+      '<td><strong>' + fmtDec(d.index, 1) + '</strong></td>' +
+      '<td><span class="tier-badge ' + tierBadgeClass(d.tier) + '">' + TIER_SHORT[d.tier] + '</span></td>' +
+      '</tr>';
+  }).join('');
+  document.getElementById('resultCount').textContent = data.length + ' of ' + DATA.length + ' countries';
+}
+
+function filterAndSort() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const tierVal = document.getElementById('tierFilter').value;
+  let filtered = DATA.filter(d => {
+    const matchSearch = !search || d.country.toLowerCase().includes(search) || d.iso3.toLowerCase().includes(search);
+    const matchTier = !tierVal || d.tier.includes(tierVal);
+    return matchSearch && matchTier;
+  });
+
+  filtered.sort((a, b) => {
+    let va = a[sortCol], vb = b[sortCol];
+    if (va === null || va === undefined) va = sortAsc ? Infinity : -Infinity;
+    if (vb === null || vb === undefined) vb = sortAsc ? Infinity : -Infinity;
+    if (typeof va === 'string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    return sortAsc ? va - vb : vb - va;
+  });
+
+  currentData = filtered;
+  renderTable(filtered);
+}
+
+// Column sort
+const colMap = {
+  'rank': 'rank', 'country': 'country', 'pop': 'pop', 'youth1524': 'youth1524',
+  'youth1529': 'youth1529', 'youthPct': 'youthPct', 'youthUnemp': 'youthUnemp',
+  'youthUnbanked': 'youthUnbanked', 'mobile': 'mobile', 'internet': 'internet',
+  'gdp': 'gdp', 'genzUsd': 'genzUsd', 'grantMult': 'grantMult', 'need': 'need',
+  'readiness': 'readiness', 'index': 'index', 'tier': 'tier'
+};
+
+document.querySelectorAll('.data-table th').forEach(th => {
+  th.addEventListener('click', function() {
+    const col = this.dataset.col;
+    if (!col) return;
+    if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = col === 'rank' || col === 'country'; }
+    filterAndSort();
+    // Update arrows
+    document.querySelectorAll('.data-table th .sort-arrow').forEach(a => a.classList.remove('active'));
+    this.querySelector('.sort-arrow').classList.add('active');
+    this.querySelector('.sort-arrow').innerHTML = sortAsc ? '&#9650;' : '&#9660;';
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', filterAndSort);
+document.getElementById('tierFilter').addEventListener('change', filterAndSort);
+
+// Initial render
+filterAndSort();
+
+// ===== COUNTRY MODAL =====
+function showCountry(name) {
+  const d = DATA.find(r => r.country === name);
+  if (!d) return;
+
+  const tn = tierNum(d.tier);
+  document.getElementById('modalCountry').textContent = d.country;
+  document.getElementById('modalSubtitle').innerHTML = 'Rank #' + d.rank + ' of 205 &nbsp;|&nbsp; <span class="tier-badge t' + tn + '">' + TIER_SHORT[d.tier] + '</span>';
+
+  document.getElementById('modalScores').innerHTML =
+    '<div class="modal-score-card"><div class="score-val">' + fmtDec(d.index, 1) + '</div><div class="score-label">Gen Z Impact Index</div></div>' +
+    '<div class="modal-score-card"><div class="score-val">' + fmtDec(d.need, 1) + '</div><div class="score-label">Need Score</div></div>' +
+    '<div class="modal-score-card"><div class="score-val">' + fmtDec(d.readiness, 1) + '</div><div class="score-label">Readiness Score</div></div>';
+
+  document.getElementById('modalStats').innerHTML =
+    '<div class="modal-stat"><div class="stat-label">Total Population</div><div class="stat-val">' + fmtDec(d.pop, 1) + 'M</div></div>' +
+    '<div class="modal-stat"><div class="stat-label">Youth 15-24</div><div class="stat-val">' + fmtDec(d.youth1524, 2) + 'M</div></div>' +
+    '<div class="modal-stat"><div class="stat-label">Youth 15-29 (Est.)</div><div class="stat-val">' + fmtDec(d.youth1529, 2) + 'M</div></div>' +
+    '<div class="modal-stat"><div class="stat-label">Youth Share (15-24)</div><div class="stat-val">' + fmtDec(d.youthPct, 1) + '%</div></div>' +
+    '<div class="modal-stat"><div class="stat-label">Youth Unemployment</div><div class="stat-val">' + (d.youthUnemp !== null ? fmtDec(d.youthUnemp, 1) + '%' : '--') + '</div></div>' +
+    '<div class="modal-stat"><div class="stat-label">Youth Unbanked</div><div class="stat-val">' + (d.youthUnbanked !== null ? fmtDec(d.youthUnbanked, 1) + '%' : '--') + '</div></div>' +
+    '<div class="modal-stat"><div class="stat-label">Mobile / 100</div><div class="stat-val">' + (d.mobile !== null ? fmtDec(d.mobile, 1) : '--') + '</div></div>' +
+    '<div class="modal-stat"><div class="stat-label">Internet Users</div><div class="stat-val">' + (d.internet !== null ? fmtDec(d.internet, 1) + '%' : '--') + '</div></div>' +
+    '<div class="modal-stat"><div class="stat-label">GDP per Capita</div><div class="stat-val">' + (d.gdp !== null ? '$' + fmt(d.gdp) : '--') + '</div></div>' +
+    '<div class="modal-stat"><div class="stat-label">Grant Impact Multiple</div><div class="stat-val">' + (d.grantMult !== null ? fmtDec(d.grantMult, 1) + 'x' : '--') + '</div></div>';
+
+  // Allocation section
+  const gxPerPerson = 210;
+  const usdPerPerson = 25200;
+  const totalGx = d.youth1529 * 1000000 * gxPerPerson;
+  const totalUsd = d.genzUsd;
+
+  document.getElementById('modalAllocation').innerHTML =
+    '<h4>GX Allocation for Gen Z in ' + d.country + '</h4>' +
+    '<div class="modal-alloc-grid">' +
+    '<div class="modal-alloc-item"><div class="a-label">Total Gen Z Allocation (USD)</div><div class="a-val">USD ' + fmtDec(totalUsd, 2) + 'B</div></div>' +
+    '<div class="modal-alloc-item"><div class="a-label">Total Gen Z Allocation (GX)</div><div class="a-val">GX ' + fmtDec(totalGx / 1e9, 2) + 'B</div></div>' +
+    '<div class="modal-alloc-item"><div class="a-label">Per-Person Grant</div><div class="a-val">GX ' + fmt(gxPerPerson) + '</div></div>' +
+    '<div class="modal-alloc-item"><div class="a-label">Per-Person Grant (USD)</div><div class="a-val">USD ' + fmt(usdPerPerson) + '</div></div>' +
+    '</div>' +
+    '<div style="font-size:0.78rem;color:var(--text-secondary);margin-top:10px;">' +
+    'Calculation: ' + fmtDec(d.youth1529, 2) + 'M estimated youth (15-29) x GX ' + fmt(gxPerPerson) + ' average grant = GX ' + fmtDec(totalGx / 1e9, 2) + 'B (' + fmtDec(totalUsd, 2) + 'B USD at genesis rate)' +
+    '</div>';
+
+  // Dynamic insight
+  let insightHtml = '<h5>What This Means for Gen Z in ' + d.country + '</h5>';
+  let hasInsight = false;
+
+  if (d.grantMult !== null && d.grantMult > 10) {
+    insightHtml += '<p>The average GX grant of USD 25,200 represents ' + fmtDec(d.grantMult, 1) + ' years of average income - enough to launch a business, fund education, or establish financial independence.</p>';
+    hasInsight = true;
+  }
+  if (d.youthUnemp !== null && d.youthUnemp > 20) {
+    insightHtml += '<p>With ' + fmtDec(d.youthUnemp, 1) + '% youth unemployment, GX provides an economic on-ramp that the traditional job market cannot.</p>';
+    hasInsight = true;
+  }
+  if (d.youthUnbanked !== null && d.youthUnbanked > 50) {
+    insightHtml += '<p>' + fmtDec(d.youthUnbanked, 1) + '% of young adults lack a bank account. GX requires no bank - just a mobile phone and verified identity.</p>';
+    hasInsight = true;
+  }
+
+  if (!hasInsight) {
+    if (d.grantMult !== null && d.grantMult <= 1) {
+      insightHtml += '<p>In a high-income economy, GX serves as supplementary capital for youth entrepreneurship and education, rather than primary income replacement.</p>';
+    } else {
+      insightHtml += '<p>GX offers ' + d.country + '\'s ' + fmtDec(d.youth1529, 2) + 'M young people a direct path to economic participation - a digital-native grant requiring no bank account, no collateral, and no capital.</p>';
+    }
+  }
+
+  document.getElementById('modalInsight').innerHTML = insightHtml;
+
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ===== WORLD MAP =====
+const ISO3_TO_NUM = {
+  'AFG':'004','ALB':'008','DZA':'012','AGO':'024','ARG':'032','ARM':'051',
+  'AUS':'036','AUT':'040','AZE':'031','BHS':'044','BHR':'048','BGD':'050',
+  'BRB':'052','BLR':'112','BEL':'056','BLZ':'084','BEN':'204','BTN':'064',
+  'BOL':'068','BIH':'070','BWA':'072','BRA':'076','BRN':'096','BGR':'100',
+  'BFA':'854','BDI':'108','CPV':'132','KHM':'116','CMR':'120','CAN':'124',
+  'CAF':'140','TCD':'148','CHL':'152','CHN':'156','COL':'170','COM':'174',
+  'COG':'178','COD':'180','CRI':'188','CIV':'384','HRV':'191','CUB':'192',
+  'CYP':'196','CZE':'203','DNK':'208','DJI':'262','DMA':'212','DOM':'214',
+  'ECU':'218','EGY':'818','SLV':'222','GNQ':'226','ERI':'232','EST':'233',
+  'SWZ':'748','ETH':'231','FJI':'242','FIN':'246','FRA':'250','GAB':'266',
+  'GMB':'270','GEO':'268','DEU':'276','GHA':'288','GRC':'300','GRD':'308',
+  'GTM':'320','GIN':'324','GNB':'624','GUY':'328','HTI':'332','HND':'340',
+  'HUN':'348','ISL':'352','IND':'356','IDN':'360','IRN':'364','IRQ':'368',
+  'IRL':'372','ISR':'376','ITA':'380','JAM':'388','JPN':'392','JOR':'400',
+  'KAZ':'398','KEN':'404','KIR':'296','PRK':'408','KOR':'410','KWT':'414',
+  'KGZ':'417','LAO':'418','LVA':'428','LBN':'422','LSO':'426','LBR':'430',
+  'LBY':'434','LTU':'440','LUX':'442','MDG':'450','MWI':'454','MYS':'458',
+  'MDV':'462','MLI':'466','MLT':'470','MHL':'584','MRT':'478','MUS':'480',
+  'MEX':'484','FSM':'583','MDA':'498','MNG':'496','MNE':'499','MAR':'504',
+  'MOZ':'508','MMR':'104','NAM':'516','NRU':'520','NPL':'524','NLD':'528',
+  'NZL':'554','NIC':'558','NER':'562','NGA':'566','MKD':'807','NOR':'578',
+  'OMN':'512','PAK':'586','PLW':'585','PAN':'591','PNG':'598','PRY':'600',
+  'PER':'604','PHL':'608','POL':'616','PRT':'620','QAT':'634','ROU':'642',
+  'RUS':'643','RWA':'646','KNA':'659','LCA':'662','VCT':'670','WSM':'882',
+  'STP':'678','SAU':'682','SEN':'686','SRB':'688','SYC':'690','SLE':'694',
+  'SGP':'702','SVK':'703','SVN':'705','SLB':'090','SOM':'706','ZAF':'710',
+  'SSD':'728','ESP':'724','LKA':'144','SDN':'729','SUR':'740','SWE':'752',
+  'CHE':'756','SYR':'760','TJK':'762','TZA':'834','THA':'764','TLS':'626',
+  'TGO':'768','TON':'776','TTO':'780','TUN':'788','TUR':'792','TKM':'795',
+  'TUV':'798','UGA':'800','UKR':'804','ARE':'784','GBR':'826','USA':'840',
+  'URY':'858','UZB':'860','VUT':'548','VEN':'862','VNM':'704','YEM':'887',
+  'ZMB':'894','ZWE':'716','PSE':'275','XKX':'983','HKG':'344','MAC':'446',
+  'TWN':'158','CUW':'531','ABW':'533','ATG':'028','SXM':'534','SMR':'674',
+  'LIE':'438','MCO':'492','TCA':'796','PRI':'630','GRL':'304','FRO':'234','CHI':'832',
+  'AND':'020','GUM':'316','VIR':'850','VGB':'092','CYM':'136','GIB':'292'
+};
+const NUM_TO_ISO3 = {};
+Object.keys(ISO3_TO_NUM).forEach(k => { NUM_TO_ISO3[ISO3_TO_NUM[k]] = k; });
+
+// Tier counts
+const tierCounts = {};
+DATA.forEach(d => { tierCounts[d.tier] = (tierCounts[d.tier] || 0) + 1; });
+
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
+  const countries = topojson.feature(world, world.objects.countries);
+
+  const dataByNumId = {};
+  DATA.forEach(d => {
+    const numId = ISO3_TO_NUM[d.iso3];
+    if (numId) dataByNumId[numId] = d;
+  });
+
+  const container = document.getElementById('mapContainer');
+  const width = container.clientWidth;
+  const height = Math.max(450, width * 0.5);
+
+  const svg = d3.select('#mapContainer')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .attr('viewBox', '0 0 ' + width + ' ' + height)
+    .style('max-width', '100%')
+    .style('cursor', 'grab');
+
+  const g = svg.append('g');
+
+  const projection = d3.geoNaturalEarth1()
+    .fitSize([width - 20, height - 20], countries)
+    .translate([width / 2, height / 2]);
+
+  const path = d3.geoPath().projection(projection);
+
+  const zoom = d3.zoom()
+    .scaleExtent([1, 12])
+    .on('zoom', (event) => {
+      g.attr('transform', event.transform);
+      g.selectAll('path').attr('stroke-width', 0.5 / event.transform.k);
+    });
+
+  svg.call(zoom);
+  svg.on('dblclick.zoom', null);
+  svg.on('dblclick', () => {
+    svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity);
+  });
+
+  const tooltip = d3.select('#mapContainer')
+    .append('div')
+    .style('position', 'absolute')
+    .style('background', 'rgba(26,26,46,0.9)')
+    .style('color', '#fff')
+    .style('padding', '8px 14px')
+    .style('border-radius', '6px')
+    .style('font-size', '0.82rem')
+    .style('pointer-events', 'none')
+    .style('opacity', 0)
+    .style('z-index', '10')
+    .style('white-space', 'nowrap');
+
+  container.style.position = 'relative';
+  container.style.overflow = 'hidden';
+
+  g.selectAll('path')
+    .data(countries.features)
+    .join('path')
+    .attr('d', path)
+    .attr('fill', d => {
+      const row = dataByNumId[d.id];
+      if (!row) return '#E0E0E0';
+      return tierColor(row.tier);
+    })
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 0.5)
+    .style('cursor', d => dataByNumId[d.id] ? 'pointer' : 'default')
+    .on('mouseover', function(event, d) {
+      const row = dataByNumId[d.id];
+      d3.select(this).attr('stroke', '#470A60').attr('stroke-width', function() {
+        const k = d3.zoomTransform(svg.node()).k;
+        return 2 / k;
+      });
+      const name = row ? row.country : (d.properties ? d.properties.name : 'Unknown');
+      const tierText = row ? ' | ' + (TIER_SHORT[row.tier] || row.tier) + ' | Index: ' + fmtDec(row.index, 1) : ' | No data';
+      tooltip
+        .html('<strong>' + name + '</strong>' + tierText)
+        .style('opacity', 1);
+    })
+    .on('mousemove', function(event) {
+      const [mx, my] = d3.pointer(event, container);
+      tooltip
+        .style('left', (mx + 15) + 'px')
+        .style('top', (my - 10) + 'px');
+    })
+    .on('mouseout', function() {
+      const k = d3.zoomTransform(svg.node()).k;
+      d3.select(this).attr('stroke', '#fff').attr('stroke-width', 0.5 / k);
+      tooltip.style('opacity', 0);
+    })
+    .on('click', function(event, d) {
+      const row = dataByNumId[d.id];
+      if (row) showCountry(row.country);
+    });
+
+  // Legend
+  const legendDiv = document.getElementById('mapLegend');
+  const legendItems = [
+    { label: 'Tier 1: Prime Target', color: TIER_COLORS['Tier 1: Prime Target'], count: tierCounts['Tier 1: Prime Target'] || 0 },
+    { label: 'Tier 2: Strong Opportunity', color: TIER_COLORS['Tier 2: Strong Opportunity'], count: tierCounts['Tier 2: Strong Opportunity'] || 0 },
+    { label: 'Tier 3: Moderate Opportunity', color: TIER_COLORS['Tier 3: Moderate Opportunity'], count: tierCounts['Tier 3: Moderate Opportunity'] || 0 },
+    { label: 'Tier 4: Emerging Opportunity', color: TIER_COLORS['Tier 4: Emerging Opportunity'], count: tierCounts['Tier 4: Emerging Opportunity'] || 0 },
+    { label: 'Tier 5: Long-Term', color: TIER_COLORS['Tier 5: Long-Term'], count: tierCounts['Tier 5: Long-Term'] || 0 },
+    { label: 'No data', color: '#E0E0E0', count: '' }
+  ];
+  legendDiv.innerHTML = '<div style="font-size:0.82rem;font-weight:700;color:#470A60;margin-bottom:12px;">Tier Legend</div>' +
+    legendItems.map(item =>
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">' +
+      '<div style="width:16px;height:16px;border-radius:4px;background:' + item.color + ';flex-shrink:0;"></div>' +
+      '<div style="font-size:0.78rem;color:#555;">' + item.label + (item.count !== '' ? ' (' + item.count + ')' : '') + '</div>' +
+      '</div>'
+    ).join('');
+});
+</script>
+</body>
+</html>

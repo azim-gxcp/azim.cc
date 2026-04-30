@@ -1,21 +1,27 @@
+"use client";
+
 import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
+import { useState } from "react";
 
 export function FeatureCard({ post }: { post: PostMeta }) {
-  const kickerColor = "#6d28d9";
+  const kickerColor = "var(--brand)"; // You can customize this based on post.kicker if needed
+  const [hovered, setHovered] = useState(false);
 
   return (
-    <Link href={`/blog/${post.slug}`} className="block no-underline mb-[72px]">
+    <Link href={`/blog/${post.slug}`} className="block no-underline mb-18">
       <article
-        className="relative overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
+        className="relative overflow-hidden transition-all duration-300 hover:-translate-y-0.5 bg-blur-lg "
         style={{
-          background: "color-mix(in oklab, #fff 91%, #000)",
+          background: "var(--bg-glass-card)",
           color: "#18181b",
           borderRadius: "12px",
           padding: "clamp(36px, 5vw, 56px) clamp(24px, 4vw, 48px)",
           boxShadow: "var(--shadow-md)",
           border: "1px solid var(--border)",
         }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
 
         <span
@@ -32,7 +38,7 @@ export function FeatureCard({ post }: { post: PostMeta }) {
         >
           &#9733;
         </span>
-        <div className="relative z-[1]">
+        <div className="relative z-1">
           <div
             style={{
               fontFamily: "var(--font-body)",
@@ -47,7 +53,7 @@ export function FeatureCard({ post }: { post: PostMeta }) {
             {post.kicker} &middot; {post.readTime} min &middot; Featured
           </div>
           <h2
-            className="m-0 mb-4"
+            className="m-0 mb-4 transition-colors duration-150"
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)",
@@ -55,6 +61,7 @@ export function FeatureCard({ post }: { post: PostMeta }) {
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
               fontVariationSettings: "'opsz' 96",
+            color: hovered ? "var(--brand)" : "var(--fg1)",
             }}
           >
             {post.title}
@@ -68,6 +75,7 @@ export function FeatureCard({ post }: { post: PostMeta }) {
               fontStyle: "italic",
               maxWidth: "56ch",
               opacity: 0.8,
+              color: "var(--fg1)",
             }}
           >
             {post.lede}
@@ -78,6 +86,7 @@ export function FeatureCard({ post }: { post: PostMeta }) {
               fontSize: "13px",
               fontStyle: "italic",
               opacity: 0.65,
+              color: "var(--fg1)",
             }}
           >
             {post.author} &middot; {post.date}

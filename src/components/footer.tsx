@@ -3,14 +3,16 @@ import Link from "next/link";
 export function Footer() {
   return (
     <footer
-      className="mt-24"
+      className="relative mt-24 bg-[#470a70] border-[#47a9ff]/15"
       style={{
-        background: "var(--bg-inverse)",
-        color: "var(--fg-inverse)",
+        background: "radial-gradient(ellipse 80% 100% at bottom center, #7c1da9, #340766)",
       }}
     >
+
+    <div className="absolute w-[calc(100%-20px)] h-[calc(100%-20px)] top-2.5 left-2.5 border border-white/50 " />
+
       <div
-        className="max-w-[1200px] mx-auto px-5 md:px-10 pt-[72px] pb-12 grid gap-16 md:grid-cols-[1.2fr_2fr]"
+        className="relative max-w-300 mx-auto px-5 md:px-10 pt-18 pb-12 grid gap-16 md:grid-cols-[1.2fr_2fr]"
       >
         <div>
           <div
@@ -20,6 +22,7 @@ export function Footer() {
               fontWeight: 600,
               letterSpacing: "-0.02em",
               marginBottom: "16px",
+              color: "white",
             }}
           >
             M Azim Abdul Majeed
@@ -50,7 +53,7 @@ export function Footer() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                color: "rgba(255,255,255,0.65)",
+                color: "#17a210",
                 marginBottom: "4px",
               }}
             >
@@ -91,7 +94,7 @@ export function Footer() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                color: "rgba(255,255,255,0.65)",
+                color: "#17a210",
                 marginBottom: "4px",
               }}
             >
@@ -132,7 +135,7 @@ export function Footer() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                color: "rgba(255,255,255,0.65)",
+                color: "#17a210",
                 marginBottom: "4px",
               }}
             >

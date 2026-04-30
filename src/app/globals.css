@@ -153,6 +153,8 @@
   --border: var(--zinc-200);
   --border-strong: var(--zinc-300);
 
+  --bg-glass-card: rgba(255, 255, 255, 0.6);
+
   --link: var(--purple-4);
   --link-hover: var(--purple-3);
 
@@ -202,6 +204,8 @@
   --bg-sunken: #0c0c0d;
   --bg-muted: var(--zinc-800);
   --bg-inverse: var(--zinc-50);
+
+  --bg-glass-card: rgba(57, 57, 62, 0.6);
 
   --fg1: var(--zinc-50);
   --fg2: var(--zinc-300);

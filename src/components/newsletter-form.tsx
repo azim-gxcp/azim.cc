@@ -41,16 +41,16 @@ export function NewsletterForm({
 
   return (
     <section
-      className="mt-[72px]"
+      className="mt-18"
       style={{
         padding: "clamp(36px, 5vw, 64px) clamp(24px, 4vw, 48px)",
         borderRadius: "12px",
-        background: isHero ? "var(--purple-1)" : "var(--bg-sunken)",
+        // background: isHero ? "var(--purple-1)" : "var(--bg-sunken)",
         color: isHero ? "var(--fg-inverse)" : "var(--fg1)",
         border: isHero ? "none" : "1px solid var(--border-subtle)",
       }}
     >
-      <div className="max-w-[560px] mx-auto text-center">
+      <div className="max-w-140 mx-auto text-center">
         <div
           style={{
             fontFamily: "var(--font-body)",

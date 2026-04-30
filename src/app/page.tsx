@@ -5,6 +5,7 @@ import { SecondaryFeatureCard } from "@/components/secondary-feature-card";
 import { ArticleCard } from "@/components/article-card";
 import { ArticleGrid } from "@/components/article-grid";
 import { NewsletterForm } from "@/components/newsletter-form";
+import AnimatedBackground from "@/components/AnimatedBg";
 
 export const revalidate = 300;
 
@@ -58,8 +59,11 @@ export default async function HomePage() {
   const rest = posts.filter((p) => !featured.some((f) => f.slug === p.slug));
 
   return (
-    <>
-      <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-14 pb-24">
+    <>  
+  
+      <section className="relative max-w-300 min-h-[90vh] mx-auto px-5 md:px-10 py-14 pb-24">
+        <AnimatedBackground />
+
         <Hero />
 
         {primary && <FeatureCard post={primary} />}
@@ -91,7 +95,7 @@ export default async function HomePage() {
         )}
 
         <NewsletterForm variant="soft" />
-      </div>
+      </section>
     </>
   );
 }

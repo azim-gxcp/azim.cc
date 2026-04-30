@@ -1,0 +1,210 @@
+ISO3,Country,Mobile_Per_100,Year
+AFG,Afghanistan,55.55,2023
+ALB,Albania,93.0,2023
+DZA,Algeria,111.61,2023
+AND,Andorra,156.1,2023
+AGO,Angola,70.05,2023
+ATG,Antigua and Barbuda,200.54,2022
+ARG,Argentina,137.71,2023
+ARM,Armenia,134.52,2023
+ABW,Aruba,130.65,2022
+AUS,Australia,112.51,2023
+AUT,Austria,121.75,2023
+AZE,Azerbaijan,107.69,2023
+BHS,"Bahamas, The",100.05,2023
+BHR,Bahrain,153.9,2023
+BGD,Bangladesh,111.28,2023
+BRB,Barbados,114.58,2022
+BLR,Belarus,128.98,2023
+BEL,Belgium,103.2,2023
+BLZ,Belize,67.18,2022
+BEN,Benin,116.04,2023
+BMU,Bermuda,105.27,2022
+BTN,Bhutan,95.63,2023
+BOL,Bolivia,101.57,2022
+BIH,Bosnia and Herzegovina,117.73,2023
+BWA,Botswana,179.03,2023
+BRA,Brazil,101.02,2023
+VGB,British Virgin Islands,90.82,2023
+BRN,Brunei Darussalam,118.67,2023
+BGR,Bulgaria,117.93,2023
+BFA,Burkina Faso,116.16,2023
+BDI,Burundi,63.16,2023
+CPV,Cabo Verde,113.02,2023
+KHM,Cambodia,120.81,2023
+CMR,Cameroon,96.48,2023
+CAN,Canada,94.15,2023
+CYM,Cayman Islands,139.31,2022
+CAF,Central African Republic,38.82,2022
+TCD,Chad,70.19,2023
+CHL,Chile,135.87,2023
+CHN,China,128.25,2023
+COL,Colombia,166.98,2023
+COM,Comoros,109.86,2023
+COD,"Congo, Dem. Rep.",53.19,2023
+COG,"Congo, Rep.",94.87,2023
+CRI,Costa Rica,133.53,2023
+CIV,Cote d'Ivoire,171.99,2023
+HRV,Croatia,117.11,2023
+CUB,Cuba,69.58,2023
+CUW,Curacao,93.8,2023
+CYP,Cyprus,148.33,2023
+CZE,Czechia,126.0,2023
+DNK,Denmark,126.72,2023
+DJI,Djibouti,48.45,2023
+DMA,Dominica,85.19,2022
+DOM,Dominican Republic,91.87,2023
+ECU,Ecuador,101.03,2023
+EGY,"Egypt, Arab Rep.",92.83,2023
+SLV,El Salvador,179.71,2023
+GNQ,Equatorial Guinea,49.54,2022
+ERI,Eritrea,59.12,2022
+EST,Estonia,150.2,2023
+SWZ,Eswatini,128.4,2023
+ETH,Ethiopia,59.87,2023
+FRO,Faroe Islands,105.8,2022
+FJI,Fiji,112.00,2023
+FIN,Finland,127.47,2023
+FRA,France,116.69,2023
+PYF,French Polynesia,118.78,2023
+GAB,Gabon,122.61,2023
+GMB,"Gambia, The",117.12,2023
+GEO,Georgia,155.25,2023
+DEU,Germany,124.66,2023
+GHA,Ghana,98.81,2023
+GIB,Gibraltar,97.6,2022
+GRC,Greece,110.79,2023
+GRL,Greenland,118.64,2022
+GRD,Grenada,95.76,2022
+GTM,Guatemala,113.71,2023
+GIN,Guinea,97.88,2023
+GNB,Guinea-Bissau,128.11,2023
+GUY,Guyana,112.57,2022
+HTI,Haiti,65.19,2022
+HND,Honduras,74.41,2023
+HKG,"Hong Kong SAR, China",319.49,2023
+HUN,Hungary,105.05,2023
+ISL,Iceland,121.48,2023
+IND,India,80.56,2023
+IDN,Indonesia,125.24,2023
+IRN,"Iran, Islamic Rep.",166.28,2023
+IRQ,Iraq,101.39,2023
+IRL,Ireland,110.8,2023
+ISR,Israel,153.34,2023
+ITA,Italy,131.87,2023
+JAM,Jamaica,115.09,2023
+JPN,Japan,178.43,2023
+JOR,Jordan,67.55,2023
+KAZ,Kazakhstan,127.11,2023
+KEN,Kenya,120.61,2023
+KIR,Kiribati,51.25,2023
+PRK,"Korea, Dem. People's Rep.",24.13,2022
+KOR,"Korea, Rep.",162.11,2023
+XKX,Kosovo,34.54,2022
+KWT,Kuwait,167.68,2023
+KGZ,Kyrgyz Republic,108.59,2023
+LAO,Lao PDR,64.76,2023
+LVA,Latvia,119.91,2023
+LBN,Lebanon,74.01,2022
+LSO,Lesotho,69.35,2023
+LBR,Liberia,32.06,2022
+LBY,Libya,192.97,2022
+LIE,Liechtenstein,127.06,2023
+LTU,Lithuania,137.2,2023
+LUX,Luxembourg,144.47,2023
+MAC,"Macao SAR, China",192.48,2023
+MDG,Madagascar,75.46,2023
+MWI,Malawi,61.09,2023
+MYS,Malaysia,142.73,2023
+MDV,Maldives,141.6,2023
+MLI,Mali,112.12,2022
+MLT,Malta,140.59,2023
+MHL,Marshall Islands,39.71,2022
+MRT,Mauritania,90.77,2023
+MUS,Mauritius,165.26,2023
+MEX,Mexico,111.74,2023
+FSM,"Micronesia, Fed. Sts.",19.99,2022
+MDA,Moldova,129.55,2023
+MCO,Monaco,104.06,2023
+MNG,Mongolia,141.08,2023
+MNE,Montenegro,207.24,2023
+MAR,Morocco,148.16,2023
+MOZ,Mozambique,47.5,2023
+MMR,Myanmar,121.03,2023
+NAM,Namibia,87.68,2023
+NRU,Nauru,87.17,2022
+NPL,Nepal,117.76,2023
+NLD,Netherlands,125.27,2023
+NCL,New Caledonia,91.68,2022
+NZL,New Zealand,126.85,2023
+NIC,Nicaragua,105.84,2023
+NER,Niger,65.74,2023
+NGA,Nigeria,98.48,2023
+MKD,North Macedonia,106.46,2023
+NOR,Norway,109.65,2023
+OMN,Oman,122.29,2023
+PAK,Pakistan,76.54,2023
+PLW,Palau,135.39,2023
+PAN,Panama,156.59,2023
+PNG,Papua New Guinea,34.06,2023
+PRY,Paraguay,126.61,2023
+PER,Peru,121.98,2023
+PHL,Philippines,117.28,2023
+POL,Poland,135.15,2023
+PRT,Portugal,123.0,2023
+PRI,Puerto Rico (US),124.51,2023
+QAT,Qatar,157.82,2023
+ROU,Romania,123.25,2023
+RUS,Russian Federation,180.84,2023
+RWA,Rwanda,91.46,2023
+WSM,Samoa,62.4,2022
+SMR,San Marino,120.27,2022
+STP,Sao Tome and Principe,63.45,2023
+SAU,Saudi Arabia,157.78,2023
+SEN,Senegal,123.91,2023
+SRB,Serbia,128.47,2023
+SYC,Seychelles,129.24,2023
+SLE,Sierra Leone,107.88,2022
+SGP,Singapore,173.2,2023
+SXM,Sint Maarten (Dutch part),205.37,2022
+SVK,Slovak Republic,138.23,2023
+SVN,Slovenia,129.23,2023
+SLB,Solomon Islands,62.07,2022
+SOM,"Somalia, Fed. Rep.",53.96,2023
+ZAF,South Africa,171.51,2023
+SSD,South Sudan,46.62,2023
+ESP,Spain,127.72,2023
+LKA,Sri Lanka,142.28,2023
+KNA,St. Kitts and Nevis,118.89,2023
+LCA,St. Lucia,98.67,2022
+VCT,St. Vincent and the Grenadines,101.63,2023
+SDN,Sudan,70.21,2022
+SUR,Suriname,157.25,2023
+SWE,Sweden,140.27,2023
+CHE,Switzerland,130.22,2023
+SYR,Syrian Arab Republic,72.44,2023
+TJK,Tajikistan,76.22,2023
+TZA,Tanzania,105.4,2023
+THA,Thailand,168.64,2023
+TLS,Timor-Leste,112.65,2023
+TGO,Togo,75.79,2023
+TON,Tonga,61.73,2022
+TTO,Trinidad and Tobago,134.23,2023
+TUN,Tunisia,132.65,2023
+TUR,Turkiye,105.68,2023
+TUV,Tuvalu,98.86,2022
+UGA,Uganda,76.3,2023
+UKR,Ukraine,133.38,2023
+ARE,United Arab Emirates,199.42,2023
+GBR,United Kingdom,122.78,2023
+USA,United States,112.41,2023
+URY,Uruguay,141.72,2023
+UZB,Uzbekistan,106.88,2023
+VUT,Vanuatu,89.29,2023
+VEN,"Venezuela, RB",70.22,2023
+VNM,Viet Nam,130.99,2023
+VIR,Virgin Islands (U.S.),91.46,2022
+PSE,West Bank and Gaza,76.69,2023
+YEM,"Yemen, Rep.",50.89,2023
+ZMB,Zambia,102.06,2023
+ZWE,Zimbabwe,91.63,2023
