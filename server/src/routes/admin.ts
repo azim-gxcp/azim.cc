@@ -130,13 +130,13 @@ export async function adminRoutes(app: FastifyInstance) {
     }
 
     // Send emails in batches
-    // Each subscriber gets their own unsubscribe link
     let sentCount = 0;
+    let failCount = 0;
     const batchSize = 50;
 
     for (let i = 0; i < activeSubscribers.length; i += batchSize) {
       const batch = activeSubscribers.slice(i, i + batchSize);
-      await Promise.all(
+      const results = await Promise.allSettled(
         batch.map((sub) => {
           const email = newsletterEmail(
             body.title,
@@ -149,11 +149,18 @@ export async function adminRoutes(app: FastifyInstance) {
           );
         })
       );
-      sentCount += batch.length;
+      sentCount += results.filter((r) => r.status === "fulfilled").length;
+      failCount += results.filter((r) => r.status === "rejected").length;
 
       if (i + batchSize < activeSubscribers.length) {
         await new Promise((r) => setTimeout(r, 1000));
       }
+    }
+
+    if (sentCount === 0 && failCount > 0) {
+      return reply.status(502).send({
+        error: `Email delivery failed for all ${failCount} subscribers. Check SMTP configuration.`,
+      });
     }
 
     // Record the send
@@ -163,7 +170,9 @@ export async function adminRoutes(app: FastifyInstance) {
     });
 
     return {
-      message: `Newsletter sent to ${sentCount} subscribers`,
+      message: failCount > 0
+        ? `Newsletter sent to ${sentCount} subscribers (${failCount} failed)`
+        : `Newsletter sent to ${sentCount} subscribers`,
       recipientCount: sentCount,
     };
   });
@@ -346,6 +355,10 @@ export async function adminRoutes(app: FastifyInstance) {
   });
 
   app.post("/api/admin/publish", async (request, reply) => {
+    if (!config.github.token) {
+      return reply.status(503).send({ error: "GitHub token not configured on server" });
+    }
+
     const parts = request.parts();
 
     let fileBuffer: Buffer | null = null;
