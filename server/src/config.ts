@@ -28,6 +28,8 @@ export const config = {
   smtp: {
     host: optional("SMTP_HOST", "localhost"),
     port: parseInt(optional("SMTP_PORT", "25"), 10),
+    user: optional("SMTP_USER", ""),
+    pass: optional("SMTP_PASS", ""),
     from: optional("SMTP_FROM", "newsletter@azim.cc"),
     fromName: optional("SMTP_FROM_NAME", "M Azim Abdul Majeed"),
   },
