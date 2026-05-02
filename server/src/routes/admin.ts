@@ -394,8 +394,9 @@ export async function adminRoutes(app: FastifyInstance) {
     const ext = fileName.split(".").pop()?.toLowerCase();
 
     if (ext === "pdf") {
-      const pdfParse = await import("pdf-parse");
-      const result = await (pdfParse as unknown as (buf: Buffer) => Promise<{ text: string }>)(fileBuffer);
+      const pdfMod = await import("pdf-parse") as Record<string, unknown>;
+      const pdfParse = (typeof pdfMod.default === "function" ? pdfMod.default : pdfMod) as (buf: Buffer) => Promise<{ text: string }>;
+      const result = await pdfParse(fileBuffer);
       content = result.text;
     } else if (ext === "md" || ext === "mdx") {
       const matter = (await import("gray-matter")).default;
@@ -403,10 +404,15 @@ export async function adminRoutes(app: FastifyInstance) {
       content = body;
     } else if (ext === "txt") {
       content = fileBuffer.toString("utf-8");
+    } else if (ext === "docx") {
+      const mammoth = await import("mammoth") as Record<string, unknown>;
+      const convert = (mammoth.default ?? mammoth) as { extractRawText: (opts: { buffer: Buffer }) => Promise<{ value: string }> };
+      const result = await convert.extractRawText({ buffer: fileBuffer });
+      content = result.value;
     } else {
       return reply
         .status(400)
-        .send({ error: "Unsupported file type. Use .pdf, .md, or .txt" });
+        .send({ error: "Unsupported file type. Use .pdf, .md, .txt, or .docx" });
     }
 
     // Clean content
