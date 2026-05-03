@@ -80,6 +80,25 @@ export async function updateFile(
   }
 }
 
+export async function deleteFile(
+  path: string,
+  sha: string,
+  message: string
+): Promise<void> {
+  const res = await fetch(`${BASE}/${path}`, {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({ message, sha, branch }),
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(
+      `GitHub deleteFile failed (${res.status}): ${(body as { message?: string }).message || res.statusText}`
+    );
+  }
+}
+
 export async function fileExists(path: string): Promise<boolean> {
   const res = await fetch(`${BASE}/${path}?ref=${branch}`, {
     method: "GET",

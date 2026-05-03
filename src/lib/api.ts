@@ -338,3 +338,15 @@ export interface AdminPost {
 export function getAdminPosts() {
   return apiFetch<AdminPost[]>("/api/admin/posts");
 }
+
+export function unpublishArticle(slug: string) {
+  return apiFetch<{ message: string }>(`/api/admin/posts/${slug}/unpublish`, {
+    method: "POST",
+  });
+}
+
+export function deleteArticle(slug: string) {
+  return apiFetch<{ message: string }>(`/api/admin/posts/${slug}`, {
+    method: "DELETE",
+  });
+}

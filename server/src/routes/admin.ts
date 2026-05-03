@@ -21,6 +21,7 @@ import {
   createFile,
   getFileContent,
   updateFile,
+  deleteFile,
   fileExists,
   appendToLlmsTxt,
 } from "../lib/github.js";
@@ -336,6 +337,49 @@ export async function adminRoutes(app: FastifyInstance) {
       .sort((a, b) =>
         new Date(b.date).getTime() - new Date(a.date).getTime()
       );
+  });
+
+  // Unpublish article (sets published: false in frontmatter via GitHub)
+  app.post("/api/admin/posts/:slug/unpublish", async (request, reply) => {
+    const { slug } = request.params as { slug: string };
+    if (!config.github.token) {
+      return reply.status(503).send({ error: "GitHub token not configured" });
+    }
+
+    const filePath = `content/posts/${slug}.mdx`;
+    try {
+      const { content: raw, sha } = await getFileContent(filePath);
+      const updated = raw.replace(
+        /^published:\s*true/m,
+        "published: false"
+      );
+      if (updated === raw) {
+        return reply.status(400).send({ error: "Article is not published or frontmatter not found" });
+      }
+      await updateFile(filePath, updated, sha, `unpublish: "${slug}"`);
+      return { message: "Article unpublished" };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      return reply.status(500).send({ error: msg });
+    }
+  });
+
+  // Delete article (removes file from GitHub)
+  app.delete("/api/admin/posts/:slug", async (request, reply) => {
+    const { slug } = request.params as { slug: string };
+    if (!config.github.token) {
+      return reply.status(503).send({ error: "GitHub token not configured" });
+    }
+
+    const filePath = `content/posts/${slug}.mdx`;
+    try {
+      const { sha } = await getFileContent(filePath);
+      await deleteFile(filePath, sha, `delete: "${slug}"`);
+      return { message: "Article deleted" };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      return reply.status(500).send({ error: msg });
+    }
   });
 
   // Publish article
