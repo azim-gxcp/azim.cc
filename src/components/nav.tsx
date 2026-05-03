@@ -90,7 +90,9 @@ export function Nav() {
               M Azim Abdul Majeed
               <span style={{ color: "var(--brand)" }}>.</span>
             </Link>
-            <span
+            <Link
+              href="/blog/the-rock-the-road-and-the-responsibility"
+              className="no-underline"
               style={{
                 fontFamily: "var(--font-body)",
                 fontSize: "11px",
@@ -98,10 +100,11 @@ export function Nav() {
                 color: "var(--fg2)",
                 letterSpacing: "0.01em",
                 marginTop: "-2px",
+                textDecoration: "none",
               }}
             >
               Be selfish to do good.
-            </span>
+            </Link>
           </div>
         </div>
 
