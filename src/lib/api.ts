@@ -333,6 +333,7 @@ export interface AdminPost {
   slug: string;
   title: string;
   date: string;
+  published: boolean;
 }
 
 export function getAdminPosts() {
@@ -341,6 +342,12 @@ export function getAdminPosts() {
 
 export function unpublishArticle(slug: string) {
   return apiFetch<{ message: string }>(`/api/admin/posts/${slug}/unpublish`, {
+    method: "POST",
+  });
+}
+
+export function republishArticle(slug: string) {
+  return apiFetch<{ message: string }>(`/api/admin/posts/${slug}/republish`, {
     method: "POST",
   });
 }

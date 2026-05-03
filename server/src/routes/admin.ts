@@ -315,7 +315,7 @@ export async function adminRoutes(app: FastifyInstance) {
     return { message: "Featured articles updated" };
   });
 
-  // List published posts
+  // List all posts (published and unpublished)
   app.get("/api/admin/posts", async () => {
     const postsDir = path.join(process.cwd(), "..", "content", "posts");
     const fs = await import("fs");
@@ -330,10 +330,13 @@ export async function adminRoutes(app: FastifyInstance) {
         const slug = filename.replace(/\.mdx$/, "");
         const raw = fs.readFileSync(path.join(postsDir, filename), "utf8");
         const { data } = matter(raw);
-        if (data.published === false) return null;
-        return { slug, title: data.title || slug, date: data.date || "" };
+        return {
+          slug,
+          title: data.title || slug,
+          date: data.date || "",
+          published: data.published !== false,
+        };
       })
-      .filter((x): x is { slug: string; title: string; date: string } => x !== null)
       .sort((a, b) =>
         new Date(b.date).getTime() - new Date(a.date).getTime()
       );
@@ -358,6 +361,31 @@ export async function adminRoutes(app: FastifyInstance) {
       }
       await updateFile(filePath, updated, sha, `unpublish: "${slug}"`);
       return { message: "Article unpublished" };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      return reply.status(500).send({ error: msg });
+    }
+  });
+
+  // Republish article (sets published: true in frontmatter via GitHub)
+  app.post("/api/admin/posts/:slug/republish", async (request, reply) => {
+    const { slug } = request.params as { slug: string };
+    if (!config.github.token) {
+      return reply.status(503).send({ error: "GitHub token not configured" });
+    }
+
+    const filePath = `content/posts/${slug}.mdx`;
+    try {
+      const { content: raw, sha } = await getFileContent(filePath);
+      const updated = raw.replace(
+        /^published:\s*false/m,
+        "published: true"
+      );
+      if (updated === raw) {
+        return reply.status(400).send({ error: "Article is already published or frontmatter not found" });
+      }
+      await updateFile(filePath, updated, sha, `republish: "${slug}"`);
+      return { message: "Article republished" };
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Unknown error";
       return reply.status(500).send({ error: msg });
