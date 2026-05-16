@@ -9,7 +9,7 @@ function escapeHtml(s: string): string {
 }
 
 const baseStyle = `
-  font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Maven Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   max-width: 580px;
   margin: 0 auto;
   padding: 40px 24px;

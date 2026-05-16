@@ -76,7 +76,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Maven+Pro:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap"
           rel="stylesheet"
         />
       </head>
@@ -105,7 +105,7 @@ export default function RootLayout({
         />
         <ThemeProvider>
           <Nav />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 glass-content">{children}</main>
           <Footer />
           <SearchDialog />
         </ThemeProvider>

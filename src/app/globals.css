@@ -105,7 +105,7 @@
 
   /* Font families */
   --font-display: "Fraunces", Georgia, serif;
-  --font-body: "Ubuntu", system-ui, sans-serif;
+  --font-body: "Maven Pro", system-ui, sans-serif;
   --font-mono-family: "JetBrains Mono", Menlo, monospace;
   --font-arabic-family: "Amiri", serif;
 
@@ -127,7 +127,7 @@
   --reading-width: 680px;
 
   /* Semantic tokens — Light */
-  --bg: #f2f2f2;
+  --bg: #ffffff;
   --bg-elev: #ffffff;
   --bg-sunken: var(--zinc-50);
   --bg-muted: var(--zinc-100);
@@ -291,6 +291,19 @@
     transition: background 220ms ease, color 220ms ease;
     margin: 0;
     padding: 0;
+    position: relative;
+  }
+
+  .glass-content {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  [data-theme="dark"] .glass-content {
+    background: rgba(9, 9, 11, 0.75);
   }
 
   [lang="ar"],
@@ -469,7 +482,7 @@
   background: var(--bg);
   color: var(--fg1);
   line-height: 1.65;
-  font-family: 'Ubuntu', system-ui, sans-serif;
+  font-family: 'Maven Pro', system-ui, sans-serif;
 }
 
 /* Mizan dark mode overrides */

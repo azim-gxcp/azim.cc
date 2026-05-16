@@ -24,6 +24,48 @@ export function PullQuote({ children }: { children: React.ReactNode }) {
   return <blockquote className="pull-quote">{children}</blockquote>;
 }
 
+export function GoldQuote({
+  children,
+  cite,
+}: {
+  children: React.ReactNode;
+  cite?: string;
+}) {
+  return (
+    <blockquote
+      style={{
+        margin: "2em 0",
+        paddingLeft: "24px",
+        borderLeft: "4px solid #B8964A",
+        fontFamily: "var(--font-display)",
+        fontSize: "22px",
+        fontStyle: "italic",
+        fontWeight: 400,
+        lineHeight: 1.4,
+        color: "#B8964A",
+      }}
+    >
+      {children}
+      {cite && (
+        <cite
+          style={{
+            display: "block",
+            marginTop: "12px",
+            fontSize: "13px",
+            fontStyle: "normal",
+            fontWeight: 600,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            opacity: 0.7,
+          }}
+        >
+          {cite}
+        </cite>
+      )}
+    </blockquote>
+  );
+}
+
 export function DropCap({ children }: { children: React.ReactNode }) {
   return <p className="drop-cap">{children}</p>;
 }
@@ -57,6 +99,7 @@ export const mdxComponents: MDXComponents = {
   ),
   em: (props) => <em {...props} />,
   PullQuote,
+  GoldQuote,
   DropCap,
   Arabic,
   Footnote,
