@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { BackLink } from "@/components/back-link";
 import { NewsletterForm } from "@/components/newsletter-form";
@@ -167,7 +168,7 @@ export default async function BlogPostPage({ params }: Props) {
       <TableOfContents content={post.content} />
 
       <div className="article-body">
-        <MDXRemote source={post.content} components={mdxComponents} />
+        <MDXRemote source={post.content} components={mdxComponents} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
       </div>
 
       <div
