@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      // Preserve link equity / indexing after slug renames.
+      {
+        source: "/blog/gx-coin-manifesto",
+        destination: "/blog/know-the-odds",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

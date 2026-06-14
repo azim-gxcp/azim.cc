@@ -1,0 +1,9 @@
+# Large source/working assets not needed for the production build.
+# The site only renders content/posts; everything below is local-only.
+# NOTE: do not add *.pdf here — public/Riba_Research_Paper.pdf is served.
+content/drafts
+design-handoff
+.playwright-mcp
+docs
+server
+*.zip
