@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts, getAllTags } from "@/lib/posts";
 
 const SITE_URL = "https://azim.cc";
 
@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogEntries = posts.map((post) => ({
     url: `${SITE_URL}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+    lastModified: new Date(post.updated || post.date),
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
@@ -19,6 +19,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.5,
+  }));
+
+  const tagEntries = getAllTags().map((t) => ({
+    url: `${SITE_URL}/tags/${t.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.4,
   }));
 
   return [
@@ -58,7 +65,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.3,
     },
+    {
+      url: `${SITE_URL}/tags`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.5,
+    },
     ...blogEntries,
     ...categoryEntries,
+    ...tagEntries,
   ];
 }

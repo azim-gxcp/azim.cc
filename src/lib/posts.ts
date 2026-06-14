@@ -12,6 +12,7 @@ export interface PostMeta {
   kicker: string;
   author: string;
   date: string;
+  updated: string;
   readTime: number;
   published: boolean;
   keywords: string[];
@@ -42,6 +43,7 @@ export function getAllPosts(): PostMeta[] {
         kicker: data.kicker || "Articles",
         author: data.author || "Azim",
         date: data.date || "",
+        updated: data.updated || data.date || "",
         readTime: Math.ceil(stats.minutes),
         published: data.published !== false,
         keywords: data.keywords || [],
@@ -72,6 +74,7 @@ export function getPostBySlug(slug: string): Post | null {
     kicker: data.kicker || "Articles",
     author: data.author || "Azim",
     date: data.date || "",
+    updated: data.updated || data.date || "",
     readTime: Math.ceil(stats.minutes),
     published: data.published !== false,
     keywords: data.keywords || [],
@@ -155,4 +158,52 @@ export function getCategorySlug(kicker: string): string {
     Articles: "articles",
   };
   return map[kicker] || kicker.toLowerCase().replace(/\s+/g, "-");
+}
+
+export interface TagInfo {
+  tag: string; // human-readable label, e.g. "Islamic finance"
+  slug: string; // url-safe slug, e.g. "islamic-finance"
+  count: number; // number of published posts carrying the tag
+}
+
+export function tagSlug(tag: string): string {
+  return tag
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function getAllTags(): TagInfo[] {
+  const posts = getAllPosts();
+  const map = new Map<string, TagInfo>();
+
+  for (const post of posts) {
+    for (const kw of post.keywords) {
+      const slug = tagSlug(kw);
+      if (!slug) continue;
+      const existing = map.get(slug);
+      if (existing) {
+        existing.count += 1;
+      } else {
+        map.set(slug, { tag: kw, slug, count: 1 });
+      }
+    }
+  }
+
+  return Array.from(map.values()).sort(
+    (a, b) => b.count - a.count || a.tag.localeCompare(b.tag)
+  );
+}
+
+export function getPostsByTag(slug: string): PostMeta[] {
+  return getAllPosts().filter((post) =>
+    post.keywords.some((kw) => tagSlug(kw) === slug)
+  );
+}
+
+export function getTagLabel(slug: string): string | null {
+  const match = getAllTags().find((t) => t.slug === slug);
+  return match ? match.tag : null;
 }

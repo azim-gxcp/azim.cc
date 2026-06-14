@@ -12,6 +12,8 @@ import { ShareButtons } from "@/components/share-buttons";
 import { RelatedArticles } from "@/components/related-articles";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { FontSizeControl } from "@/components/font-size-control";
+import { ArticleTags } from "@/components/article-tags";
+import { getCategorySlug } from "@/lib/posts";
 import type { Metadata } from "next";
 
 interface Props {
@@ -77,6 +79,10 @@ export default async function BlogPostPage({ params }: Props) {
       "@type": "Person",
       name: post.author,
       url: "https://azim.cc/about",
+      sameAs: [
+        "https://x.com/EduTechOne",
+        "https://www.linkedin.com/in/azim-gx/",
+      ],
     },
     publisher: {
       "@type": "Person",
@@ -84,6 +90,7 @@ export default async function BlogPostPage({ params }: Props) {
       url: "https://azim.cc",
     },
     datePublished: new Date(post.date).toISOString(),
+    dateModified: new Date(post.updated || post.date).toISOString(),
     url,
     mainEntityOfPage: url,
     articleSection: post.kicker,
@@ -92,12 +99,41 @@ export default async function BlogPostPage({ params }: Props) {
     keywords: post.keywords.join(", "),
   };
 
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://azim.cc",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: post.kicker,
+        item: `https://azim.cc/category/${getCategorySlug(post.kicker)}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: url,
+      },
+    ],
+  };
+
   return (
     <div className="max-w-[800px] mx-auto px-5 md:px-10 py-14 pb-24">
       <ReadingProgress />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
       <BackLink />
 
@@ -170,6 +206,8 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="article-body">
         <MDXRemote source={post.content} components={mdxComponents} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
       </div>
+
+      <ArticleTags keywords={post.keywords} />
 
       <div
         style={{
