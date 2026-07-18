@@ -103,11 +103,11 @@
   --zinc-900: #18181b;
   --zinc-950: #09090b;
 
-  /* Font families */
-  --font-display: "Fraunces", Georgia, serif;
-  --font-body: "Maven Pro", system-ui, sans-serif;
-  --font-mono-family: "JetBrains Mono", Menlo, monospace;
-  --font-arabic-family: "Lateef", serif;
+  /* Font families (self-hosted via next/font; CSS vars set on <html>) */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-maven), system-ui, sans-serif;
+  --font-mono-family: var(--font-jetbrains), Menlo, monospace;
+  --font-arabic-family: var(--font-lateef), serif;
 
   /* Spacing */
   --sp-0: 0;
@@ -482,7 +482,7 @@
   background: var(--bg);
   color: var(--fg1);
   line-height: 1.65;
-  font-family: 'Maven Pro', system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 
 /* Mizan dark mode overrides */

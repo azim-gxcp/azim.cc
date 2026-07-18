@@ -5,7 +5,36 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { SearchDialog } from "@/components/search-dialog";
+import { Fraunces, Maven_Pro, JetBrains_Mono, Lateef } from "next/font/google";
 import "./globals.css";
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  axes: ["opsz", "SOFT"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-fraunces",
+});
+
+const mavenPro = Maven_Pro({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-maven",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains",
+});
+
+const lateef = Lateef({
+  subsets: ["arabic"],
+  weight: "300",
+  display: "swap",
+  variable: "--font-lateef",
+  preload: false,
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://azim.cc"),
@@ -71,15 +100,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Maven+Pro:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Lateef:wght@300&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${fraunces.variable} ${mavenPro.variable} ${jetbrainsMono.variable} ${lateef.variable}`}
+    >
       <body className="min-h-screen flex flex-col" style={{ fontFamily: "var(--font-body)" }}>
         <script
           type="application/ld+json"
