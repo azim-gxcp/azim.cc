@@ -13,7 +13,7 @@ import { RelatedArticles } from "@/components/related-articles";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { FontSizeControl } from "@/components/font-size-control";
 import { ArticleTags } from "@/components/article-tags";
-import { getCategorySlug } from "@/lib/posts";
+import { getCategorySlug, extractFaqItems } from "@/lib/posts";
 import type { Metadata } from "next";
 
 interface Props {
@@ -75,8 +75,15 @@ export default async function BlogPostPage({ params }: Props) {
     "@type": "Article",
     headline: post.title,
     description: post.lede,
+    image: {
+      "@type": "ImageObject",
+      url: `${url}/opengraph-image`,
+      width: 1200,
+      height: 630,
+    },
     author: {
       "@type": "Person",
+      "@id": "https://azim.cc/#person",
       name: post.author,
       url: "https://azim.cc/about",
       sameAs: [
@@ -124,6 +131,20 @@ export default async function BlogPostPage({ params }: Props) {
     ],
   };
 
+  const faqItems = post.faq ? extractFaqItems(post.content) : [];
+  const faqLd =
+    faqItems.length >= 2
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqItems.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: { "@type": "Answer", text: item.answer },
+          })),
+        }
+      : null;
+
   return (
     <div className="max-w-[800px] mx-auto px-5 md:px-10 py-14 pb-24">
       <ReadingProgress />
@@ -135,6 +156,14 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
+      {faqLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      )}
       <BackLink />
 
       <header className="mb-12">

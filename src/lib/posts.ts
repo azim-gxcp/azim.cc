@@ -16,6 +16,7 @@ export interface PostMeta {
   readTime: number;
   published: boolean;
   keywords: string[];
+  faq: boolean;
 }
 
 export interface Post extends PostMeta {
@@ -47,6 +48,7 @@ export function getAllPosts(): PostMeta[] {
         readTime: Math.ceil(stats.minutes),
         published: data.published !== false,
         keywords: data.keywords || [],
+        faq: data.faq === true,
       } satisfies PostMeta;
     })
     .filter((post) => post.published)
@@ -78,6 +80,7 @@ export function getPostBySlug(slug: string): Post | null {
     readTime: Math.ceil(stats.minutes),
     published: data.published !== false,
     keywords: data.keywords || [],
+    faq: data.faq === true,
     content,
   };
 }
@@ -206,4 +209,64 @@ export function getPostsByTag(slug: string): PostMeta[] {
 export function getTagLabel(slug: string): string | null {
   const match = getAllTags().find((t) => t.slug === slug);
   return match ? match.tag : null;
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+function stripInlineMarkdown(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// Extracts "Q. ... / A. ..." pairs from post content for FAQPage structured data.
+// An answer runs until the next question or the next "##" section heading.
+export function extractFaqItems(content: string): FaqItem[] {
+  const items: FaqItem[] = [];
+  let question: string | null = null;
+  let answerLines: string[] = [];
+  let inAnswer = false;
+
+  const flush = () => {
+    if (question && answerLines.length > 0) {
+      items.push({
+        question: stripInlineMarkdown(question),
+        answer: stripInlineMarkdown(answerLines.join(" ")),
+      });
+    }
+    question = null;
+    answerLines = [];
+    inAnswer = false;
+  };
+
+  for (const raw of content.split("\n")) {
+    const line = raw.trim();
+    if (line.startsWith("## ")) {
+      flush();
+      continue;
+    }
+    if (line.startsWith("Q. ")) {
+      flush();
+      question = line.slice(3).trim();
+      continue;
+    }
+    if (line.startsWith("A. ")) {
+      inAnswer = true;
+      answerLines.push(line.slice(3).trim());
+      continue;
+    }
+    if (inAnswer && line) {
+      answerLines.push(line);
+    }
+  }
+  flush();
+
+  return items;
 }

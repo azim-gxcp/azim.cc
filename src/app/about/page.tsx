@@ -7,9 +7,102 @@ export const metadata: Metadata = {
     "Writer, researcher, and monetary architect. I work at the intersection of economics, Islamic finance, and first-principles monetary design.",
 };
 
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  mainEntity: {
+    "@type": "Person",
+    "@id": "https://azim.cc/#person",
+    name: "M Azim Abdul Majeed",
+    url: "https://azim.cc",
+    description:
+      "Writer, researcher, and monetary architect working at the intersection of economics, Islamic finance, and first-principles monetary design.",
+    jobTitle: "Writer, Researcher, and Monetary Architect",
+    knowsAbout: [
+      "Islamic finance",
+      "Riba",
+      "Monetary architecture",
+      "Monetary systems",
+      "Fiat currency",
+      "Inflation",
+      "Central banking",
+      "Bitcoin",
+      "Cryptocurrency",
+      "Blockchain",
+      "Islamic economics",
+      "Maqasid al-shariah",
+      "First-principles economic design",
+      "GX Coin Protocol",
+      "Mizan",
+    ],
+    sameAs: [
+      "https://x.com/EduTechOne",
+      "https://www.linkedin.com/in/azim-gx/",
+    ],
+  },
+};
+
+const publicationLd = {
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  name: "Mizan: A Primary-Source Diagnostic Framework for Evaluating Islamic Financial Instruments Against Classical Ribawi Characteristics",
+  headline:
+    "Mizan: A Primary-Source Diagnostic Framework for Evaluating Islamic Financial Instruments Against Classical Ribawi Characteristics",
+  author: { "@id": "https://azim.cc/#person" },
+  datePublished: "2026-06-30",
+  inLanguage: "en",
+  url: "https://doi.org/10.63740/xtab6508",
+  sameAs: "https://journal.jibep.org/index.php/jibep/article/view/17",
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "DOI",
+    value: "10.63740/xtab6508",
+  },
+  keywords: [
+    "Islamic FinTech",
+    "Shariah compliance",
+    "Riba",
+    "ribawi characteristics",
+    "digital diagnostics",
+    "fiat currency",
+  ],
+  isPartOf: {
+    "@type": "PublicationIssue",
+    issueNumber: "2",
+    datePublished: "2026-06",
+    isPartOf: {
+      "@type": "PublicationVolume",
+      volumeNumber: "2",
+      isPartOf: {
+        "@type": "Periodical",
+        name: "Journal of Islamic Banking, Economics and Policy",
+        issn: "2977-9618",
+        publisher: {
+          "@type": "Organization",
+          name: "Islamic Finance Review (IFR)",
+        },
+      },
+    },
+  },
+  about: {
+    "@type": "SoftwareApplication",
+    name: "Mizan",
+    applicationCategory: "FinanceApplication",
+    url: "https://azim.cc/tools/mizan",
+  },
+};
+
 export default function AboutPage() {
   return (
     <div className="max-w-[720px] mx-auto px-5 md:px-10 py-14 pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(publicationLd) }}
+      />
       <header
         className="mb-10 pb-8"
         style={{ borderBottom: "1px solid var(--border-subtle)" }}
@@ -203,6 +296,44 @@ export default function AboutPage() {
             </li>
           ))}
         </ul>
+
+        <h2
+          className="mt-12 mb-3"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "26px",
+            fontWeight: 600,
+            color: "var(--fg1)",
+            fontVariationSettings: "'opsz' 72",
+          }}
+        >
+          Peer-reviewed research
+        </h2>
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "18px",
+            lineHeight: 1.8,
+            color: "var(--fg1)",
+          }}
+        >
+          &ldquo;Mizan: A Primary-Source Diagnostic Framework for Evaluating
+          Islamic Financial Instruments Against Classical Ribawi
+          Characteristics.&rdquo;{" "}
+          <em>Journal of Islamic Banking, Economics and Policy</em> (JIBEP),
+          Vol. 2, Issue 2 (June 2026). ISSN 2977-9618.{" "}
+          <Link
+            href="https://doi.org/10.63740/xtab6508"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            doi.org/10.63740/xtab6508
+          </Link>
+          . A peer-reviewed paper introducing{" "}
+          <Link href="/tools/mizan">Mizan</Link>, an open-access diagnostic tool
+          that evaluates Islamic financial instruments against classical
+          jurisprudential criteria derived exclusively from primary sources.
+        </p>
 
         <h2
           className="mt-12 mb-3"

@@ -93,6 +93,7 @@ export default function RootLayout({
                 "Economics, monetary architecture, Islamic Finance and first-principles thinking about how money should work.",
               author: {
                 "@type": "Person",
+                "@id": "https://azim.cc/#person",
                 name: "M Azim Abdul Majeed",
                 url: "https://azim.cc/about",
                 sameAs: [
