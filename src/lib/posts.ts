@@ -17,6 +17,8 @@ export interface PostMeta {
   published: boolean;
   keywords: string[];
   faq: boolean;
+  summary: string[];
+  words: number;
 }
 
 export interface Post extends PostMeta {
@@ -49,6 +51,8 @@ export function getAllPosts(): PostMeta[] {
         published: data.published !== false,
         keywords: data.keywords || [],
         faq: data.faq === true,
+        summary: Array.isArray(data.summary) ? data.summary : [],
+        words: stats.words,
       } satisfies PostMeta;
     })
     .filter((post) => post.published)
@@ -81,6 +85,8 @@ export function getPostBySlug(slug: string): Post | null {
     published: data.published !== false,
     keywords: data.keywords || [],
     faq: data.faq === true,
+    summary: Array.isArray(data.summary) ? data.summary : [],
+    words: stats.words,
     content,
   };
 }

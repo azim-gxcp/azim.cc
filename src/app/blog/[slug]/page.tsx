@@ -13,6 +13,7 @@ import { RelatedArticles } from "@/components/related-articles";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { FontSizeControl } from "@/components/font-size-control";
 import { ArticleTags } from "@/components/article-tags";
+import { KeyTakeaways } from "@/components/key-takeaways";
 import { getCategorySlug, extractFaqItems } from "@/lib/posts";
 import type { Metadata } from "next";
 
@@ -53,6 +54,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: url,
+      types: {
+        "text/markdown": `${url}/llms.txt`,
+      },
     },
     keywords: post.keywords,
   };
@@ -101,9 +105,12 @@ export default async function BlogPostPage({ params }: Props) {
     url,
     mainEntityOfPage: url,
     articleSection: post.kicker,
-    wordCount: post.readTime * 250,
+    wordCount: post.words,
     inLanguage: "en",
     keywords: post.keywords.join(", "),
+    ...(post.summary.length > 0
+      ? { abstract: post.summary.join(" ") }
+      : {}),
   };
 
   const breadcrumbLd = {
@@ -229,6 +236,8 @@ export default async function BlogPostPage({ params }: Props) {
           <FontSizeControl />
         </div>
       </header>
+
+      <KeyTakeaways items={post.summary} />
 
       <TableOfContents content={post.content} />
 
