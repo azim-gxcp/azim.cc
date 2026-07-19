@@ -88,11 +88,20 @@ export async function authRoutes(app: FastifyInstance) {
         return reply.status(401).send({ error: "Invalid token type" });
       }
 
-      const tokens = await createTokens(
-        payload.sub as string,
-        payload.email as string,
-        payload.role as string
-      );
+      // Re-check the account against the DB so a deleted or demoted user cannot
+      // keep minting valid (admin) tokens for the life of the refresh token.
+      // Use the CURRENT role/email from the DB, not the token payload.
+      const [user] = await db
+        .select({ id: users.id, email: users.email, role: users.role })
+        .from(users)
+        .where(eq(users.id, payload.sub as string))
+        .limit(1);
+
+      if (!user) {
+        return reply.status(401).send({ error: "Account no longer exists" });
+      }
+
+      const tokens = await createTokens(user.id, user.email, user.role);
 
       return tokens;
     } catch {
