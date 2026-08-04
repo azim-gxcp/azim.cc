@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CookieSettingsLink } from "@/components/cookie-consent";
 
 export function Footer() {
   return (
@@ -163,6 +164,14 @@ export function Footer() {
                   {link.label}
                 </Link>
               ))}
+              <CookieSettingsLink
+                className="cursor-pointer border-0 bg-transparent p-0 text-left no-underline hover:underline"
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "15px",
+                  color: "rgba(255,255,255,0.85)",
+                }}
+              />
             </div>
           </div>
         </div>
