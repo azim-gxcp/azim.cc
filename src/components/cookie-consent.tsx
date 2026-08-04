@@ -118,8 +118,8 @@ function loadRegion() {
  * for the rest of the page view and will rewrite its cookies on engagement
  * events. This stops it at the source.
  */
-function disableGoogleAnalytics() {
-  (window as unknown as Record<string, boolean>)[`ga-disable-${GA_ID}`] = true;
+function setAnalyticsBlocked(blocked: boolean) {
+  (window as unknown as Record<string, boolean>)[`ga-disable-${GA_ID}`] = blocked;
 }
 
 function clearGoogleAnalyticsCookies() {
@@ -142,10 +142,6 @@ function storeChoice(choice: "granted" | "denied") {
     window.localStorage.setItem(STORAGE_KEY, choice);
   } catch {
     // Storage blocked: nothing persists, so the banner returns next visit.
-  }
-  if (choice === "denied") {
-    disableGoogleAnalytics();
-    clearGoogleAnalyticsCookies();
   }
   choiceListeners.forEach((notify) => notify());
 }
@@ -184,14 +180,33 @@ export function CookieConsent() {
     if (undecided) loadRegion();
   }, [undecided]);
 
+  const showBanner = (undecided && visitorRegion === "required") || reopened;
+  const showAnalytics =
+    choice === "granted" || (undecided && visitorRegion === "not-required");
+
+  // Until both the stored choice and the region are known we do nothing at all.
+  // Acting early would wipe a returning reader's identifier on every page load
+  // during the few hundred ms before the region lookup resolves.
+  const settled =
+    choice !== "unknown" && (choice !== "none" || visitorRegion !== "pending");
+
   useEffect(() => {
-    // Runs on every load while declined, so any cookie that survived the live
-    // gtag instance on the page where consent was withdrawn gets cleaned up.
-    if (choice === "denied") {
-      disableGoogleAnalytics();
-      clearGoogleAnalyticsCookies();
+    if (!settled) return;
+
+    if (showAnalytics) {
+      // Clears a flag left by an earlier denial, so re-accepting really works.
+      setAnalyticsBlocked(false);
+      return;
     }
-  }, [choice]);
+
+    // Analytics must not be running. Stop any instance still live in the page
+    // and leave no identifier behind, whether the reader declined outright or
+    // simply has not answered yet. Runs on later loads too, catching a cookie
+    // that gtag rewrote after unmounting on the page where consent was
+    // withdrawn.
+    setAnalyticsBlocked(true);
+    clearGoogleAnalyticsCookies();
+  }, [settled, showAnalytics]);
 
   useEffect(() => {
     // Reopening is reader-initiated (footer link), so move focus to the panel.
@@ -208,10 +223,6 @@ export function CookieConsent() {
     setReopened(false);
     storeChoice(next);
   }
-
-  const showBanner = (undecided && visitorRegion === "required") || reopened;
-  const showAnalytics =
-    choice === "granted" || (undecided && visitorRegion === "not-required");
 
   return (
     <>
